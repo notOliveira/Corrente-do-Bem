@@ -1,0 +1,252 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}{% endblock title %}</title>
+
+    <!-- CSS FILES -->
+    <link href="{% static 'main/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'main/bootstrap/bootstrap-icons.css' %}" rel="stylesheet">
+
+    <link href="{% static 'main/css/templatemo-kind-heart-charity.css' %}" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'main/media/images/favicon.png' %}">
+
+</head>
+
+<body>
+
+    {% comment %} Green header with location & email {% endcomment %}
+    {% comment %} 
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8 col-12 d-flex flex-wrap">
+                    <p class="d-flex me-4 mb-0">
+                        <i class="bi-geo-alt me-2"></i>
+                        Akershusstranda 20, 0150 Oslo, Norway
+                    </p>
+
+                    <p class="d-flex mb-0">
+                        <i class="bi-envelope me-2"></i>
+
+                        <a href="mailto:info@company.com">
+                            info@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                    <ul class="social-icon">
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-twitter"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-facebook"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-instagram"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-youtube"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-whatsapp"></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header> 
+    {% endcomment %}
+
+    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url "home" %}">
+                <img src="{% static 'main/media/images/zero-fome.png' %}" class="logo img-fluid" alt="Kind Heart Charity">
+                <span class="fs-4">
+                    Zero Fome
+                    <small>Tranformando vidas pela ajuda</small>
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% if request.path == '/' %}#{% else %} {% url "home" %} {% endif %}">Início</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="#section_2">Sobre</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="#section_3">Perto de você</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="#section_4">Como ajudar</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="#section_5">Contato</a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link click-scroll dropdown-toggle"
+                            id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">{{user.first_name}}</a>
+
+                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url "profile" %}">Perfil</a></li>
+
+                            <li><a class="dropdown-item" href="{% url "organizations" %}">Organizações</a></li>
+                            
+                            <form method="post" action="{% url 'logout' %}">
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
+                                {% csrf_token %}
+                            </form>
+                        </ul>
+                    </li>
+                    
+                    {% endif %}
+
+                    <li class="nav-item ms-3">
+                        {% if not user.is_authenticated %}
+                            <a class="nav-link custom-btn custom-border-btn btn" href="{% url "login" %}">Entrar</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+
+        {% block content %}
+
+        {% endblock content %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12 mb-4">
+                    <img src="{% static 'main/media/images/zero-fome.png' %}" class="logo img-fluid" alt="">
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-12 mb-4">
+                    <h5 class="site-footer-title mb-3">Links</h5>
+
+                    <ul class="footer-menu">
+                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Sobre nós</a></li>
+
+                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Locais de doações</a></li>
+
+                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Como ajudar</a></li>
+
+                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Contato</a></li>
+
+                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Reportar organização</a></li>
+                        
+                        <li class="footer-menu-item"><a href="https://wa.me/5511968317891?text=Ol%C3%A1%2C+eu+gostaria+de+perguntar+algumas+coisas+sobre+o+Zero+Fome%21" class="footer-menu-link">Suporte</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-12 mx-auto">
+                    <h5 class="site-footer-title mb-3">Informações de contato</h5>
+
+                    <p class="text-white d-flex mb-2">
+                        <i class="bi-telephone me-2"></i>
+
+                        <a href="tel: +5511968317891" class="site-footer-link">
+                            +55 11 96831-7891
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <i class="bi-envelope me-2"></i>
+
+                        <a href="mailto:info@yourgmail.com" class="site-footer-link">
+                            gustavooliveira.classroom@gmail.com
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex mt-3">
+                        <i class="bi-geo-alt me-2"></i>
+                        Av. Luiz Merenda, 443<br>Campanário, Diadema - SP<br>09931-390
+                    </p>
+
+                    <a href="https://maps.app.goo.gl/vR5Va48C3kuKUJbX8" class="custom-btn btn mt-3">Ir para o Maps</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-footer-bottom">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-md-7 col-12">
+                        <p class="copyright-text mb-0">Copyright © 2024 <a href="#">Zero Fome</a>
+                        </p>
+                    </div>
+
+                    <div class="col-lg-6 col-md-5 col-12 d-flex justify-content-center align-items-center mx-auto">
+                        <ul class="social-icon">
+                            <li class="social-icon-item">
+                                <a href="https://github.com/notOliveira/Zero-Fome" class="social-icon-link bi-github" target="blank"></a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="https://www.linkedin.com/in/notoliveira/" class="social-icon-link bi-linkedin"></a>
+                            </li>
+                            
+                            <li class="social-icon-item">
+                                <a href="https://instagram.com/notoliveira" class="social-icon-link bi-instagram" target="blank"></a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="https://www.youtube.com/@notoliveira" class="social-icon-link bi-youtube" target="blank"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="{% static 'main/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'main/bootstrap/bootstrap.min.js'%}"></script>
+    <script src="{% static 'main/jquery/jquery.sticky.js'%}"></script>
+    {% comment %} <script src="{% static 'main/js/click-scroll.js'%}"></script> {% endcomment %}
+    <script src="{% static 'main/js/counter.js'%}"></script>
+    <script src="{% static 'main/js/custom.js'%}"></script>
+    <script src="{% static 'main/js/functions.js'%}"></script>
+    {% block links %}{% endblock links %}
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Zero Fome - Minhas organizações{% endblock title %}
+
+{% block content %}
+
+        <section class="news-section section-padding">
+           
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                        {{ message }}
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            
+            <div class="container mb-5">
+                <div class="row">
+                  <div class="col-12 text-end me-auto">
+                      <a type="button" class="btn btn-success" href="{% url 'create-org' %}">+ Criar organização</a>
+                  </div>
+                </div>
+              </div>
+
+            <div class="container">
+                <h1 class="text-center mb-5">Minhas organizações</h1>
+                <div class="row">
+                    
+                    {% if orgs %}
+                        {% for org in orgs %}
+                            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                                <div class="custom-block-wrap bg-secondary bg-gradient">
+                                    
+                                    <img src="{{org.image.url}}"
+                                    class="custom-block-image img-fluid" style="height: 300px;">
+
+
+                                    <div class="custom-block">
+                                        <div class="custom-block-body">
+                                            <h5 class="mb-5 text-center text-white">{{org.organization.name}}</h5>
+                                            <span class="text-white">
+                                                <p class="text-white">{{org.organization.street}}</p>
+                                                <p class="text-white">Nº {{org.organization.number}} - {{org.organization.neighborhood}} - {{org.organization.city}}</p>
+                                            </span>
+                                        </div>
+
+                                        <a href="{% url "organization" id=org.organization.id %}" class="custom-btn btn">Visualizar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                <p>Você não pertence a nenhuma organização. <a href="{% url 'create-org' %}"><b>Clique aqui</b></a> ou no botão acima para criar uma!</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    
+                </div>
+            </div>
+        </section>
+   
+{% endblock content %}

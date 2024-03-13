@@ -1,0 +1,147 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{org.name}} - Configurações{% endblock title %}
+
+{% block content %}
+
+        <section class="donate-section">
+            <div class="section-overlay"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-12 mx-auto">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show w-100 mx-auto" role="alert">
+                                    <h6>{{message}}</h6>
+                                    <button type="button" class="btn-close  d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if org_profile.image.url == '/media/default_profile_picture.jpg' %}
+                            <div class="alert alert-primary alert-dismissible fade show w-100 mx-auto" role="alert">
+                                <h6 class="text-primary">Coloque uma foto de perfil!</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+
+
+                        <form method="POST" enctype="multipart/form-data" class="custom-form donate-form">
+                            {% csrf_token %}
+                            <h3 class="mb-4 text-center"><a href="{% url "organization" id=org_profile.organization.id %}">{{org_profile.organization.name}}</a></h3>
+
+                            <div class="row">
+
+                                <div class="col-12 text-center">
+                                    <img src="{{ org_profile.image.url }}" class="justify-center">
+                                    <br><br><br>
+                                </div>
+
+                                
+                                <div id="upload-pic">
+                                    <label for="id_image" class="custom-btn custom-border-btn btn col-12">Escolher foto</label>
+                                    <input type="file" name="image" accept="image/*" id="id_image">
+                                </div>
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">* Nome da organização</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="name" class="form-control" maxlength="100" required= id="id_name" value="{{org_profile.organization.name}}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Email</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="email" class="form-control text-success" value="{{org_profile.organization.email}}" readonly>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">* CEP</h5>
+                                </div>
+
+                                <div class="col-sm-12 col-lg-12">
+    
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <input type="text" name="cep" class="form-control" placeholder="00000-000" maxlength="9" id="id_cep" onkeyup="handleZipCode(event)" required value="{{ org_profile.organization.cep }}"> 
+                                        </div>
+    
+                                        <div class="col-4">
+                                            <button class="btn btn-primary col-12" onclick="getCep()">Buscar</button>
+                                        </div>
+                                    </div>
+
+                                    <p id="feedback-cep" class="text-danger mt-3 d-none"></p>
+
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Rua</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="street" class="form-control" maxlength="100" id="id_street" readonly required value="{{ org_profile.organization.street }}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Bairro</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="neighborhood" class="form-control" maxlength="100" id="id_neighborhood" readonly required value="{{ org_profile.organization.neighborhood }}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Cidade</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="city" class="form-control" maxlength="100" id="id_city" readonly required value="{{ org_profile.organization.city }}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Estado</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="state" class="form-control" id="id_state" readonly required value="{{ org_profile.organization.state }}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Número</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="number" class="form-control" maxlength="10" id="id_number" required value="{{ org_profile.organization.number }}">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <h5 class="mt-4">Descrição</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <textarea type="textarea" rows="4" name="description" class="form-control" id="id_description">{{ org_profile.organization.description }}</textarea>
+                                </div>
+                                
+                                
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="form-control mt-4">Enviar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}
+
+{% block links %}
+    <script src="{% static 'main/js/profile.js' %}"></script>
+{% endblock links %}

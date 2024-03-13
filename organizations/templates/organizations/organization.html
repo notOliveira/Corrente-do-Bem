@@ -1,0 +1,100 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{org.organization.name}}{% endblock title %}
+
+{% block content %}
+
+        <section class="news-section section-padding">
+           
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                        {{ message }}
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="container">
+                <h1 class="text-center mb-5">{{org.organization.name}}</h1>
+            </div>
+        </section>
+
+        <section class="section-padding section-bg" id="section_2">
+            <div class="container">
+                {% if org_profile.image.url == '/media/default_org_picture.png' %}
+                    <div class="alert alert-info alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                        A organização ainda não possui uma imagem de perfil.
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+                        
+                        <div class="custom-text-box">
+                            <div class="row">
+                                <h4 class="mb-5 col-8">Informações</h4>
+                                <div class="col-4"><a class="btn btn-primary" href="{% url "settings-org" id=org.organization.id %}">Editar dados</button></a>
+                            </div>
+
+                            <p class="mt-2 text-muted">OBS: Essas informações serão públicas, com exceção aos usuários atrelados à organização.</p>
+
+                            <p class="mt-2">
+                                <b>Endereço:</b> {{org.organization.street}} - {{org.organization.number}}<br>
+                                {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}
+                            
+                            </p>
+
+                            <p class="mt-2"><b>CEP:</b> {{org.organization.cep}}</p>
+
+                            <p class="mt-2"><b>Usuários: </b><a class="text-info"data-bs-toggle="modal" data-bs-target="#usersModal">Clique aqui</a></p>
+
+                            <h5 class="mt-3">Descrição</h5>
+
+                            <p class="mt-2">{{org.organization.description}}</p>
+
+                            <ul class="custom-list mt-2">
+                                <li class="custom-list-item d-flex">
+                                    <i class="bg-info custom-text-box-icon me-2"></i>
+                                    {{org.organization.users.all | length }} usuários registrados
+                                </li>
+
+                                {% comment %} <li class="custom-list-item d-flex">
+                                    <i class="bg-warning custom-text-box-icon me-2"></i>
+                                    2 denúncias registradas
+                                </li> {% endcomment %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <img src="{{org.image.url}}" class="custom-text-box-image img-fluid" alt="">
+                </div>
+            </div>
+        </section>
+
+        {% comment %} MODAL USERS {% endcomment %}
+        <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="usersModalLabel">Usuários da organização</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% for user in org.organization.users.all %} 
+                            {{ user.first_name }} {{ user.last_name }} (<a href="mailto:{{ user.email }}">{{ user.email }}</a>)
+                            {% if not forloop.last %}<br>{% endif %} 
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+{% endblock content %}
