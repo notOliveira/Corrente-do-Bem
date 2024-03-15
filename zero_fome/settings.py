@@ -93,19 +93,7 @@ WSGI_APPLICATION = 'zero_fome.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-if environment == "main":
-    # Railway database
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ["MYSQLDATABASE"],
-            'USER': os.environ["MYSQLUSER"],
-            'PASSWORD': os.environ["MYSQLPASSWORD"],
-            'HOST': os.environ["MYSQLHOST"],
-            'PORT': os.environ["MYSQLPORT"],
-        }
-    }
-else:
+if environment == "development":
     # Local database
     DATABASES = {
         'default': {
@@ -117,6 +105,19 @@ else:
             'PORT': os.environ["LOCALPORT"],
         }
     }
+else:
+    # Railway database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ["PGDATABASE"],
+            'USER': os.environ["PGUSER"],
+            'PASSWORD': os.environ["PGPASSWORD"],
+            'HOST': os.environ["PGHOST"],
+            'PORT': os.environ["PGPORT"],
+        }
+    }
+
 
 
 # Password validation
