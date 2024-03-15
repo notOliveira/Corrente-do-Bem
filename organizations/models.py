@@ -11,6 +11,7 @@ class Organization(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=2, choices=STATE_CHOICES, blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
+    complement = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     users = models.ManyToManyField('users.CustomUser', related_name='organization_users', blank=True)
     # Work on category system in the future

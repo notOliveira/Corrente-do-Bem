@@ -4,7 +4,7 @@ from .models import Organization, OrganizationProfile
 class OrganizationCreationForm(forms.ModelForm):
     class Meta:
         model = Organization
-        fields = ['name', 'email', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'description']
+        fields = ['name', 'email', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement', 'description']
         dictionary = {}
         for field in fields:
             dictionary[field] = forms.TextInput(attrs={'class': 'form-control'})
@@ -18,6 +18,7 @@ class OrganizationCreationForm(forms.ModelForm):
             'city': 'Cidade',
             'state': 'Estado',
             'number': 'Número',
+            'complement': 'Complemento',
             'description': 'Descrição',
         }
         
@@ -25,7 +26,7 @@ class OrganizationUpdateForm(forms.ModelForm):
             
     class Meta:
         model = Organization
-        fields = ['name', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'description']
+        fields = ['name', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement', 'description']
 
 class OrganizationProfileUpdateForm(forms.ModelForm):
     class Meta:
