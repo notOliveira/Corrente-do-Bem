@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# Verifica em qual branch estamos
+environment = os.getenv("ENV", "production")
+print(f"Running on environment: {environment}")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +34,7 @@ SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django-server-production-774a.up.railway.app', 'https://django-server-production-774a.up.railway.app']
+ALLOWED_HOSTS = ['django-server-production-774a.up.railway.app', 'https://django-server-production-774a.up.railway.app', 'localhost']
 
 
 # FORM SUBMISSION
@@ -84,16 +92,31 @@ WSGI_APPLICATION = 'zero_fome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["PGDATABASE"],
-        'USER': os.environ["PGUSER"],
-        'PASSWORD': os.environ["PGPASSWORD"],
-        'HOST': os.environ["PGHOST"],
-        'PORT': os.environ["PGPORT"],
+
+if environment == "main":
+    # Railway database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ["MYSQLDATABASE"],
+            'USER': os.environ["MYSQLUSER"],
+            'PASSWORD': os.environ["MYSQLPASSWORD"],
+            'HOST': os.environ["MYSQLHOST"],
+            'PORT': os.environ["MYSQLPORT"],
+        }
     }
-}
+else:
+    # Local database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ["LOCALDATABASE"],
+            'USER': os.environ["MYSQLUSER"],
+            'PASSWORD': os.environ["LOCALPASSWORD"],
+            'HOST': os.environ["LOCALHOST"],
+            'PORT': os.environ["LOCALPORT"],
+        }
+    }
 
 
 # Password validation
