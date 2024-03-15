@@ -99,7 +99,7 @@ if environment == "development":
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.environ["LOCALDATABASE"],
-            'USER': os.environ["MYSQLUSER"],
+            'USER': os.environ["LOCALUSER"],
             'PASSWORD': os.environ["LOCALPASSWORD"],
             'HOST': os.environ["LOCALHOST"],
             'PORT': os.environ["LOCALPORT"],
