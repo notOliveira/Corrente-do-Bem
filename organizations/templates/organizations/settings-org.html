@@ -27,9 +27,16 @@
                         {% endif %}
 
 
-                        <form method="POST" enctype="multipart/form-data" class="custom-form donate-form">
+                        <form method="POST" enctype="multipart/form-data" class="custom-form donate-form mt-3">
+                            <div class="container mb-5">
+                                <div class="row">
+                                  <div class="col-12 text-start ms-auto">
+                                      <a type="button" class="btn btn-primary" href="{% url 'organization' id=org_profile.organization.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
+                                  </div>
+                                </div>
+                            </div>
                             {% csrf_token %}
-                            <h3 class="mb-4 text-center"><a href="{% url "organization" id=org_profile.organization.id %}">{{org_profile.organization.name}}</a></h3>
+                            <h3 class="mb-4 text-center">{{org_profile.organization.name}}</h3>
 
                             <div class="row">
 
@@ -38,7 +45,6 @@
                                     <br><br><br>
                                 </div>
 
-                                
                                 <div id="upload-pic">
                                     <label for="id_image" class="custom-btn custom-border-btn btn col-12">Escolher foto</label>
                                     <input type="file" name="image" accept="image/*" id="id_image">
@@ -125,7 +131,7 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <input type="text" name="complement" class="form-control" id="id_complement" required>
+                                    <input type="text" name="complement" class="form-control" id="id_complement" value="{{ org_profile.organization.complement }}">
                                 </div>
                                 
                                 
@@ -136,7 +142,38 @@
                                 <div class="col-12 mt-2">
                                     <textarea type="textarea" rows="4" name="description" class="form-control" id="id_description">{{ org_profile.organization.description }}</textarea>
                                 </div>
-                                
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">Site</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="url" class="form-control" name="website" maxlength="200" id="id_website" value="{% if org_profile.website %}{{ org_profile.website }}{% endif %}">
+                                </div>
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">Usuário Instagram</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" class="form-control" name="instagram_url" maxlength="200" id="id_instagram_url" value="{% if org_profile.instagram_url %}{{ org_profile.instagram_url }}{% endif %}">
+                                </div>
+
+                                {% comment %} <div class="col-12">
+                                    <h5 class="mt-4">Usuário X / Twitter</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" class="form-control" name="twitter_url" maxlength="200" id="id_twitter_url" value="{% if org_profile.twitter_url %}{{ org_profile.twitter_url }}{% endif %}">
+                                </div>
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">Usuário Linkedin</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" class="form-control" name="linkedin_url" maxlength="200" id="id_linkedin_url" value="{% if org_profile.linkedin_url %}{{ org_profile.linkedin_url }}{% endif %}">
+                                </div> {% endcomment %}
                                 
                                 <div class="col-12 mt-2">
                                     <button type="submit" class="form-control mt-4">Enviar</button>

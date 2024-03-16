@@ -60,7 +60,6 @@ def settings_org(request, id):
         else:
             messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')
     
-    
     organization = Organization.objects.get(id=id)
     
     if request.user not in organization.users.all():
@@ -69,10 +68,10 @@ def settings_org(request, id):
     
     organization_profile = OrganizationProfile.objects.get(organization=organization)
     
-
-    
     context = {
         'org' : organization,
         'org_profile': organization_profile,
+        'form_org': OrganizationUpdateForm(),
+        'form_org_profile': OrganizationProfileUpdateForm(instance=organization_profile)
     }
     return render(request, 'organizations/settings-org.html', context)

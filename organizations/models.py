@@ -19,17 +19,17 @@ class Organization(models.Model):
     
     def __str__(self):
         return self.name
+        # return str(self.__dict__)
 
 class OrganizationProfile(models.Model):
     organization = models.OneToOneField(Organization, on_delete=models.CASCADE)
     image = models.ImageField(default='default_org_picture.png', upload_to='org_pics')
-    website = models.URLField(blank=True, null=True)
-    facebook_url = models.URLField(blank=True, null=True)
-    twitter_url = models.URLField(blank=True, null=True)
-    linkedin_url = models.URLField(blank=True, null=True)
+    website = models.CharField(blank=True, null=True, max_length=200)
+    instagram = models.CharField(blank=True, null=True, max_length=50)
     
     def __str__(self):
         return f'{self.organization.name} - Profile'
+        # return  str(self.__dict__) 
     
     # Substituindo método save
     def save(self, *args, **kwargs):

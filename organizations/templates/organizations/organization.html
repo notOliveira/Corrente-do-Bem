@@ -31,6 +31,14 @@
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endif %}
+
+                {% if org_profile.image.url == '/media/default_org_picture.png' %}
+                    <div class="alert alert-info alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                        A organização ainda não possui uma imagem de perfil.
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-lg-6 col-12">
                         

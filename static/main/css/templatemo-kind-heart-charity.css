@@ -766,8 +766,7 @@ strong {
   background-position: center;
   background-size: cover;
   position: relative;
-  padding-top: 150px;
-  padding-bottom: 150px;
+  padding-top: 100px;
 }
 
 .donate-form {
