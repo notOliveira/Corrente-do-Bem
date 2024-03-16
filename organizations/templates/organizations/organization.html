@@ -22,7 +22,7 @@
             </div>
         </section>
 
-        <section class="section-padding section-bg" id="section_2">
+        <section class="section-padding section-bg">
             <div class="container">
                 {% if org.image.url == '/media/default_org_picture.png' %}
                     <div class="alert alert-info alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
@@ -43,7 +43,12 @@
 
                             <p class="mt-2 text-muted">OBS: Essas informações serão públicas, com exceção aos usuários atrelados à organização.</p>
 
-                            <p class="mt-2">
+                            {% for category in org.organization.category.all %} 
+                            <span class="badge bg-primary w-auto fs-6 mb-2 px-3">{{category}}</span>
+                                {% if not forloop.last %}&nbsp;&nbsp;&nbsp;{% endif %} 
+                            {% endfor %}
+
+                            <p class="mt-4">
                                 <b>Endereço:</b> {{org.organization.street}} - {{org.organization.number}}<br>
                                 {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}<br>
                                 Complemento: {{org.organization.complement}}

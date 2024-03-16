@@ -22,6 +22,7 @@ def create_org(request):
             try:
                 organization = form.save(commit=False)
                 organization.save()
+                form.save_m2m()
                 organization.users.add(request.user)
                 messages.success(request, 'Organização criada com sucesso!')
                 return redirect('organizations')

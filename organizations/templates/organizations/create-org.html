@@ -23,7 +23,8 @@
                             {% csrf_token %}
                             <h3 class="mb-4 text-center">Criar organização</h3>
 
-                            <div class="row">
+                            {% comment %} {{form}} {% endcomment %}
+                             <div class="row">
                                 
                                 <div class="text-end mt-4">
                                     <p class="text-warning">* Campos obrigatórios</p>
@@ -44,6 +45,22 @@
                                 <div class="col-12 mt-2">
                                     <input type="email" name="email" id="id_email" pattern="[^ @]*@[^ @]*" class="form-control" maxlength="100" required>
                                 </div>
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">* Categorias</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <select name="category" class="form-control" id="id_category" multiple="" required>
+                                        <option class="form-control" value="1">Eletrodomésticos</option>
+                                        <option class="form-control" value="2">Alimentos</option>
+                                        <option class="form-control" value="3">Vestuário</option>
+                                        <option class="form-control" value="4">Mobílias</option>
+                                        <option class="form-control" value="5">Diversos</option>
+                                    </select>
+                                </div>
+
+                                <p class="text-info mt-3 d-none">Selecione o que sua organização deseja receber</p>
                                 
                                 <div class="col-12">
                                     <h5 class="mt-4">* CEP</h5>
@@ -120,7 +137,7 @@
                                 <div class="col-12 mt-2">
                                     <textarea type="textarea" rows="4" name="description" class="form-control" id="id_description"></textarea>
                                 </div>
-
+                                
                                 <div class="col-12 mt-2">
                                     <button type="submit" class="form-control mt-4">Enviar</button>
                                 </div>

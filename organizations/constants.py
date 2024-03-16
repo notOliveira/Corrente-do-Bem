@@ -27,3 +27,11 @@ STATE_CHOICES = (
     ('SE', 'Sergipe'),
     ('TO', 'Tocantins'),
 )
+
+CATEGORY_CHOICES = (
+    (1, 'Eletrodomésticos'),
+    (2, 'Alimentos'),
+    (3, 'Vestuário'),
+    (4, 'Mobílias'),
+    (5, 'Diversos')
+)

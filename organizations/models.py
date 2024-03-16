@@ -1,7 +1,14 @@
 from django.db import models
 from PIL import Image
-from .constants import STATE_CHOICES
+from .constants import STATE_CHOICES, CATEGORY_CHOICES
 
+
+class Category(models.Model):
+    name = models.IntegerField(choices=CATEGORY_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.get_name_display()
+    
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(blank=True, null=True)
@@ -14,8 +21,8 @@ class Organization(models.Model):
     complement = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     users = models.ManyToManyField('users.CustomUser', related_name='organization_users', blank=True)
-    # Work on category system in the future
-    # category = models.CharField(max_length=100, blank=True, null=True)
+    category = models.ManyToManyField(Category, related_name='organization_categorys', blank=True)
+
     
     def __str__(self):
         return self.name
