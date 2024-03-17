@@ -12,8 +12,6 @@ def organizations(request):
     }
     return render(request, 'organizations/organizations.html', context)
 
-
-
 @login_required(login_url='/login')
 def create_org(request):
     if request.method == "POST":
@@ -35,19 +33,20 @@ def create_org(request):
         
     return render(request, 'organizations/create-org.html', context={'form': OrganizationCreationForm()})
 
-@login_required(login_url='/login')
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    
+    context = {
+        'org': organization_profile
+    }
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
-        messages.error(request, 'Você não tem permissão para acessar essa organização.')
-        return redirect('organizations')
+        return render(request, 'organizations/organization-view.html', context)
 
     context = {
         'org': organization_profile
     }
     return render(request, 'organizations/organization.html', context)
-
 
 def settings_org(request, id):
     if request.method == "POST":

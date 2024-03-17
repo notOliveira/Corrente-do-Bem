@@ -11,7 +11,7 @@
                     {% if messages %}
                     {% for message in messages %}
                             <div class="col-12">
-                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto my-4" role="alert">
                                     {{ message }}
                                     <br>
                                     <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>

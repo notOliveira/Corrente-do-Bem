@@ -1,0 +1,69 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{org.organization.name}}{% endblock title %}
+
+{% block content %}
+
+        <section class="news-section py-5">
+           
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                        {{ message }}
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="container">
+                <h1 class="text-center mb-5">{{org.organization.name}}</h1>
+            </div>
+        </section>
+
+        <section class="py-5 section-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-12">   
+                        <div class="custom-text-box">
+                            <div class="row">
+                                <h4 class=" col-8"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
+                                <div class="col-4"></div>
+                                <h6 class="py-4">Esses são os itens que essa organização gostaria de receber:</h6>
+                                {% for category in org.organization.category.all %} 
+                                <span class="ms-2 badge bg-primary w-auto fs-6">{{category}}</span>
+                                    {% if not forloop.last %}&nbsp;&nbsp;&nbsp;{% endif %} 
+                                {% endfor %}
+
+                                <p class="mt-4"><i class="bi bi-telephone-fill"></i>&nbsp;<b>Telefone:</b> {{org.organization.phone}}</p>
+
+                                <p class="pt-4">
+                                    <i class="bi bi-geo-alt-fill"></i>&nbsp;
+                                    <b>Endereço:</b> {{org.organization.street}} - {{org.organization.number}}<br>
+                                    {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}<br>
+                                    Complemento: {{org.organization.complement}}
+                                </p>
+
+                                <p><b>CEP:</b> {{org.organization.cep}}</p>
+
+                                <h6 class="my-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
+
+                                <p class="mt-2">{{org.organization.description}}</p>
+
+                                {% if org.website %}
+                                <p class="mt-2"><i class="bi bi-link-45deg"></i>&nbsp;<b>Site: </b><a href="{{org.website}}" target="blank">{{org.website}}</a></p>
+                                {% endif %}
+                                {% if org.instagram %}
+                                <p class="mt-2"><i class="bi bi-instagram"></i>&nbsp;<b>Instagram: </b><a href="http://instagram.com/{{org.instagram}}" target="blank">https://instagram.com/{{org.instagram}}</a></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-lg-6 col-12">
+                    <img src="{{org.image.url}}" class="custom-text-box-image img-fluid" alt="">
+                </div>
+            </div>
+        </section>
+   
+{% endblock content %}

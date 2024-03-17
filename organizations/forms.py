@@ -26,7 +26,7 @@ class OrganizationUpdateForm(forms.ModelForm):
             
     class Meta:
         model = Organization
-        fields = ['name', 'category', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement', 'description']
+        fields = ['name', 'category', 'phone', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement', 'description']
 
 class OrganizationProfileUpdateForm(forms.ModelForm):
     class Meta:
