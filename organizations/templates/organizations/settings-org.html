@@ -41,7 +41,7 @@
                             <div class="row">
 
                                 <div class="col-12 text-center">
-                                    <img src="{{ org_profile.image.url }}" class="justify-center">
+                                    <img src="{{ org_profile.image.url }}" class="justify-center org-picture rounded-circle">
                                     <br><br><br>
                                 </div>
 
@@ -148,7 +148,7 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <input type="url" class="form-control" name="website" maxlength="50" id="id_website" value="{% if org_profile.website %}{{ org_profile.website }}{% endif %}">
+                                    <input type="url" class="form-control" name="website" maxlength="50" id="id_website" value="{% if org_profile.website %}{{ org_profile.website }}{% endif %}" placeholder="https://seusite.com">
                                 </div>
 
                                 <div class="col-12">

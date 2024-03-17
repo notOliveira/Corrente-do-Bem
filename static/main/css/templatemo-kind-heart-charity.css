@@ -1372,6 +1372,10 @@ blockquote::before {
   color: var(--white-color);
 }
 
+.org-picture {
+  max-height: 300px;
+}
+
 
 /*---------------------------------------
   RESPONSIVE STYLES               
@@ -1657,4 +1661,5 @@ blockquote::before {
     padding: 25px;
   }
 }
+
 
