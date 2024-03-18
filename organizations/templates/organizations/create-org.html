@@ -23,11 +23,10 @@
                             {% csrf_token %}
                             <h3 class="mb-4 text-center">Criar organização</h3>
 
-                            {% comment %} {{form}} {% endcomment %}
                              <div class="row">
                                 
                                 <div class="text-end mt-4">
-                                    <p class="text-warning">* Campos obrigatórios</p>
+                                    <p class="text-primary">* Campos obrigatórios</p>
                                 </div>
 
                                 <div class="col-12">
@@ -35,7 +34,7 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <input type="text" name="name" class="form-control" maxlength="100" id="id_name" required>
+                                    <input type="text" name="name" class="form-control" maxlength="50" id="id_name" required>
                                 </div>
                                 
                                 <div class="col-12">
@@ -45,6 +44,16 @@
                                 <div class="col-12 mt-2">
                                     <input type="email" name="email" id="id_email" pattern="[^ @]*@[^ @]*" class="form-control" maxlength="100" required>
                                 </div>
+                                <p class="text-primary">O email é único e por enquanto não poderá ser trocado</p>
+
+                                <div class="col-12">
+                                    <h5 class="mt-4">* Telefone</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="phone" class="form-control" maxlength="11" id="id_phone" onkeyup="handlePhone(event)" placeholder="99999999999" required>
+                                </div>
+                                <p class="text-primary">Coloque apenas o DDD e o telefone, de preferência um Whatsapp</p>
 
                                 <div class="col-12">
                                     <h5 class="mt-4">* Categorias</h5>
@@ -60,7 +69,7 @@
                                     </select>
                                 </div>
 
-                                <p class="text-info mt-3 d-none">Selecione o que sua organização deseja receber</p>
+                                <p class="text-primary mt-3">Selecione o que sua organização deseja receber</p>
                                 
                                 <div class="col-12">
                                     <h5 class="mt-4">* CEP</h5>

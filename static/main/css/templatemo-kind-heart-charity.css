@@ -1376,6 +1376,15 @@ blockquote::before {
   max-height: 300px;
 }
 
+.form-control option {
+  margin-top: 10px;
+}
+
+select option:checked {
+  background-color: green !important;
+  color: white !important; /* Mudando a cor do texto para branco para melhorar a legibilidade */
+}
+
 
 /*---------------------------------------
   RESPONSIVE STYLES               

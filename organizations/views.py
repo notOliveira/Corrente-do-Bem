@@ -25,13 +25,18 @@ def create_org(request):
                 messages.success(request, 'Organização criada com sucesso!')
                 return redirect('organizations')
             except Exception as e:
-                messages.error(request, f'Houve um problema ao criar a organização: {str(e)}')
+                print(e)
+                messages.error(request, f'Houve um problema ao criar a organização. Por favor, tente novamente.')
                 return redirect('create-org')
         else:
-            messages.error(request, 'Houve um problema ao validar o formulário. Por favor, tente novamente.')
+            email_errors = form.errors.get('email')
+            if email_errors:
+                messages.error(request, 'O email já está sendo utilizado por outra organização.')
+            else:
+                messages.error(request, 'Houve um problema ao validar o formulário. Por favor, tente novamente.')
             return redirect('create-org')
         
-    return render(request, 'organizations/create-org.html', context={'form': OrganizationCreationForm()})
+    return render(request, 'organizations/create-org.html')
 
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
@@ -62,6 +67,13 @@ def settings_org(request, id):
     
     organization = Organization.objects.get(id=id)
     
+    categories = organization.category.all().values_list('name')
+    
+    org_categories = []
+    
+    for category in categories:
+        org_categories.append(category[0])
+    
     if request.user not in organization.users.all():
         messages.error(request, 'Você não tem permissão para acessar essa organização.')
         return redirect('organizations')
@@ -71,7 +83,6 @@ def settings_org(request, id):
     context = {
         'org' : organization,
         'org_profile': organization_profile,
-        'form_org': OrganizationUpdateForm(),
-        'form_org_profile': OrganizationProfileUpdateForm(instance=organization_profile)
+        'categories': org_categories
     }
     return render(request, 'organizations/settings-org.html', context)

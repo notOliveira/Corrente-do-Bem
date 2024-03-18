@@ -14,6 +14,19 @@ const zipCodeMask = (value) => {
     return value
 }
 
+const handlePhone = (event) => {
+    let input = event.target
+    input.value = phoneMask(input.value)
+}
+
+const phoneMask = (value) => {
+    if (!value) {
+        return ""
+    }
+    value = value.replace(/\D/g,'')
+    return value
+}
+
 function getCep() {
     event.preventDefault(); // Prevenir o comportamento padrão do formulário
 

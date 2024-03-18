@@ -30,24 +30,28 @@
                             <div class="row">
                                 <h4 class=" col-8"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
                                 <div class="col-4"></div>
+                                
                                 <h6 class="py-4">Esses são os itens que essa organização gostaria de receber:</h6>
                                 {% for category in org.organization.category.all %} 
-                                <span class="ms-2 badge bg-primary w-auto fs-6">{{category}}</span>
+                                <span class="badge bg-primary w-auto fs-6 mb-2 px-3">{{category}}</span>
                                     {% if not forloop.last %}&nbsp;&nbsp;&nbsp;{% endif %} 
                                 {% endfor %}
 
-                                <p class="mt-4"><i class="bi bi-telephone-fill"></i>&nbsp;<b>Telefone:</b> {{org.organization.phone}}</p>
+                                <h6 class="py-3"><i class="bi bi-telephone-fill"></i>&nbsp;Contato</h6>
 
-                                <p class="pt-4">
-                                    <i class="bi bi-geo-alt-fill"></i>&nbsp;
+                                <p><b>Telefone:</b> <a href="https://wa.me/+55{{org.organization.phone}}" target="blank">{{org.organization.phone}}</a></p>
+                                <p><b>Email:</b> <a href="mailto:{{org.organization.email}}">{{org.organization.email}}</a></p>
+
+                                <h6 class="py-3"><i class="bi bi-geo-alt-fill"></i>&nbsp;Endereço</h6>
+                                <p>
                                     <b>Endereço:</b> {{org.organization.street}} - {{org.organization.number}}<br>
-                                    {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}<br>
-                                    Complemento: {{org.organization.complement}}
+                                    Bairro {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}<br>
+                                    {% if org.organization.complement != None %}Complemento: {{org.organization.complement}}{% endif %}
                                 </p>
 
-                                <p><b>CEP:</b> {{org.organization.cep}}</p>
+                                <p class="mt-2"><b>CEP:</b> {{org.organization.cep}}</p>
 
-                                <h6 class="my-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
+                                <h6 class="mt-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
 
                                 <p class="mt-2">{{org.organization.description}}</p>
 

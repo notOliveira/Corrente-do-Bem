@@ -67,16 +67,25 @@
                                 </div>
 
                                 <div class="col-12">
+                                    <h5 class="mt-4">* Telefone</h5>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <input type="text" name="phone" class="form-control" maxlength="11" id="id_phone" value="{{org_profile.organization.phone}}" onkeyup="handlePhone(event)" placeholder="99999999999" required>
+                                </div>
+                                <p class="text-primary">Coloque apenas o DDD e o telefone, de preferência um Whatsapp</p>
+
+                                <div class="col-12">
                                     <h5 class="mt-4">* Categorias</h5>
                                 </div>
 
                                 <div class="col-12 mt-2">
                                     <select name="category" class="form-control" id="id_category" multiple="" required>
-                                        <option class="form-control" value="1">Eletrodomésticos</option>
-                                        <option class="form-control" value="2">Alimentos</option>
-                                        <option class="form-control" value="3">Vestuário</option>
-                                        <option class="form-control" value="4">Mobílias</option>
-                                        <option class="form-control" value="5">Diversos</option>
+                                        <option class="form-control" value="1" {% if 1 in categories %}selected{% endif %}>Eletrodomésticos</option>
+                                        <option class="form-control" value="2" {% if 2 in categories %}selected{% endif %}>Alimentos</option>
+                                        <option class="form-control" value="3" {% if 3 in categories %}selected{% endif %}>Vestuário</option>
+                                        <option class="form-control" value="4" {% if 4 in categories %}selected{% endif %}>Mobílias</option>
+                                        <option class="form-control" value="5" {% if 5 in categories %}selected{% endif %}>Diversos</option>
                                     </select>
                                 </div>
                                 
@@ -145,7 +154,7 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <input type="text" name="complement" class="form-control" id="id_complement" value="{{ org_profile.organization.complement }}">
+                                    <input type="text" name="complement" class="form-control" id="id_complement" value="{% if org.organization.complement != None %}{{ org_profile.organization.complement }}{% endif %}">
                                 </div>
                                 
                                 

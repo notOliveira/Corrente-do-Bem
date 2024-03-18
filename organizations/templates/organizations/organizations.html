@@ -23,7 +23,7 @@
                     
                     {% if orgs %}
                         {% for org in orgs %}
-                            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 mt-5">
                                 <div class="custom-block-wrap bg-secondary bg-gradient">
                                     
                                     <img src="{{org.image.url}}"
@@ -52,7 +52,7 @@
 
                     <div class="container">
                         <div class="row">
-                          <div class="col-12 text-end me-auto">
+                          <div class="col-12 text-end my-5">
                               <a type="button" class="btn btn-success" href="{% url 'create-org' %}">+ Criar organização</a>
                           </div>
                         </div>
