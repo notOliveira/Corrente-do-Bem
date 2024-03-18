@@ -39,8 +39,19 @@
 
                                 <h6 class="py-3"><i class="bi bi-telephone-fill"></i>&nbsp;Contato</h6>
 
-                                <p><b>Telefone:</b> <a href="https://wa.me/+55{{org.organization.phone}}" target="blank">{{org.organization.phone}}</a></p>
-                                <p><b>Email:</b> <a href="mailto:{{org.organization.email}}">{{org.organization.email}}</a></p>
+
+                                <div class="col-sm-12 col-lg-12">
+    
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p><b>Telefone:</b> <a href="https://wa.me/+55{{org.organization.phone}}" target="blank">{{org.organization.phone}}</a></p>
+                                        </div>
+    
+                                        <div class="col-6 text-end">
+                                            <a href="https://wa.me/+55{{org.organization.phone}}" class="btn btn-success" target="blank"><i class="bi bi-whatsapp"></i> Whatsapp</a>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <h6 class="py-3"><i class="bi bi-geo-alt-fill"></i>&nbsp;Endereço</h6>
                                 <p>
@@ -71,3 +82,4 @@
         </section>
    
 {% endblock content %}
+

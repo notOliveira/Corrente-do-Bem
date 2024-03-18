@@ -26,191 +26,211 @@
                             </div>
                         {% endif %}
 
-
-                        <form method="POST" enctype="multipart/form-data" class="custom-form donate-form mt-3">
+                        <div class="custom-form donate-form mt-3">
                             <div class="container mb-5">
                                 <div class="row">
-                                  <div class="col-12 text-start ms-auto">
-                                      <a type="button" class="btn btn-primary" href="{% url 'organization' id=org_profile.organization.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
-                                  </div>
-                                </div>
-                            </div>
-                            {% csrf_token %}
-                            <h3 class="mb-4 text-center">{{org_profile.organization.name}}</h3>
-
-                            <div class="row">
-
-                                <div class="col-12 text-center">
-                                    <img src="{{ org_profile.image.url }}" class="justify-center org-picture rounded-circle">
-                                    <br><br><br>
-                                </div>
-
-                                <div id="upload-pic">
-                                    <label for="id_image" class="custom-btn custom-border-btn btn col-12">Escolher foto</label>
-                                    <input type="file" name="image" accept="image/*" id="id_image">
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">* Nome da organização</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="name" class="form-control" maxlength="100" required= id="id_name" value="{{org_profile.organization.name}}">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Email</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="email" class="form-control text-success" value="{{org_profile.organization.email}}" readonly>
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">* Telefone</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="phone" class="form-control" maxlength="11" id="id_phone" value="{{org_profile.organization.phone}}" onkeyup="handlePhone(event)" placeholder="99999999999" required>
-                                </div>
-                                <p class="text-primary">Coloque apenas o DDD e o telefone, de preferência um Whatsapp</p>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">* Categorias</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <select name="category" class="form-control" id="id_category" multiple="" required>
-                                        <option class="form-control" value="1" {% if 1 in categories %}selected{% endif %}>Eletrodomésticos</option>
-                                        <option class="form-control" value="2" {% if 2 in categories %}selected{% endif %}>Alimentos</option>
-                                        <option class="form-control" value="3" {% if 3 in categories %}selected{% endif %}>Vestuário</option>
-                                        <option class="form-control" value="4" {% if 4 in categories %}selected{% endif %}>Mobílias</option>
-                                        <option class="form-control" value="5" {% if 5 in categories %}selected{% endif %}>Diversos</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">* CEP</h5>
-                                </div>
-
-                                <div class="col-sm-12 col-lg-12">
-    
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <input type="text" name="cep" class="form-control" placeholder="00000-000" maxlength="9" id="id_cep" onkeyup="handleZipCode(event)" required value="{{ org_profile.organization.cep }}"> 
-                                        </div>
-    
-                                        <div class="col-4">
-                                            <button class="btn btn-primary col-12" onclick="getCep()">Buscar</button>
-                                        </div>
+                                    <div class="col-12 text-start ms-auto">
+                                        <a type="button" class="btn btn-primary" href="{% url 'organization' id=org_profile.organization.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
                                     </div>
-
-                                    <p id="feedback-cep" class="text-danger mt-3 d-none"></p>
-
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Rua</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="street" class="form-control" maxlength="100" id="id_street" readonly required value="{{ org_profile.organization.street }}">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Bairro</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="neighborhood" class="form-control" maxlength="100" id="id_neighborhood" readonly required value="{{ org_profile.organization.neighborhood }}">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Cidade</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="city" class="form-control" maxlength="100" id="id_city" readonly required value="{{ org_profile.organization.city }}">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Estado</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="state" class="form-control" id="id_state" readonly required value="{{ org_profile.organization.state }}">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Número</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="number" class="form-control" maxlength="10" id="id_number" required value="{{ org_profile.organization.number }}">
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">Complemento</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" name="complement" class="form-control" id="id_complement" value="{% if org.organization.complement != None %}{{ org_profile.organization.complement }}{% endif %}">
-                                </div>
-                                
-                                
-                                <div class="col-12">
-                                    <h5 class="mt-4">Descrição</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <textarea type="textarea" rows="4" name="description" class="form-control" id="id_description">{{ org_profile.organization.description }}</textarea>
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">Site</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="url" class="form-control" name="website" maxlength="50" id="id_website" value="{% if org_profile.website %}{{ org_profile.website }}{% endif %}" placeholder="https://seusite.com">
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">Usuário Instagram</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" class="form-control" name="instagram" maxlength="50" id="id_instagram" value="{% if org_profile.instagram %}{{ org_profile.instagram }}{% endif %}">
-                                </div>
-
-                                {% comment %} <div class="col-12">
-                                    <h5 class="mt-4">Usuário X / Twitter</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" class="form-control" name="twitter_url" maxlength="200" id="id_twitter_url" value="{% if org_profile.twitter_url %}{{ org_profile.twitter_url }}{% endif %}">
-                                </div>
-
-                                <div class="col-12">
-                                    <h5 class="mt-4">Usuário Linkedin</h5>
-                                </div>
-
-                                <div class="col-12 mt-2">
-                                    <input type="text" class="form-control" name="linkedin_url" maxlength="200" id="id_linkedin_url" value="{% if org_profile.linkedin_url %}{{ org_profile.linkedin_url }}{% endif %}">
-                                </div> {% endcomment %}
-                                
-                                <div class="col-12 mt-2">
-                                    <button type="submit" class="form-control mt-4">Enviar</button>
                                 </div>
                             </div>
-                        </form>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <h3 class="mb-4 text-center">{{org_profile.organization.name}}</h3>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <img src="{{ org_profile.image.url }}" class="justify-center org-picture rounded-circle">
+                                        <br><br><br>
+                                    </div>
+                                    <div id="upload-pic">
+                                        <label for="id_image" class="custom-btn custom-border-btn btn col-12">Escolher foto</label>
+                                        <input type="file" name="image" accept="image/*" id="id_image">
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">* Nome da organização</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="name" class="form-control" maxlength="100" required= id="id_name" value="{{ org_profile.organization.name }}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Email</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="email" class="form-control text-success" value="{{org_profile.organization.email}}" readonly>
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">* Telefone</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="phone" class="form-control" maxlength="11" id="id_phone" value="{{org_profile.organization.phone}}" onkeyup="handlePhone(event)" placeholder="99999999999" required>
+                                    </div>
+                                    <p class="text-primary">Coloque apenas o DDD e o telefone, de preferência um Whatsapp</p>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">* Categorias</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <select name="category" class="form-control" id="id_category" multiple="" required>
+                                            <option class="form-control" value="1" {% if 1 in categories %}selected{% endif %}>Eletrodomésticos</option>
+                                            <option class="form-control" value="2" {% if 2 in categories %}selected{% endif %}>Alimentos</option>
+                                            <option class="form-control" value="3" {% if 3 in categories %}selected{% endif %}>Vestuário</option>
+                                            <option class="form-control" value="4" {% if 4 in categories %}selected{% endif %}>Mobílias</option>
+                                            <option class="form-control" value="5" {% if 5 in categories %}selected{% endif %}>Diversos</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">* CEP</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-12">
+        
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <input type="text" name="cep" class="form-control" placeholder="00000-000" maxlength="9" id="id_cep" onkeyup="handleZipCode(event)" required value="{{ org_profile.organization.cep }}"> 
+                                            </div>
+        
+                                            <div class="col-4">
+                                                <button class="btn btn-primary col-12" onclick="getCep()">Buscar</button>
+                                            </div>
+                                        </div>
+                                        <p id="feedback-cep" class="text-danger mt-3 d-none"></p>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Rua</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="street" class="form-control" maxlength="100" id="id_street" readonly required value="{{ org_profile.organization.street }}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Bairro</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="neighborhood" class="form-control" maxlength="100" id="id_neighborhood" readonly required value="{{ org_profile.organization.neighborhood }}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Cidade</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="city" class="form-control" maxlength="100" id="id_city" readonly required value="{{ org_profile.organization.city }}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Estado</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="state" class="form-control" id="id_state" readonly required value="{{ org_profile.organization.state }}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Número</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="number" class="form-control" maxlength="10" id="id_number" required value="{{ org_profile.organization.number }}">
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Complemento</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" name="complement" class="form-control" id="id_complement" value="{% if org.organization.complement != None %}{{ org_profile.organization.complement }}{% endif %}">
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Descrição</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <textarea type="textarea" rows="4" name="description" class="form-control" id="id_description">{{ org_profile.organization.description }}</textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Site</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="url" class="form-control" name="website" maxlength="50" id="id_website" value="{% if org_profile.website %}{{ org_profile.website }}{% endif %}" placeholder="https://seusite.com">
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Usuário Instagram</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" class="form-control" name="instagram" maxlength="50" id="id_instagram" value="{% if org_profile.instagram %}{{ org_profile.instagram }}{% endif %}">
+                                    </div>
+                                    {% comment %} <div class="col-12">
+                                        <h5 class="mt-4">Usuário X / Twitter</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" class="form-control" name="twitter_url" maxlength="200" id="id_twitter_url" value="{% if org_profile.twitter_url %}{{ org_profile.twitter_url }}{% endif %}">
+                                    </div>
+                                    <div class="col-12">
+                                        <h5 class="mt-4">Usuário Linkedin</h5>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <input type="text" class="form-control" name="linkedin_url" maxlength="200" id="id_linkedin_url" value="{% if org_profile.linkedin_url %}{{ org_profile.linkedin_url }}{% endif %}">
+                                    </div> {% endcomment %}
+                                    
+                                    <div class="col-12 mt-2">
+                                        <button type="submit" class="form-control bg-success mt-4">Enviar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <p class="mt-5">
+                                <h6 class="text-danger" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;Zona de perigo
+                                </h6>   
+                              </p>
+                              <div class="collapse" id="collapseExample">
+                                <div class="card card-body">
+                                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteOrgModal">Excluir organização</button>
+                                </div>
+                              </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </section>
 
+        <div class="modal fade" id="deleteOrgModal" tabindex="-1" aria-labelledby="deleteOrgModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteOrgModalLabel">Excluir organização</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja excluir essa organização? Essa ação é <b class="text-danger">irreversível</b>.</p>
+
+                        <p class="mt-4">Digite <b>"{{org_profile.organization.name}}"</b> para confirmar</p>
+                        <input type="text" class="form-control my-4" id="delete-org-input" onkeyup="handleDeleteOrgInput(event)" >
+                        <button type="button" class="btn btn-danger col-12" id="delete-org-btn" name="delete-org" disabled>Excluir</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 {% endblock content %}
 
 {% block links %}
     <script src="{% static 'main/js/profile.js' %}"></script>
+    
+    <script>
+        const handleDeleteOrgInput = (event) => {
+            const input = event.target;
+            const deleteOrgBtn = document.getElementById('delete-org-btn');
+            const orgName = "{{org_profile.organization.name}}";
+            const inputValue = input.value.trim();
+        
+            if (inputValue === orgName) {
+                deleteOrgBtn.removeAttribute('disabled');
+            } else {
+                deleteOrgBtn.setAttribute('disabled', 'true');
+            }
+        }
+        
+        
+    </script>
 {% endblock links %}
