@@ -3,7 +3,9 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from requests.exceptions import RequestException
-import requests, json
+from django.conf import settings
+from organizations import models
+import requests, json, googlemaps
 
 # Create your views here.
 
@@ -33,6 +35,9 @@ def get_cep(request, cep):
 
 def home(request):
     return render(request, 'main/home.html')
+
+def near_you(request):
+    return render(request, 'main/near-you.html')
 
 def donate(request):
     return render(request, 'main/donate.html')

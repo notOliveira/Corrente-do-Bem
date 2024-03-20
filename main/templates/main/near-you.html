@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{org.organization.name}}{% endblock title %}
+
+{% block content %}
+
+        <section class="news-section py-5">
+            <div class="container">
+                <h1 class="text-center">Organizações próximas</h1>
+            </div>
+        </section>
+
+        <section class="py-5 section-bg">
+            <div class="container">
+                <div class="row">
+                    {% comment %} MAP {% endcomment %}
+                </div>
+            </div>
+        </section>
+   
+{% endblock content %}
+

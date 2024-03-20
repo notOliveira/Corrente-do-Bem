@@ -4,7 +4,7 @@ from .models import Organization, OrganizationProfile
 class OrganizationCreationForm(forms.ModelForm):
     class Meta:
         model = Organization
-        fields = '__all__'
+        fields = ['name', 'email', 'phone', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement', 'description', 'category']
         
 class OrganizationUpdateForm(forms.ModelForm):
             
