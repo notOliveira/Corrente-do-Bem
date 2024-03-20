@@ -58,18 +58,20 @@ def create_org(request):
 
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
-    address = f'{organization_profile.organization.street} {organization_profile.organization.number}, {organization_profile.organization.cep}, {organization_profile.organization.city} - {organization_profile.organization.state}'
     
-    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-    result = gmap.geocode(address)[0]
-    
-    place_id = result.get('place_id', None)
-    lat = result.get('geometry', {}).get('location', {}).get('lat', None)
-    lng = result.get('geometry', {}).get('location', {}).get('lng', None)
+    location = [{
+        'lat': float(organization_profile.organization.lat),
+        'lng': float(organization_profile.organization.lng),
+        'name' : organization_profile.organization.name
+    }]
     
     context = {
-        'org': organization_profile
+        'org': organization_profile,
+        'key': settings.GOOGLE_API_KEY,
+        'location': location
     }
+    
+    print(context)
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
         return render(request, 'organizations/organization-view.html', context)

@@ -1387,6 +1387,10 @@ select option:checked {
   color: white !important; /* Mudando a cor do texto para branco para melhorar a legibilidade */
 }
 
+#map {
+  height: 500px;
+}
+
 
 /*---------------------------------------
   RESPONSIVE STYLES               
