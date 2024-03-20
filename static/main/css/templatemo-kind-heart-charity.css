@@ -279,7 +279,9 @@ strong {
 .custom-text-box-image {
   border-radius: var(--border-radius-medium);
   width: 100%;
-  height: 100%;
+  /*
+  height: 100%; 
+  */
   object-fit: cover;
 }
 

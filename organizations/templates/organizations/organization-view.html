@@ -62,10 +62,6 @@
 
                                 <p class="mt-2"><b>CEP:</b> {{org.organization.cep}}</p>
 
-                                <h6 class="mt-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
-
-                                <p class="mt-2">{{org.organization.description}}</p>
-
                                 {% if org.website %}
                                 <p class="mt-2"><i class="bi bi-link-45deg"></i>&nbsp;<b>Site: </b><a href="{{org.website}}" target="blank">{{org.website}}</a></p>
                                 {% endif %}
@@ -77,6 +73,13 @@
                     </div>
                 <div class="col-lg-6 col-12">
                     <img src="{{org.image.url}}" class="custom-text-box-image img-fluid" alt="">
+                </div>
+                <div class="col-12">
+                    <div class="custom-text-box">
+                        <h6 class="mt-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
+
+                            <p class="mt-2">{{org.organization.description}}</p>
+                    </div>
                 </div>
             </div>
         </section>
