@@ -55,9 +55,9 @@
 
                                 <h6 class="py-3"><i class="bi bi-geo-alt-fill"></i>&nbsp;Endereço</h6>
                                 <p>
-                                    <b>Endereço:</b> {{org.organization.street}} - {{org.organization.number}}<br>
-                                    Bairro {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}}<br>
-                                    {% if org.organization.complement != None %}Complemento: {{org.organization.complement}}{% endif %}
+                                    <b>Endereço:</b> {{org.organization.street}}, {{org.organization.number}}<br>
+                                    {{org.organization.neighborhood}} - {{org.organization.city}}/{{org.organization.state}} - ({{org.organization.complement}})<br>
+                                    {% if org.organization.complement %}Complemento: {{org.organization.complement}}{% endif %}
                                 </p>
 
                                 <p class="mt-2"><b>CEP:</b> {{org.organization.cep}}</p>
