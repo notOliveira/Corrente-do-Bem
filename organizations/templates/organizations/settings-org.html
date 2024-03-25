@@ -134,7 +134,7 @@
                                         <h5 class="mt-4">Complemento</h5>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <input type="text" name="complement" class="form-control" id="id_complement" value="{% if org.organization.complement != None %}{{ org_profile.organization.complement }}{% endif %}">
+                                        <input type="text" name="complement" class="form-control" id="id_complement" value="{% if org.organization.complement != 'None' %}{{ org_profile.organization.complement }}{% endif %}">
                                     </div>
                                     
                                     <div class="col-12">
