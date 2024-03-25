@@ -85,6 +85,24 @@ def settings_org(request, id):
         if org_form.is_valid() and org_profile_form.is_valid():
             org_form.save()
             org_profile_form.save()
+            
+            organization = Organization.objects.get(id=id)
+            
+            address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+                
+            # Adding the place_id, lat and lng to the organization
+            gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+            location = gmap.geocode(address)[0]
+
+            place_id = location.get('place_id', None)
+            lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+            lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+            
+            organization.lat = lat
+            organization.lng = lng
+            organization.place_id = place_id
+            organization.save()
+            
             messages.success(request, 'Configurações atualizadas com sucesso!')
             return redirect('settings-org', id=id)
         else:
