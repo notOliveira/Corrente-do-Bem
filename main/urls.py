@@ -3,7 +3,7 @@ from . import views as main_views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('get-viacep/<str:cep>/', main_views.get_cep, name='get_cep'),
+    # path('get-viacep/<str:cep>/', main_views.get_cep, name='get_cep'),
     path('', main_views.home, name='home'),
     path('near-you', main_views.near_you, name='near-you'),
     

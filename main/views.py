@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from requests.exceptions import RequestException
 from django.conf import settings
 from organizations import models
+from users.models import CustomUser as User
 import requests, json, googlemaps
 
 # Create your views here.
@@ -37,7 +38,18 @@ def home(request):
     return render(request, 'main/home.html')
 
 def near_you(request):
-    return render(request, 'main/near-you.html')
+    
+    organizations = models.Organization.objects.all()
+    
+    # Faço uma lista com as informações de todas as organizações, para que elas sejam inseridas no mapa de organizações próximas
+    organizations_list = list(organizations.values_list('name', 'lat', 'lng', 'id'))
+    organizations_list = [[item for item in sublist] for sublist in organizations_list]   
+    
+    context = {
+        'key': settings.GOOGLE_API_KEY,
+        'organizations': organizations_list
+    }
+    return render(request, 'main/near-you.html', context)
 
 def donate(request):
     return render(request, 'main/donate.html')

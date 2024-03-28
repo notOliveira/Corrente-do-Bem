@@ -1,0 +1,80 @@
+{% load static%}
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script> 
+    let map
+    let lat
+    let lng
+    let locations = {{locations|safe}};
+
+    async function initMap(userLat, userLng){
+        var infoWindow = [];
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: userLat, lng: userLng }, 
+            zoom: 18,
+        });
+
+        locations.forEach(function (location) {
+            var marker = new google.maps.Marker({
+                position: { lat: Number(location[1]), lng: Number(location[2]) }, 
+                map: map, 
+                title: location[0]
+            });
+    
+            var infowindow = new google.maps.InfoWindow();
+    
+            infoWindow.push(infowindow);
+
+            var contentString;
+
+             marker.addListener('click', function() {
+                 var contentString;
+                 
+                 if (location.length <= 3) {
+                     var contentString = "<div class='marker-content'>" +
+                         "<p class='text-center'>" + String(location[0]) + "</p>" +
+                         "</div>";
+                 }
+                 else {
+                     var contentString = "<div class='marker-content'>" +
+                         "<a class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</a>" +
+                         "</div>";
+                 }
+                 infowindow.setContent(contentString);
+                 infowindow.open(map, marker);
+             });
+             // event click off the marker
+             
+             // marker.addListener('mouseout', function() {
+             //     infowindow.close();
+             // });
+             
+             if (location.length == 4) {
+                marker.setIcon("{% static 'main/media/images/icons/marker-dot.png' %}");
+             }
+        });
+    }
+
+    function success(pos) {
+        const crd = pos.coords;
+        lat = crd.latitude;
+        lng = crd.longitude;
+
+        locations.push(["Você está aqui!", lat, lng]);
+
+        initMap(lat, lng);
+    }
+    
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+    
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+</script>
