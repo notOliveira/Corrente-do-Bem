@@ -114,7 +114,7 @@
                                 {% if user.is_superuser %}
                                     <li><a class="dropdown-item" href="/admin">Django admin</a></li>
                                 {% endif %}
-
+                                
                                 <form method="post" action="{% url 'logout' %}">
                                     {% csrf_token %}
                                     <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
