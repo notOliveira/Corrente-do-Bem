@@ -15,6 +15,6 @@ class Donation(models.Model):
     image = models.ImageField(upload_to=upload_to_directory, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Doação'
-        verbose_name_plural = 'Doações'
+        verbose_name = 'Donation'
+        verbose_name_plural = 'Donations'
 

@@ -12,12 +12,20 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
 
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+        
     def __str__(self):
         return self.username
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(default='default_profile_picture.jpg', upload_to='profile_pics')
+    
+    class Meta:
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
     
     def __str__(self):
         return f'{self.user.username} - Profile'

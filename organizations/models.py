@@ -4,7 +4,11 @@ from .constants import STATE_CHOICES, CATEGORY_CHOICES
 
 class Category(models.Model):
     name = models.IntegerField(choices=CATEGORY_CHOICES, unique=True)
-
+    
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        
     def __str__(self):
         return self.get_name_display()
 
@@ -25,10 +29,14 @@ class Organization(models.Model):
     description = models.TextField(blank=True)
     users = models.ManyToManyField('users.CustomUser', related_name='organization_users', blank=True)
     category = models.ManyToManyField(Category, related_name='organizations', blank=True)
-
+    
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organizations'
+        
     def __str__(self):
         return self.name
-
+    
 class OrganizationProfile(models.Model):
     organization = models.OneToOneField(Organization, on_delete=models.CASCADE)
     image = models.ImageField(default='default_org_picture.png', upload_to='org_pics')
@@ -37,6 +45,10 @@ class OrganizationProfile(models.Model):
     
     def __str__(self):
         return f'{self.organization.name} - Profile'
+    
+    class Meta:
+        verbose_name = 'Organization Profile'
+        verbose_name_plural = 'Organization Profiles'
     
     # Substituindo método save
     def save(self, *args, **kwargs):
