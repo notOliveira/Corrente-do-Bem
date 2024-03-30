@@ -18,7 +18,9 @@
             var marker = new google.maps.Marker({
                 position: { lat: Number(location[1]), lng: Number(location[2]) }, 
                 map: map, 
-                title: location[0]
+                title: location[0],
+                mapTypeId: "terrain",
+
             });
     
             var infowindow = new google.maps.InfoWindow();
@@ -36,9 +38,15 @@
                          "</div>";
                  }
                  else {
-                     var contentString = "<div class='marker-content'>" +
+                    var contentString = "<div class='marker-content'>" +
                          "<a class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</a>" +
                          "</div>";
+                    var contentString = "<div class='marker-content'>" +
+                            "<a class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</a>" +
+                            "<div class='marker-image-container d-flex justify-content-center align-items-center'>" +
+                                "<img src='media/" + String(location[4]) + "' class='marker-image' style='height: 150px;'>" +
+                            "</div>" +
+                        "</div>";
                  }
                  infowindow.setContent(contentString);
                  infowindow.open(map, marker);
@@ -49,7 +57,7 @@
              //     infowindow.close();
              // });
              
-             if (location.length == 4) {
+             if (location.length > 3) {
                 marker.setIcon("{% static 'main/media/images/icons/marker-dot.png' %}");
              }
         });

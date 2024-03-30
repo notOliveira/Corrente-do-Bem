@@ -1,3 +1,4 @@
+{% load static %}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script> 
     let map
@@ -40,6 +41,8 @@
             marker.addListener('mouseout', function() {
                 infowindow.close();
             });
+
+            marker.setIcon("{% static 'main/media/images/icons/marker-dot.png' %}");
         });
     }
     

@@ -70,8 +70,6 @@ def organization(request, id):
         'key': settings.GOOGLE_API_KEY,
         'location': location
     }
-    
-    print(context)
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
         return render(request, 'organizations/organization-view.html', context)

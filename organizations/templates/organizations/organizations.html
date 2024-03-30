@@ -24,15 +24,15 @@
                     {% if orgs %}
                         {% for org in orgs %}
                             <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 mt-5">
-                                <div class="custom-block-wrap bg-secondary bg-gradient">
+                                <div class="custom-block-wrap off-white-bg">
                                     
                                     <img src="{{org.image.url}}"
-                                    class="custom-block-image img-fluid" style="height: 300px;">
+                                    class="custom-block-image img-fluid" style="height: 300px; object-fit: contain; ">
 
 
                                     <div class="custom-block">
                                         <div class="custom-block-body">
-                                            <h5 class="text-center text-white">{{org.organization.name}}</h5>
+                                            <h5 class="text-center text-dark">{{org.organization.name}}</h5>
                                         </div>
                                         <a href="{% url "organization" id=org.organization.id %}" class="custom-btn btn">Visualizar</a>
                                     </div>
