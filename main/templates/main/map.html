@@ -20,6 +20,7 @@
                 map: map, 
                 title: location[0],
                 mapTypeId: "terrain",
+                icon: "{% static 'main/media/images/icons/marker-dot.png' %}"
 
             });
     
@@ -56,10 +57,6 @@
              // marker.addListener('mouseout', function() {
              //     infowindow.close();
              // });
-             
-             if (location.length > 3) {
-                marker.setIcon("{% static 'main/media/images/icons/marker-dot.png' %}");
-             }
         });
     }
 

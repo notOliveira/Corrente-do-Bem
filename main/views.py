@@ -46,8 +46,6 @@ def near_you(request):
     organizations_list = list(organizations.values_list('organization__name', 'organization__lat', 'organization__lng', 'organization__id', 'image'))
     organizations_list = [[item for item in sublist] for sublist in organizations_list]   
     
-    print(organizations_list)
-    
     context = {
         'key': settings.GOOGLE_API_KEY,
         'organizations': organizations_list
