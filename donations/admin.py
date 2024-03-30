@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Donation
 
-# Register your models here.
+# register donation
+admin.site.register(Donation)
