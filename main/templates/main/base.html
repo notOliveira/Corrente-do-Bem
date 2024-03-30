@@ -96,21 +96,21 @@
                         <a class="nav-link click-scroll" href="{% if request.path == '/' %}#{% else %} {% url "home" %} {% endif %}">Início</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_2">Sobre</a>
-                    </li>
+                    {% comment %} <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% if request.path == '/' %}#section_2{% else %}{% url 'home' %}#section_2{% endif %}">Sobre</a>
+                    </li> {% endcomment %}
 
                     <li class="nav-item">
                         <a class="nav-link click-scroll" href="{% url 'near-you' %}">Perto de você</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_4">Como ajudar</a>
+                    {% comment %} <li class="nav-item">
+                        <a class="nav-link click-scroll" href="#section_3">Como ajudar</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_5">Contato</a>
-                    </li>
+                        <a class="nav-link click-scroll" href="#section_4">Contato</a>
+                    </li> {% endcomment %}
 
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
