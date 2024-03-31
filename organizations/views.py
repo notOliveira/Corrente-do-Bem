@@ -6,6 +6,8 @@ from .forms import OrganizationCreationForm, OrganizationUpdateForm, Organizatio
 from django.conf import settings
 import googlemaps
 
+# Organizations
+
 @login_required(login_url='/login')
 def organizations(request):
     orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user)
@@ -24,9 +26,9 @@ def create_org(request):
                 organization.save()
                 form.save_m2m()
                 organization.users.add(request.user)
-                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
                 
                 # Adding the place_id, lat and lng to the organization
+                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
                 gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
                 location = gmap.geocode(address)[0]
     
@@ -127,3 +129,23 @@ def settings_org(request, id):
         'categories': org_categories
     }
     return render(request, 'organizations/settings-org.html', context)
+
+# Donations
+
+def org_donations(request, id):
+    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    
+    context = {
+        'org': organization_profile
+    }
+    
+    return render(request, 'donations/org-donations.html', context)
+
+def register_donation(request, id):
+    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    
+    context = {
+        'org': organization_profile
+    }
+    
+    return render(request, 'organizations/register-donation.html', context)

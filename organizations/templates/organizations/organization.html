@@ -22,35 +22,31 @@
             </div>
         </section>
 
-        <section class="section-bg py-5">
-
-            <div class="container my-4">
-                <div class="row">
-                    <div class="col-6">
-                        <button class="btn btn-block btn-success col-12" style="height: 50px;" href="" >Gerenciar doações</button>
-                    </div>
-                    <div class="col-6">
-                        <button class="btn btn-block btn-success col-12" style="height: 50px;">Gerenciar doações</button>
-                    </div>
-                </div>
-            </div>
-
+        <section class="section-bg py-1">
             <div class="container">
                 {% if org.image.url == '/media/default_org_picture.png' %}
-                    <div class="alert alert-info alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                    <div class="alert alert-info alert-dismissible fade show m-auto my-5 fs-5" role="alert">
                         A organização ainda não possui uma imagem de perfil.
                         <br>
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endif %}
 
+                <div class="row my-3">
+                    <div class="col-6">
+                        <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "settings-org" id=org.organization.id %}">Editar informações</a>
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-block btn-warning col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Gerenciar doações</a>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-6 col-12">
-                        
                         <div class="custom-text-box">
                             <div class="row">
-                                <h4 class="mb-5 col-8"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
-                                <div class="col-4"><a class="btn btn-primary" href="{% url "settings-org" id=org.organization.id %}">Editar dados</button></a>
+                                <h4 class="mb-5 col-12"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
+                                <div class="col-4"></div>
                             </div>
 
                             <p class="mt-2 text-muted">OBS: Essas informações serão públicas, com exceção aos usuários atrelados à organização.</p>
@@ -97,22 +93,23 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <img src="{{org.image.url}}" class="custom-text-box-image" alt="">
-                </div>
-                <div class="col-12">
-                    <div class="custom-text-box">
-                        <h6 class="mt-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
-                        <p class="mt-2">{{org.organization.description}}</p>
+                
+                    <div class="col-lg-6 col-12">
+                        <img src="{{org.image.url}}" class="custom-text-box-image" alt="">
                     </div>
-                </div>
+                    <div class="col-12">
+                        <div class="custom-text-box">
+                            <h6 class="mt-3"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;Descrição</h6>
+                            <p class="mt-2">{{org.organization.description}}</p>
+                        </div>
+                    </div>
 
-                <div class="col-12">
-                    <div id="map"></div>
-                    <script async
-                        src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
-                    </script>
+                    <div class="col-12">
+                        <div id="map"></div>
+                        <script async
+                            src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
+                        </script>
+                    </div>
                 </div>
             </div>
         </section>

@@ -1,10 +1,16 @@
 from django.urls import path
-from . import views as org_views
+from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', org_views.organizations, name='organizations'),
-    path('create/', org_views.create_org, name='create-org'),
-    path('<int:id>/', org_views.organization, name='organization'),
-    path('<int:id>/settings/', org_views.settings_org, name='settings-org')
+    
+    # Organizations
+    path('', views.organizations, name='organizations'),
+    path('create/', views.create_org, name='create-org'),
+    path('<int:id>/', views.organization, name='organization'),
+    path('<int:id>/settings/', views.settings_org, name='settings-org'),
+    
+    # Donations
+    path('<int:id>/donations/', views.org_donations, name='org-donations'),
+    path('<int:id>/donations/new', views.register_donation, name='register-donation'),
 ]
