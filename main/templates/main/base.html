@@ -112,7 +112,7 @@
                                 <li><a class="dropdown-item" href="{% url "organizations" %}">Organizações</a></li>
                                 
                                 {% if user.is_superuser %}
-                                    <li><a class="dropdown-item" href="/admin">Django admin</a></li>
+                                    <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
                                 {% endif %}
                                 
                                 <form method="post" action="{% url 'logout' %}">

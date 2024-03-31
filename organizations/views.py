@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Organization, OrganizationProfile
-from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm
+from users.models import CustomUser as User
+from .models import Organization, OrganizationProfile, Donation
+from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
 from django.conf import settings
 import googlemaps
 
@@ -134,9 +135,12 @@ def settings_org(request, id):
 
 def org_donations(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    # Get last 10 donations
+    donations = Donation.objects.filter(organization__id=id).order_by('-date')[:10]
     
     context = {
-        'org': organization_profile
+        'org': organization_profile,
+        'donations': donations
     }
     
     return render(request, 'donations/org-donations.html', context)
@@ -144,8 +148,31 @@ def org_donations(request, id):
 def register_donation(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     
+    if request.method == "POST":
+        form = DonationForm(request.POST, request.FILES)
+        email = request.POST.get('user')     
+        
+        try:
+            user = User.objects.get(email=email)
+        except:
+            messages.error(request, 'Usuário não encontrado.')
+            return redirect('register-donation', id=id)
+        
+        if form.is_valid():
+            donation = form.save(commit=False)
+            donation.organization = organization_profile.organization
+            donation.user = user
+            donation.save()
+            
+            messages.success(request, 'Doação registrada com sucesso!')
+            return redirect('org-donations', id=id)
+        else:
+            messages.error(request, 'Houve um problema ao registrar a doação. Por favor, tente novamente.')
+            
+            return redirect('register-donation', id=id)
     context = {
         'org': organization_profile
     }
     
-    return render(request, 'organizations/register-donation.html', context)
+    return render(request, 'donations/register-donation.html', context)
+

@@ -44,12 +44,12 @@ class OrganizationProfile(models.Model):
     website = models.CharField(blank=True, null=True, max_length=200)
     instagram = models.CharField(blank=True, null=True, max_length=50)
     
-    def __str__(self):
-        return f'{self.organization.name} - Profile'
-    
     class Meta:
         verbose_name = 'Organization Profile'
         verbose_name_plural = 'Organization Profiles'
+        
+    def __str__(self):
+        return f'{self.organization.name} - Profile'
     
     # Substituindo método save
     def save(self, *args, **kwargs):
@@ -67,13 +67,11 @@ class Donation(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField(blank=True, null=True)
-    
-    def upload_to_directory(instance, filename):
-        # Defina o caminho de upload com base no ID da organização
-        return f'donations/{instance.organization_id}/{filename}'
-
-    image = models.ImageField(upload_to=upload_to_directory, blank=True, null=True)
+    image = models.ImageField(upload_to='donations_pics', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Donation'
         verbose_name_plural = 'Donations'
+        
+    def __str__(self):
+        return f'Doação #{self.id} - {self.user.username} - {self.organization.name}'

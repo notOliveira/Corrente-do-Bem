@@ -17,7 +17,7 @@ class Command(BaseCommand):
         if not CustomUser.objects.filter(email='admin@admin.com').exists():
             CustomUser.objects.create_superuser(
                 email='admin@admin.com',
-                username='admin',
+                username='admin@admin.com',
                 first_name='Admin',
                 last_name='Administrator',
                 password='admin'
