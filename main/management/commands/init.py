@@ -1,25 +1,155 @@
 from django.core.management.base import BaseCommand
 from users.models import CustomUser
-from organizations.models import Category
+from django.conf import settings
+from organizations.models import Organization, Category
 from organizations.constants import CATEGORY_CHOICES
+import googlemaps
 
 class Command(BaseCommand):
     help = 'Cria os objetos padrão do banco'
 
     def handle(self, *args, **options):
-
         # Adiciona as categorias
         Category.objects.bulk_create([Category(name=value) for value, _ in CATEGORY_CHOICES if not Category.objects.filter(name=value).exists()])
         
-        self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
-        
         # Criando superusuário
-        if not CustomUser.objects.filter(email='admin@admin.com').exists():
+        admin_email = 'admin@admin.com'
+        if not CustomUser.objects.filter(email=admin_email).exists():
             CustomUser.objects.create_superuser(
-                email='admin@admin.com',
-                username='admin@admin.com',
+                email=admin_email,
+                username=admin_email,
                 first_name='Admin',
                 last_name='Administrator',
                 password='admin'
-                )
-                
+            )
+
+        # Criando organizações
+        orgs = [
+            {
+                'name': 'Organização 1',
+                'email': 'org1@email.com',
+                'phone': '11968317891',
+                'cep': '04458-150',
+                'street': 'Rua Marisa Prado',
+                'neighborhood': 'Jardim Sônia',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '16',
+                'description': 'Descrição da organização 1',
+                'category_name': 1,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 2',
+                'email': 'org2@email.com',
+                'phone': '11968317891',
+                'cep': '65912-300',
+                'street': 'Rua Mamoré',
+                'neighborhood': 'Parque Santa Lúcia',
+                'city': 'Imperatriz',
+                'state': 'MA',
+                'number': '193',
+                'description': 'Descrição da organização',
+                'category_name': 2,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 3',
+                'email': 'org3@email.com',
+                'phone': '11968317891',
+                'cep': '29163-490',
+                'street': 'Rua Samora Machel',
+                'neighborhood': 'Cidade Continental-Setor África',
+                'city': 'Serra',
+                'state': 'ES',
+                'number': '12',
+                'description': 'Descrição da organização',
+                'category_name': 3,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 4',
+                'email': 'org4@email.com',
+                'phone': '11968317891',
+                'cep': '69316-586',
+                'street': 'Rua Renato Marques Jr',
+                'neighborhood': 'Senador Hélio Campos',
+                'city': 'Boa Vista',
+                'state': 'RR',
+                'number': '710',
+                'description': 'Descrição da organização',
+                'category_name': 4,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 5',
+                'email': 'org5@email.com',
+                'phone': '11968317891',
+                'cep': '74740-530',
+                'street': 'Rua 3',
+                'neighborhood': 'Jardim Brasil',
+                'city': 'Goiânia',
+                'state': 'GO',
+                'number': '238',
+                'description': 'Descrição da organização',
+                'category_name': 5,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 5',
+                'email': 'org5@email.com',
+                'phone': '11968317891',
+                'cep': '74740-530',
+                'street': 'Rua 3',
+                'neighborhood': 'Jardim Brasil',
+                'city': 'Goiânia',
+                'state': 'GO',
+                'number': '238',
+                'description': 'Descrição da organização',
+                'category_name': 5,
+                'complement': ''
+            }
+            ]
+
+        for org_data in orgs:
+            if Organization.objects.filter(email=org_data['email']).exists():
+                continue
+
+            # Crie a organização
+            organization = Organization.objects.create(
+                name=org_data['name'],
+                email=org_data['email'],
+                phone=org_data['phone'],
+                cep=org_data['cep'],
+                street=org_data['street'],
+                neighborhood=org_data['neighborhood'],
+                city=org_data['city'],
+                state=org_data['state'],
+                number=org_data['number'],
+                complement=org_data['complement'],
+                description=org_data['description'],
+            )
+            
+            organization.category.set([Category.objects.get(name=org_data['category_name'])])
+
+            # Adicione o usuário
+            admin_user = CustomUser.objects.get(email=admin_email)
+            organization.users.add(admin_user)
+
+            # Obtenha os detalhes do local usando o Google Maps API
+            address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+            gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+            location = gmap.geocode(address)[0]
+
+            place_id = location.get('place_id', None)
+            lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+            lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+            
+            organization.lat = lat
+            organization.lng = lng
+            organization.place_id = place_id
+            organization.save()
+            
+            print(organization.__dict__)
+
+        self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
