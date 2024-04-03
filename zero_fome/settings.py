@@ -105,7 +105,7 @@ if environment == "development":
             'PORT': os.environ["LOCALPORT"],
         }
     }
-else:
+elif environment == "production":
     # Railway database
     DATABASES = {
         'default': {
@@ -117,6 +117,15 @@ else:
             'PORT': os.environ["PGPORT"],
         }
     }
+elif environment == "sqlite" or environment == "fatec":
+    # SQLite database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+
 
 
 

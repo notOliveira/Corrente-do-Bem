@@ -96,19 +96,76 @@ class Command(BaseCommand):
                 'complement': ''
             },
             {
-                'name': 'Organização 5',
-                'email': 'org5@email.com',
+                'name': 'Organização 6',
+                'email': 'org6@email.com',
                 'phone': '11968317891',
-                'cep': '74740-530',
-                'street': 'Rua 3',
-                'neighborhood': 'Jardim Brasil',
-                'city': 'Goiânia',
-                'state': 'GO',
-                'number': '238',
-                'description': 'Descrição da organização',
+                'cep': '03332-005',
+                'street': 'Praça Joana Lombello Malavazi',
+                'neighborhood': 'Cidade Mãe do Céu',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '1',
+                'description': '',
+                'category_name': 3,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 7',
+                'email': 'org7@email.com',
+                'phone': '11968317891',
+                'cep': '05187-160',
+                'street': 'Rua Daniel Faria Gonçalvez',
+                'neighborhood': 'Jardim Ipanema (Zona Oeste)',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '1',
+                'description': '',
                 'category_name': 5,
                 'complement': ''
-            }
+            },
+            {
+                'name': 'Organização 8',
+                'email': 'org8@email.com',
+                'phone': '11968317891',
+                'cep': '03877-100',
+                'street': 'Rua Engenheiro Osvaldo Andreani',
+                'neighborhood': 'Rua Engenheiro Osvaldo Andreani',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '1',
+                'description': '',
+                'category_name': 5,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 9',
+                'email': 'org9@email.com',
+                'phone': '11968317891',
+                'cep': '05756-260',
+                'street': 'Rua Cauaburi',
+                'neighborhood': 'Jardim Umarizal',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '1',
+                'description': '',
+                'category_name': 5,
+                'complement': ''
+            },
+            {
+                'name': 'Organização 10',
+                'email': 'org10@email.com',
+                'phone': '11968317891',
+                'cep': '03570-480',
+                'street': 'Rua Júlia Antonieta Tepedino Guerra',
+                'neighborhood': 'Parque Savoy City',
+                'city': 'São Paulo',
+                'state': 'SP',
+                'number': '1',
+                'description': '',
+                'category_name': 5,
+                'complement': ''
+            },
+            
             ]
 
         for org_data in orgs:
@@ -149,7 +206,5 @@ class Command(BaseCommand):
             organization.lng = lng
             organization.place_id = place_id
             organization.save()
-            
-            print(organization.__dict__)
 
         self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
