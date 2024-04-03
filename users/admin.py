@@ -24,3 +24,4 @@ class ProfileAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
+

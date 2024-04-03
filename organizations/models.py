@@ -1,6 +1,6 @@
 from django.db import models
 from PIL import Image
-from .constants import STATE_CHOICES, CATEGORY_CHOICES
+from .constants import STATE_CHOICES, CATEGORY_CHOICES, USER_ROLES
 from users.models import CustomUser as User
 
 class Category(models.Model):
@@ -61,6 +61,17 @@ class OrganizationProfile(models.Model):
             output_size = (1000, 1000)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+class UserRole(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    role = models.IntegerField(choices=USER_ROLES)
+
+    class Meta:
+        unique_together = ['user', 'organization']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.organization.name} - {self.get_role_display()}"
 
 class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

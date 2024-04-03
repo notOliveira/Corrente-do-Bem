@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users.models import CustomUser as User
-from .models import Organization, OrganizationProfile, Donation
+from .models import Organization, OrganizationProfile, Donation, UserRole
 from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
 from django.conf import settings
 import googlemaps
 
 # Organizations
+
 
 @login_required(login_url='/login')
 def organizations(request):
@@ -27,6 +28,8 @@ def create_org(request):
                 organization.save()
                 form.save_m2m()
                 organization.users.add(request.user)
+
+                UserRole.objects.create(user=request.user, organization=organization, role=0)
                 
                 # Adding the place_id, lat and lng to the organization
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
@@ -61,6 +64,11 @@ def create_org(request):
 
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+
+    user_role = None
+
+    if request.user.is_authenticated:
+        user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
     
     location = [{
         'lat': float(organization_profile.organization.lat),
@@ -71,7 +79,8 @@ def organization(request, id):
     context = {
         'org': organization_profile,
         'key': settings.GOOGLE_API_KEY,
-        'location': location
+        'location': location,
+        'role': user_role.role if user_role else None
     }
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
@@ -79,7 +88,20 @@ def organization(request, id):
 
     return render(request, 'organizations/organization.html', context)
 
+@login_required(login_url='/login')
 def settings_org(request, id):
+    organization_profile = OrganizationProfile.objects.get(id=id)
+    organization = Organization.objects.get(id=id)
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
+
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
+    
+    if not user_role.role == 0:
+        messages.error(request, 'Você não tem permissão para acessar essa página')
+        return redirect('organization', id=id)
+    
     if request.method == "POST":
         org_form = OrganizationUpdateForm(request.POST, instance=Organization.objects.filter(id=id).first())
         org_profile_form = OrganizationProfileUpdateForm(request.POST, request.FILES, instance=OrganizationProfile.objects.get(organization__id=id))
@@ -109,20 +131,12 @@ def settings_org(request, id):
         else:
             messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')
     
-    organization = Organization.objects.get(id=id)
-    
-    categories = organization.category.all().values_list('name')
+    categories = organization_profile.organization.category.all().values_list('name')
     
     org_categories = []
     
     for category in categories:
         org_categories.append(category[0])
-    
-    if request.user not in organization.users.all():
-        messages.error(request, 'Você não tem permissão para acessar essa organização.')
-        return redirect('organizations')
-    
-    organization_profile = OrganizationProfile.objects.get(organization=organization)
     
     context = {
         'org' : organization,
@@ -133,6 +147,7 @@ def settings_org(request, id):
 
 # Donations
 
+@login_required(login_url='/login')
 def org_donations(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     # Get last 10 donations
@@ -145,6 +160,7 @@ def org_donations(request, id):
     
     return render(request, 'donations/org-donations.html', context)
 
+@login_required(login_url='/login')
 def register_donation(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     

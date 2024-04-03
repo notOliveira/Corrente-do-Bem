@@ -32,15 +32,30 @@
                     </div>
                 {% endif %}
 
+                {% if role == 0 %}
+                <div class="row my-3">
+                    <div class="col-4">
+                        <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "settings-org" id=org.organization.id %}">Editar informações</a>
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-block btn-warning col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Gerenciar doações</a>
+                    </div>
+                    
+                </div>
+                {% else %}
                 <div class="row my-3">
                     <div class="col-6">
-                        <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "settings-org" id=org.organization.id %}">Editar informações</a>
+                        <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                     </div>
                     <div class="col-6">
                         <a class="btn btn-block btn-warning col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Gerenciar doações</a>
                     </div>
                 </div>
-
+                {% endif %}
+                
                 <div class="row">
                     <div class="col-lg-6 col-12">
                         <div class="custom-text-box">

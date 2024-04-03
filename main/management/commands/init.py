@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from users.models import CustomUser
 from django.conf import settings
-from organizations.models import Organization, Category
+from organizations.models import Organization, Category, UserRole
 from organizations.constants import CATEGORY_CHOICES
 import googlemaps
 
@@ -192,6 +192,8 @@ class Command(BaseCommand):
             # Adicione o usuário
             admin_user = CustomUser.objects.get(email=admin_email)
             organization.users.add(admin_user)
+
+            UserRole.objects.create(user=admin_user, organization=organization, role=0)
 
             # Obtenha os detalhes do local usando o Google Maps API
             address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'

@@ -35,3 +35,8 @@ CATEGORY_CHOICES = (
     (4, 'Mobílias'),
     (5, 'Diversos')
 )
+
+USER_ROLES = (
+        (0, 'Administrador'),
+        (1, 'Colaborador')
+    )
