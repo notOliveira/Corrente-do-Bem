@@ -12,10 +12,30 @@
     async function initMap(userLat, userLng){
         var infoWindow = [];
 
+        var infowindow = new google.maps.InfoWindow();
+        
         map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: userLat, lng: userLng }, 
             zoom: 14,
+            mapTypeId: "terrain",
         });
+
+        var marker = new google.maps.Marker({
+            position: { lat: userLat, lng: userLng }, 
+            map: map, 
+            title: "Você está aqui!",
+            icon: "{% static 'main/media/images/icons/marker-you-here.png' %}"
+
+        });
+
+        marker.addListener('click', function() {
+            var contentString = "<div class='marker-content'>" +
+                "<p class='text-center'>Você está por aqui!</p>" +
+                "</div>";
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+        })
+
 
         locations.forEach(function (location) {
             var marker = new google.maps.Marker({
@@ -27,31 +47,18 @@
 
             });
     
-            var infowindow = new google.maps.InfoWindow();
-    
             infoWindow.push(infowindow);
 
             var contentString;
 
              marker.addListener('click', function() {
-                 var contentString;
-                 
-                 if (location.length <= 3) {
-                     var contentString = "<div class='marker-content'>" +
-                         "<p class='text-center'>" + String(location[0]) + "</p>" +
-                         "</div>";
-                 }
-                 else {
-                    var contentString = "<div class='marker-content'>" +
-                         "<a class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</a>" +
-                         "</div>";
-                    var contentString = "<div class='marker-content'>" +
-                            "<a class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</a>" +
-                            "<div class='marker-image-container d-flex justify-content-center align-items-center'>" +
-                                "<img src='media/" + String(location[4]) + "' class='marker-image' style='height: 150px;'>" +
-                            "</div>" +
-                        "</div>";
-                 }
+                var contentString = "<a class='marker-content' href='/organizations/" + String(location[3]) + "'>" +
+                        "<p class='text-center fs-5' href='/organizations/" + String(location[3]) + "'>" + String(location[0]) + "</p>" +
+                        "<div class='marker-image-container d-flex justify-content-center align-items-center'>" +
+                            "<img src='media/" + String(location[4]) + "' class='marker-image' style='height: 150px;'>" +
+                        "</div>" +
+                    "</a>";
+
                  infowindow.setContent(contentString);
                  infowindow.open(map, marker);
              });
@@ -67,8 +74,6 @@
         const crd = pos.coords;
         lat = crd.latitude;
         lng = crd.longitude;
-
-        locations.push(["Você está aqui!", lat, lng]);
 
         initMap(lat, lng);
     }
