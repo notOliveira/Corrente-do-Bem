@@ -124,7 +124,12 @@
                         </li>
                     {% endif %}
 
-                    {% if not user.is_authenticated %}
+                    {% if not user.is_authenticated and request.path == '/login/' %}
+                    <li class="nav-item ms-3">
+                        <a class="nav-link custom-btn custom-border-btn btn" href="{% url "register" %}">Registrar-se</a>
+                    </li>
+                    {% elif user.is_authenticated %}
+                    {% else %}
                     <li class="nav-item ms-3">
                         <a class="nav-link custom-btn custom-border-btn btn" href="{% url "login" %}">Entrar</a>
                     </li>

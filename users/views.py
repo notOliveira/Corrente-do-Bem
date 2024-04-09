@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, ProfileUpdateForm, UsersUpdateForm
 from django.contrib import messages
+from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
-from django.contrib.auth.forms import PasswordResetForm
-from users.models import CustomUser
 from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from users.models import CustomUser
+from .forms import UserRegisterForm, ProfileUpdateForm, UsersUpdateForm
 
 @login_required(login_url='/login')
 def profile(request):
@@ -85,33 +85,35 @@ def password_reset_request(request):
         password_form = PasswordResetForm(request.POST)
         if password_form.is_valid():
             data = password_form.cleaned_data['email']
-            user_email = CustomUser.objects.filter(Q(email=data))
-            if user_email.exists():
-                for user in user_email:
-                    subject = 'Redefinição de senha'
-                    email_template_name = 'users/reset_password_email.txt'
-                    parameters = {
-                        'username': user.username,
-                        'email': user.email,
-                        # Mudar para domínio de produção
-                        'domain': 'localhost:8000',
-                        'site_name': 'Zero Fome',
-                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                        'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
-                    }
-                    email = render_to_string(email_template_name, parameters)
-                    try:
-                        send_mail(subject, email, '', [user.email], fail_silently=False)
-                    except:
-                        return HttpResponse('Invalid Header')
-                    return redirect('password_reset_done')
+            user_email = CustomUser.objects.filter(Q(username=data)).first()
+            if user_email is not None:
+                subject = 'Redefinição de senha'
+                email_template_name = 'reset_password_email.txt'
+                parameters = {
+                    'username': user_email.first_name,
+                    'email': user_email.username,
+                    'domain': 'localhost:8000',
+                    'site_name': 'Zero Fome',
+                    'uid': urlsafe_base64_encode(force_bytes(user_email.pk)),
+                    'token': default_token_generator.make_token(user_email),
+                    'protocol': 'http',
+                }
+                email = render_to_string(email_template_name, parameters)
+                
+                print(email)
+                try:
+                    send_mail(subject, email, '', [user_email.username], fail_silently=False)
+                except Exception as e:
+                    print(e)
+                    return HttpResponse('Invalid Header')
+                messages.success(request, 'Um email foi enviado para você com instruções para redefinir sua senha.')
+                return redirect('home')
     else:
         password_form = PasswordResetForm()
     context = {
         'password_form': password_form  
     }
-    return render(request, 'users/password_reset.html', context)
+    return render(request, 'users/reset-password.html', context)
 
 def logout_user(request):
     logout(request)
