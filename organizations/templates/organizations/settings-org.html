@@ -37,7 +37,6 @@
                             <form method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <h3 class="mb-4 text-center">{{org_profile.organization.name}}</h3>
-                                <p class="fs-5 text-center">Função: {{role_name}} </p>
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <img src="{{ org_profile.image.url }}" class="justify-center org-picture rounded-circle">

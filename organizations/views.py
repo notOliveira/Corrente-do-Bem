@@ -9,8 +9,7 @@ import googlemaps
 
 # Organizations
 
-
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def organizations(request):
     orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user)
     context = {
@@ -18,7 +17,7 @@ def organizations(request):
     }
     return render(request, 'organizations/organizations.html', context)
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def create_org(request):
     if request.method == "POST":
         form = OrganizationCreationForm(request.POST)
@@ -80,7 +79,8 @@ def organization(request, id):
         'org': organization_profile,
         'key': settings.GOOGLE_API_KEY,
         'location': location,
-        'role': user_role.role if user_role else None
+        'role': user_role.role if user_role else None,
+        'role_name': user_role.get_role_display() if user_role else None
     }
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
@@ -88,7 +88,7 @@ def organization(request, id):
 
     return render(request, 'organizations/organization.html', context)
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def settings_org(request, id):
     organization_profile = OrganizationProfile.objects.get(id=id)
     organization = Organization.objects.get(id=id)
@@ -148,14 +148,13 @@ def settings_org(request, id):
         'org' : organization,
         'org_profile': organization_profile,
         'categories': org_categories,
-        'role': user_role.role,
-        'role_name': user_role.get_role_display()
+        'role': user_role.role
     }
     return render(request, 'organizations/settings-org.html', context)
     
 # Donations
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def org_donations(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     # Get last 10 donations
@@ -168,7 +167,7 @@ def org_donations(request, id):
     
     return render(request, 'donations/org-donations.html', context)
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def register_donation(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     

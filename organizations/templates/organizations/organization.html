@@ -60,11 +60,12 @@
                     <div class="col-lg-6 col-12">
                         <div class="custom-text-box">
                             <div class="row">
-                                <h4 class="mb-5 col-12"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
-                                <div class="col-4"></div>
+                                <h4 class="mb-4 text-dark"><i class="bi bi-info-circle-fill"></i>&nbsp;Informações</h4>
                             </div>
 
-                            <p class="mt-2 text-muted">OBS: Essas informações serão públicas, com exceção aos usuários atrelados à organização.</p>
+                            <p>Sua função: {{role_name}}</p>
+
+                            <p class="text-muted">OBS: Essas informações serão públicas, com exceção aos usuários atrelados à organização.</p>
 
                             <h6 class="py-4">Esses são os itens que  organização gostaria de receber:</h6>
                             {% for category in org.organization.category.all %} 
