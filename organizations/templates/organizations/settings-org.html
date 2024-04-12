@@ -37,6 +37,7 @@
                             <form method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <h3 class="mb-4 text-center">{{org_profile.organization.name}}</h3>
+                                <p class="fs-5 text-center">Função: {{role_name}} </p>
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <img src="{{ org_profile.image.url }}" class="justify-center org-picture rounded-circle">
@@ -169,7 +170,7 @@
                                     </div> {% endcomment %}
                                     
                                     <div class="col-12 mt-2">
-                                        <button type="submit" class="form-control bg-success mt-4">Enviar</button>
+                                        <button type="submit" name="edit-org" class="form-control bg-success mt-4">Salvar</button>
                                     </div>
                                 </div>
                             </form>
@@ -202,8 +203,11 @@
                         <p class="fs-5">Tem certeza que deseja excluir essa organização? Essa ação é <b class="text-danger">irreversível</b>.</p>
 
                         <p class="mt-4">Digite <b>"{{org_profile.organization.name}}"</b> para confirmar</p>
-                        <input type="text" class="form-control my-4" id="delete-org-input" onkeyup="handleDeleteOrgInput(event)" >
-                        <button type="button" class="btn btn-danger col-12" id="delete-org-btn" name="delete-org" disabled>Excluir</button>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" id="delete-org-input" onkeyup="handleDeleteOrgInput(event)" >
+                            <button type="submit" name="delete-org" class="btn btn-danger col-12" id="delete-org-btn" disabled>Excluir</button>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>

@@ -102,35 +102,41 @@ def settings_org(request, id):
         messages.error(request, 'Você não tem permissão para acessar essa página')
         return redirect('organization', id=id)
     
-    if request.method == "POST":
-        org_form = OrganizationUpdateForm(request.POST, instance=Organization.objects.filter(id=id).first())
-        org_profile_form = OrganizationProfileUpdateForm(request.POST, request.FILES, instance=OrganizationProfile.objects.get(organization__id=id))
-        if org_form.is_valid() and org_profile_form.is_valid():
-            org_form.save()
-            org_profile_form.save()
-            
-            organization = Organization.objects.get(id=id)
-            
-            address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+    if request.method == "POST":        
+        if 'edit-org' in request.POST:
+            org_form = OrganizationUpdateForm(request.POST, instance=Organization.objects.filter(id=id).first())
+            org_profile_form = OrganizationProfileUpdateForm(request.POST, request.FILES, instance=OrganizationProfile.objects.get(organization__id=id))
+            if org_form.is_valid() and org_profile_form.is_valid():
+                org_form.save()
+                org_profile_form.save()
                 
-            # Adding the place_id, lat and lng to the organization
-            gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-            location = gmap.geocode(address)[0]
+                organization = Organization.objects.get(id=id)
+                
+                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+                    
+                # Adding the place_id, lat and lng to the organization
+                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                location = gmap.geocode(address)[0]
 
-            place_id = location.get('place_id', None)
-            lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-            lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-            
-            organization.lat = lat
-            organization.lng = lng
-            organization.place_id = place_id
-            organization.save()
-            
-            messages.success(request, 'Configurações atualizadas com sucesso!')
-            return redirect('settings-org', id=id)
-        else:
-            messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')
-    
+                place_id = location.get('place_id', None)
+                lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+                lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+                
+                organization.lat = lat
+                organization.lng = lng
+                organization.place_id = place_id
+                organization.save()
+                
+                messages.success(request, 'Configurações atualizadas com sucesso!')
+                return redirect('settings-org', id=id)
+            else:
+                messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')
+        
+        elif 'delete-org' in request.POST:
+            messages.success(request, 'Organização deletada com sucesso!')
+            organization.delete()
+            return redirect('organizations')
+        
     categories = organization_profile.organization.category.all().values_list('name')
     
     org_categories = []
@@ -141,10 +147,12 @@ def settings_org(request, id):
     context = {
         'org' : organization,
         'org_profile': organization_profile,
-        'categories': org_categories
+        'categories': org_categories,
+        'role': user_role.role,
+        'role_name': user_role.get_role_display()
     }
     return render(request, 'organizations/settings-org.html', context)
-
+    
 # Donations
 
 @login_required(login_url='/login')

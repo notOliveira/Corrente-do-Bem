@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     cep = models.CharField(max_length=9, blank=True, null=True)
-    organizations = models.ManyToManyField('organizations.Organization', related_name='user_organizations', blank=True, max_length=10)
+    organizations = models.ManyToManyField('organizations.Organization', related_name='user_organizations', blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
 
