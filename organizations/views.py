@@ -91,12 +91,13 @@ def organization(request, id):
 @login_required(login_url='login')
 def settings_org(request, id):
     organization_profile = OrganizationProfile.objects.get(id=id)
-    organization = Organization.objects.get(id=id)
-    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
 
     if request.user not in organization_profile.organization.users.all():
         messages.error(request, 'Você não tem permissão para acessar essa organização.')
         return redirect('organizations')
+    
+    organization = Organization.objects.get(id=id)
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
     
     if not user_role.role == 0:
         messages.error(request, 'Você não tem permissão para acessar essa página')
@@ -157,12 +158,20 @@ def settings_org(request, id):
 @login_required(login_url='login')
 def org_donations(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
+    
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
+        
     # Get last 10 donations
     donations = Donation.objects.filter(organization__id=id).order_by('-date')[:10]
     
     context = {
         'org': organization_profile,
-        'donations': donations
+        'donations': donations,
+        'role': user_role.role
     }
     
     return render(request, 'donations/org-donations.html', context)
@@ -170,6 +179,10 @@ def org_donations(request, id):
 @login_required(login_url='login')
 def register_donation(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
     
     if request.method == "POST":
         form = DonationForm(request.POST, request.FILES)
@@ -193,6 +206,7 @@ def register_donation(request, id):
             messages.error(request, 'Houve um problema ao registrar a doação. Por favor, tente novamente.')
             
             return redirect('register-donation', id=id)
+    
     context = {
         'org': organization_profile
     }
