@@ -21,6 +21,8 @@ def invite_users(request, organization_id):
     
     
     if request.method == 'POST':
+        print(request.POST) 
+        pass
         invited_user = User.objects.get(username=request.POST.get('email'))
 
         # Verifique se já existe um convite pendente para este usuário nesta organização
