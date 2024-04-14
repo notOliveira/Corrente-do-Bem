@@ -49,7 +49,6 @@ def invite_users(request, organization_id):
                     'protocol': 'http',
                     'org_name': invitation.organization.name
                 }
-                print(parameters)
                 email = render_to_string(email_template_name, parameters)
                 
                 send_mail(subject, email, '', [invitation.invited_user.username], fail_silently=False)
