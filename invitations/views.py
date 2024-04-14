@@ -21,38 +21,47 @@ def invite_users(request, organization_id):
     
     
     if request.method == 'POST':
-        print(request.POST) 
-        pass
-        invited_user = User.objects.get(username=request.POST.get('email'))
-
-        # Verifique se já existe um convite pendente para este usuário nesta organização
-        if Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user, is_accepted=False).exists():
-            messages.error(request, f'O usuário {invited_user.first} foi convidado para se juntar a esta organização.')
-            return 
-
-        # Crie um novo convite
-        invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user)
-
-        # Envie o email de convite
-        subject = 'Convite para se juntar à organização'
-        email_template_name = 'invite_org.txt'
-        parameters = {
-            'username': invited_user.first_name,
-            'email': invited_user.email,
-            'domain': 'localhost:8000',
-            'site_name': 'Zero Fome',
-            'token': invitation.token,
-            'protocol': 'http'
-        }
-        email = render_to_string(email_template_name, parameters)
         
-        send_mail(subject, email, '', [invitation.invited_user.username], fail_silently=False)
+        for email in list(request.POST.getlist('email')):
+            try:
+                invited_user = User.objects.get(username=request.POST.get('email'))
+                
+                if not invited_user:
+                    raise Exception(f'O usuário com email {email} não foi encontrado.')
+                
+                # Verifique se já existe um convite pendente para este usuário nesta organização
+                if Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user, is_accepted=False).exists():
+                    messages.error(request, f'O usuário {invited_user.first_name} já foi convidado para se juntar a esta organização.')
+                    continue
 
-        return redirect('invitation_sent_page')  # Redirecionar para uma página informando que o convite foi enviado
+                # Crie um novo convite
+                invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user)
+
+                # Envie o email de convite
+                subject = 'Convite para se juntar à organização'
+                email_template_name = 'invite_org.txt'
+                parameters = {
+                    'username': invited_user.first_name,
+                    'email': invited_user.email,
+                    'domain': 'localhost:8000',
+                    'site_name': 'Zero Fome',
+                    'token': invitation.token,
+                    'protocol': 'http',
+                    'org_name': invitation.organization.name
+                }
+                print(parameters)
+                email = render_to_string(email_template_name, parameters)
+                
+                send_mail(subject, email, '', [invitation.invited_user.username], fail_silently=False)
+                
+            except Exception as e:
+                messages.error(request, e)
+
+            return redirect('organization', id=organization_id) 
     
     return render(request, 'invitations/invite-users.html')
 
-def accept_invitation(request, token):
+def accept_invite(request, token):
     invitation = get_object_or_404(Invitation, token=token)
 
     # Marque o convite como aceito
@@ -61,5 +70,8 @@ def accept_invitation(request, token):
 
     # Adicione o usuário à organização
     invitation.organization.users.add(invitation.invited_user)
+    UserRole.objects.create(user=invitation.invited_user, organization=invitation.organization, role=1)
+    
+    messages.success(request, f'Você aceitou o convite para se juntar à organização {invitation.organization.name}.')
 
-    return redirect('invitation_accepted_page')  # Redirecionar para uma página informando que o convite foi aceito
+    return redirect('organizations')  # Redirecionar para uma página informando que o convite foi aceito
