@@ -22,15 +22,19 @@ def invite_users(request, organization_id):
     
     if request.method == 'POST':
         
-        for email in list(request.POST.getlist('email')):
+        for email_user in list(request.POST.getlist('email')):
             try:
-                invited_user = User.objects.get(username=request.POST.get('email'))
+                invited_user = User.objects.filter(username=email_user).first()
                 
                 if not invited_user:
-                    raise Exception(f'O usuário com email {email} não foi encontrado.')
+                    raise Exception(f'O usuário com email {email_user} não foi encontrado.')
                 
+                # Verificar se o usuário já pertence à organização
+                if invited_user in organization_profile.organization.users.all():
+                    messages.info(request, f'O usuário {invited_user.first_name} já faz parte desta organização.')
+                    continue
                 # Verifique se já existe um convite pendente para este usuário nesta organização
-                if Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user, is_accepted=False).exists():
+                elif Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user, is_accepted=False).exists():
                     messages.error(request, f'O usuário {invited_user.first_name} já foi convidado para se juntar a esta organização.')
                     continue
 
@@ -53,10 +57,13 @@ def invite_users(request, organization_id):
                 
                 send_mail(subject, email, '', [invitation.invited_user.username], fail_silently=False)
                 
+                messages.success(request, f"Um convite foi enviado para {parameters['email']}.")
+                
             except Exception as e:
                 messages.error(request, e)
-
-            return redirect('organization', id=organization_id) 
+                continue
+        
+        return redirect('organization', id=organization_id) 
     
     return render(request, 'invitations/invite-users.html')
 
@@ -65,12 +72,20 @@ def accept_invite(request, token):
 
     # Marque o convite como aceito
     invitation.is_accepted = True
-    invitation.save()
-
+    
+    # Validar se o usuário logado é o mesmo da solicitação. Caso não seja, mostre uma mensagem de erro
+    if not request.user == invitation.invited_user:
+        messages.error(request, 'Você não tem permissão para aceitar este convite.')
+        return redirect('organizations')
+    
     # Adicione o usuário à organização
     invitation.organization.users.add(invitation.invited_user)
+    
+    # Adicionando usuário como colaborador
     UserRole.objects.create(user=invitation.invited_user, organization=invitation.organization, role=1)
+    
+    invitation.delete()
     
     messages.success(request, f'Você aceitou o convite para se juntar à organização {invitation.organization.name}.')
 
-    return redirect('organizations')  # Redirecionar para uma página informando que o convite foi aceito
+    return redirect('organizations')
