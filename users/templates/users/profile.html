@@ -87,7 +87,7 @@
                                     </div>
     
                                     <div class="col-lg-12 col-12 mt-2">
-                                        <button type="submit" class="form-control mt-4">Confirmar</button>
+                                        <button name="save-profile" type="submit" class="form-control mt-4">Confirmar</button>
                                     </div>
                                 </div>
                             </form>
@@ -98,7 +98,7 @@
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteOrgModal">Excluir organização</button>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">Encerrar minha conta</button>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +107,47 @@
             </div>
         </section>
 
+        <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserModalLabel">Encerrar minha conta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja encerrar sua conta? Essa ação é <b class="text-danger">irreversível</b>.</p>
+
+                        <p class="mt-4">Digite <b>"{{user.username}}"</b> para confirmar</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" onkeyup="handleDeleteUserInput(event)" >
+                            <button type="submit" name="delete-account" class="btn btn-danger col-12" id="delete-user-btn" disabled>Excluir</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 {% endblock content %}
 
 {% block links %}
     <script src="{% static 'js/profile.js' %}"></script>
+    
+    <script>
+        const handleDeleteUserInput = (event) => {
+            const input = event.target;
+            const deleteUserBtn = document.getElementById('delete-user-btn');
+            const username = "{{user.username}}";
+            const inputValue = input.value.trim();
+        
+            if (inputValue === username) {
+                deleteUserBtn.removeAttribute('disabled');
+            } else {
+                deleteUserBtn.setAttribute('disabled', 'true');
+            }
+        }
+    </script>
 {% endblock links %}

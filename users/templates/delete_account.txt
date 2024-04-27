@@ -1,0 +1,13 @@
+{% autoescape off %}
+
+Olá {{ username }}!
+
+Você solicitou o encerramento permanente de sua conta no Zero Fome.
+
+Lamentamos sua decisão, mas respeitamos sua escolha. Esperamos que tenha tido uma boa experiência conosco e que possamos atendê-lo novamente no futuro.
+
+Atenciosamente,
+
+Equipe Zero Fome
+
+{% endautoescape %}

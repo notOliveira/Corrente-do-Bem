@@ -16,16 +16,37 @@ from .forms import UserRegisterForm, ProfileUpdateForm, UsersUpdateForm
 @login_required(login_url='/login')
 def profile(request):
     if request.method == "POST":
-        user_form = UsersUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Perfil atualizado com sucesso!")
-            return redirect('profile')
-    else:
-        user_form = UsersUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        if 'save-profile' in request.POST:
+            user_form = UsersUpdateForm(request.POST, instance=request.user)
+            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                messages.success(request, "Perfil atualizado com sucesso!")
+                return redirect('profile')
+        elif 'delete-account' in request.POST:
+            user_email = CustomUser.objects.filter(id=request.user.id).first()
+            subject = 'Encerramento de conta'
+            email_template_name = 'delete_account.txt'
+            parameters = {
+                'username': user_email.first_name,
+                'email': user_email.username,
+                'site_name': 'Zero Fome',
+            }
+            email = render_to_string(email_template_name, parameters)
+            
+            try:
+                send_mail(subject, email, '', [user_email.username], fail_silently=False)
+            except Exception as e:
+                print(e)
+                return HttpResponse('Invalid Header')
+            
+            user_email.delete()
+            messages.success(request, "Conta deletada com sucesso!")
+            return redirect('home')
+
+    user_form = UsersUpdateForm(instance=request.user)
+    profile_form = ProfileUpdateForm(instance=request.user.profile)
     
     context = {
         'user_form': user_form,
