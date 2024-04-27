@@ -65,7 +65,7 @@ def invite_users(request, organization_id):
         
         return redirect('organization', id=organization_id) 
     
-    return render(request, 'invitations/invite-users.html')
+    return render(request, 'invitations/invite-users.html', {'id': organization_profile.organization.id})
 
 def accept_invite(request, token):
     invitation = get_object_or_404(Invitation, token=token)
