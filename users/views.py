@@ -65,20 +65,25 @@ def register_user(request):
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == "POST":
+        
         email = request.POST['email']
         password = request.POST['password']
+        user = CustomUser.objects.filter(email=email.lower()).first()
         user_instance = authenticate(request, email=email.lower(), password=password)
         
-        if user_instance is not None:
+        if not user:
+            messages.error(request, "Usuário com esse email não existe! Por favor tente novamente.")
+            return redirect('login')
+        elif user_instance is None:
+            messages.error(request, "Senha incorreta! Por favor tente novamente.")
+            return redirect('login')
+        else:
             login(request, user_instance)
             return redirect('home')
-        else:
-            messages.error(request, "Usuário não existe! Por favor tente novamente.")
-            return redirect('login')
-    else:
-        messages.error(request, '')
-        return render(request, 'users/login.html', {})
+    
+    return render(request, 'users/login.html')
 
 def password_reset_request(request):
     if request.method == 'POST':
@@ -86,7 +91,10 @@ def password_reset_request(request):
         if password_form.is_valid():
             data = password_form.cleaned_data['email']
             user_email = CustomUser.objects.filter(Q(username=data)).first()
-            if user_email is not None:
+            if user_email is None:
+                messages.error(request, 'Email não encontrado!')
+                return redirect('reset-password')
+            elif user_email is not None:
                 subject = 'Redefinição de senha'
                 email_template_name = 'reset_password_email.txt'
                 parameters = {
