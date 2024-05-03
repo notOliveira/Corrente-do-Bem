@@ -116,12 +116,13 @@
                     </div>
                     <div class="modal-body">
                         <p class="fs-5">Tem certeza que deseja encerrar sua conta? Essa ação é <b class="text-danger">irreversível</b>.</p>
+                        <p class="fs-6">OBS: Caso você seja o único administrador de alguma organização, será necessário nomear outro usuário como administrador antes de encerrar sua conta, caso o contrário você não conseguirá prosseguir.</p>
 
-                        <p class="mt-4">Digite <b>"{{user.username}}"</b> para confirmar</p>
+                        <p class="mt-4">Digite <b>"{{user.username}}"</b> para confirmar.</p>
                         <form method="POST">
                             {% csrf_token %}
                             <input type="text" class="form-control my-4" onkeyup="handleDeleteUserInput(event)" >
-                            <button type="submit" name="delete-account" class="btn btn-danger col-12" id="delete-user-btn" disabled>Excluir</button>
+                            <button type="submit" name="delete-account" class="btn btn-danger col-12" id="delete-user-btn" disabled>Encerrar conta</button>
                         </form>
                     </div>
                     <div class="modal-footer">

@@ -11,39 +11,79 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from users.models import CustomUser
+from organizations.models import UserRole
 from .forms import UserRegisterForm, ProfileUpdateForm, UsersUpdateForm
+
+# Funções para deixar o código do views mais limpo
+def delete_account(request):
+    user_email = CustomUser.objects.filter(id=request.user.id).first()
+    
+    # Checando se o usuário é adminstrador único de alguma organizaçáo, caso seja, não poderá deletar a conta
+    user_orgs = user_email.organizations.all()
+    
+    # Iterando sobre as organizações do usuário
+    for org in user_orgs:
+        # Verificando se o usuário é administrador ou colaborador
+        user_role_org = UserRole.objects.filter(user=user_email, organization=org).first()
+        # Caso seja colaborador, não haverá problemas em deixar a organização
+        if user_role_org.role == 1:
+            continue
+        # Caso não seja, será necessário verificar se o usuário é o único administrador da organização
+        else:
+            # Criar uma variável que será usada para verificar se há mais de um administrador na organização
+            admin_validation = False
+            # Iterar sobre os usuários
+            for user in org.users.all():
+                # Caso o usuário seja o mesmo que está tentando deletar a conta, não será necessário verificar se ele é o único administrador
+                if user == user_email:
+                    pass
+                else:
+                    # Verificar a role dos usuários
+                    user_role = UserRole.objects.filter(user=user, organization=org).first()
+                    if user_role.role == 0:
+                        admin_validation = True
+            
+            if admin_validation == False:
+                messages.error(request, f"Você é o único administrador da organização {org.name}. Por favor, adicione outro administrador antes de deletar a conta.")
+                return redirect('profile')
+            else:
+                continue
+    
+    subject = 'Encerramento de conta'
+    email_template_name = 'delete_account.txt'
+    parameters = {
+        'username': user_email.first_name,
+        'email': user_email.username,
+        'site_name': 'Zero Fome',
+    }
+    email = render_to_string(email_template_name, parameters)
+    try:
+        send_mail(subject, email, '', [user_email.username], fail_silently=False)
+    except Exception as e:
+        print(e)
+        return HttpResponse('Invalid Header')
+    user_email.delete()
+    messages.success(request, "Conta deletada com sucesso!")
+    return redirect('home')
+
+def save_profile(request):
+    user_form = UsersUpdateForm(request.POST, instance=request.user)
+    profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+    if user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        messages.success(request, "Perfil atualizado com sucesso!")
+        return redirect('profile')
+
+# Views
 
 @login_required(login_url='/login')
 def profile(request):
     if request.method == "POST":
         if 'save-profile' in request.POST:
-            user_form = UsersUpdateForm(request.POST, instance=request.user)
-            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
-                messages.success(request, "Perfil atualizado com sucesso!")
-                return redirect('profile')
+            save_profile(request)
         elif 'delete-account' in request.POST:
-            user_email = CustomUser.objects.filter(id=request.user.id).first()
-            subject = 'Encerramento de conta'
-            email_template_name = 'delete_account.txt'
-            parameters = {
-                'username': user_email.first_name,
-                'email': user_email.username,
-                'site_name': 'Zero Fome',
-            }
-            email = render_to_string(email_template_name, parameters)
-            
-            try:
-                send_mail(subject, email, '', [user_email.username], fail_silently=False)
-            except Exception as e:
-                print(e)
-                return HttpResponse('Invalid Header')
-            
-            user_email.delete()
-            messages.success(request, "Conta deletada com sucesso!")
-            return redirect('home')
+            delete_account(request)
 
     user_form = UsersUpdateForm(instance=request.user)
     profile_form = ProfileUpdateForm(instance=request.user.profile)
