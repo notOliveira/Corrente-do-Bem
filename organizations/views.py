@@ -213,3 +213,24 @@ def register_donation(request, id):
     
     return render(request, 'donations/register-donation.html', context)
 
+def users_org(request, id):
+    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
+    
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
+    
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
+    
+    users = organization_profile.organization.users.all()
+
+    # Unir lista de usuários com seus respectivos roles
+    users = [(user, UserRole.objects.filter(user=user, organization=organization_profile.organization).first().role) for user in users]
+    
+    context = {
+        'org': organization_profile,
+        'users': users,
+        'role': user_role.role
+    }
+    
+    return render(request, 'organizations/organization-users.html', context)

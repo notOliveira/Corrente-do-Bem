@@ -8,6 +8,7 @@ urlpatterns = [
     path('create/', views.create_org, name='create-org'),
     path('<int:id>/', views.organization, name='organization'),
     path('<int:id>/settings/', views.settings_org, name='settings-org'),
+    path('<int:id>/users/', views.users_org, name='users-org'),
     
     # Donations
     path('<int:id>/donations/', views.org_donations, name='org-donations'),
