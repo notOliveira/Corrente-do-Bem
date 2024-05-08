@@ -77,8 +77,30 @@
 
                 </div>
             </div>
-
         </section>
+        <div class="modal fade" id="leaveOrgModal" tabindex="-1" aria-labelledby="leaveOrgModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="leaveOrgModalLabel">Excluir organização</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja excluir essa organização? Essa ação é <b class="text-danger">irreversível</b>.</p>
+
+                        <p class="mt-4">Digite <b>"{{org_profile.organization.name}}"</b> para confirmar</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" id="delete-org-input" onkeyup="handleDeleteOrgInput(event)" >
+                            <button type="submit" name="delete-org" class="btn btn-danger col-12" id="delete-org-btn" disabled>Excluir</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 {% endblock content %}

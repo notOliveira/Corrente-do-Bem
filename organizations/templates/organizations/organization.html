@@ -50,11 +50,14 @@
                 </div>
                 {% else %}
                 <div class="row my-3">
-                    <div class="col-6">
+                    <div class="col-4">
                         <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <a class="btn btn-block btn-warning col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Gerenciar doações</a>
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "users-org" id=org.organization.id %}">Visualizar usuários</a>
                     </div>
                 </div>
                 {% endif %}
@@ -133,7 +136,6 @@
             </div>
         </section>
 
-        {% comment %} MODAL USERS {% endcomment %}
         <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
