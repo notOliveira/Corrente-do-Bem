@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}{{org.organization.name}} - Doações{% endblock title %}
+{% block title %}{{org.organization.name}} - Usuários{% endblock title %}
 
 {% block content %}
         {% if messages %}
@@ -45,7 +45,10 @@
                     {% for org_user in users %}
                         <div class="list-group-item py-3">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{org_user.0.first_name}} {{org_user.0.last_name}}</h5>
+                                <div class="col-6">
+                                    <h5 class="mb-1">{{org_user.0.first_name}} {{org_user.0.last_name}} <span class="text-muted fs-5">{% if org_user.1 == 0 %}(Admin){% else %}(Colaborador){% endif %}</span></h5>
+                                    <p>{{org_user.0.email}}</p>
+                                </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <!-- Caso você seja admin, mostrar a opção de remover usuário -->
@@ -53,11 +56,11 @@
                                             {% if org_user.0 != user and org_user.1 == 1 %}
                                                 <a class="btn btn-danger float-end mb-3">Remover usuário &nbsp;<i class="bi bi-trash-fill"></i></a>
                                             {% elif org_user.0 == user %}
-                                                <a class="btn btn-danger float-end mb-3">Sair da organização &nbsp;<i class="bi bi-box-arrow-right"></i></a>
+                                                <a class="btn btn-danger float-end mb-3" data-bs-toggle="modal" data-bs-target="#leaveOrgModal">Sair da organização &nbsp;<i class="bi bi-box-arrow-right"></i></a>
                                             {% endif %}
                                         {% elif role == 1 %}
                                             {% if org_user.0 == user %}
-                                                <a class="btn btn-danger float-end mb-3">Sair da organização &nbsp;<i class="bi bi-box-arrow-right"></i></a>
+                                                <a class="btn btn-danger float-end mb-3" data-bs-toggle="modal" data-bs-target="#leaveOrgModal">Sair da organização &nbsp;<i class="bi bi-box-arrow-right"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -67,11 +70,9 @@
                                                 <a class="btn btn-success float-end">Promover para administrador &nbsp;<i class="bi bi-person-check"></i></a>
                                             {% endif %}
                                         {% endif %}
-                                        
                                     </div>
                                 </div>
                             </div>
-                            <p>{{org_user.0.email}}</p>
                         </div>
                     {% endfor %}
 
@@ -82,17 +83,19 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="leaveOrgModalLabel">Excluir organização</h5>
+                        <h5 class="modal-title" id="leaveOrgModalLabel">Sair da organização</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="fs-5">Tem certeza que deseja excluir essa organização? Essa ação é <b class="text-danger">irreversível</b>.</p>
+                        <p class="fs-5">Tem certeza que deseja sair da organização? Você poderá voltar quando quiser.</p>
 
-                        <p class="mt-4">Digite <b>"{{org_profile.organization.name}}"</b> para confirmar</p>
+                        <p class="text-warning">OBS: Caso você seja o único administrador desta organização, não conseguirá sair da organização. Promova algum colaborador antes de sair.</p>
+
+                        <p class="mt-4">Digite <b>"{{org.organization.name}}"</b> para confirmar</p>
                         <form method="POST">
                             {% csrf_token %}
-                            <input type="text" class="form-control my-4" id="delete-org-input" onkeyup="handleDeleteOrgInput(event)" >
-                            <button type="submit" name="delete-org" class="btn btn-danger col-12" id="delete-org-btn" disabled>Excluir</button>
+                            <input type="text" class="form-control my-4" id="leave-org-input" onkeyup="handleDeleteOrgInput(event)" >
+                            <button type="submit" name="leave-org" class="btn btn-danger col-12" id="leave-org-btn" disabled>Excluir</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -104,3 +107,20 @@
 
 
 {% endblock content %}
+
+{% block links %}
+    <script>
+        const handleDeleteOrgInput = (event) => {
+            const input = event.target;
+            const leaveOrgBtn = document.getElementById('leave-org-btn');
+            const orgName = "{{org.organization.name}}";
+            const inputValue = input.value.trim();
+        
+            if (inputValue === orgName) {
+                leaveOrgBtn.removeAttribute('disabled');
+            } else {
+                leaveOrgBtn.setAttribute('disabled', 'true');
+            }
+        }
+    </script>
+{% endblock links %}

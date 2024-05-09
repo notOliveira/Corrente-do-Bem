@@ -38,7 +38,7 @@
                         <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "settings-org" id=org.organization.id %}">Editar informações</a>
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "invite-users" organization_id=org.organization.id %}">Convidar usuários</a>
+                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "users-org" id=org.organization.id %}">Gerenciar usuários</a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
