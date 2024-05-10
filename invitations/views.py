@@ -2,6 +2,7 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from organizations.models import Organization, OrganizationProfile, UserRole
 from users.models import CustomUser as User
 from .models import Invitation
@@ -68,14 +69,14 @@ def invite_users(request, organization_id):
     return render(request, 'invitations/invite-users.html', {'id': organization_profile.organization.id})
 
 def accept_invite(request, token):
-    invitation = get_object_or_404(Invitation, token=token)
-
-    if not invitation.is_valid():
-        messages.error(request, 'Este convite é inválido ou expirou.')
+    try:
+        invitation = Invitation.objects.get(token=token)
+    except ValidationError:
+        messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
         return redirect('organizations')
-
-    # Marque o convite como aceito
-    invitation.is_accepted = True
+    except Invitation.DoesNotExist:
+        messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
+        return redirect('organizations')
     
     # Validar se o usuário logado é o mesmo da solicitação. Caso não seja, mostre uma mensagem de erro
     if not request.user == invitation.invited_user:

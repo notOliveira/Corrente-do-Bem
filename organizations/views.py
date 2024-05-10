@@ -11,7 +11,7 @@ import googlemaps
 
 @login_required(login_url='login')
 def organizations(request):
-    orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user)
+    orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user).order_by('organization__name')
     context = {
         'orgs': orgs_profile
     }

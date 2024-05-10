@@ -17,23 +17,16 @@
             </div>
             {% endfor %}
         {% endif %}
-
-
         <section class="news-detail-header-section text-center">
             <div class="section-overlay"></div>
-
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-12 col-12">
                         <h1 class="text-white">Usuários - {{org.organization.name}}</h1>
                     </div>
-
                 </div>
             </div>
         </section>
-
-
         <section class="news-section">
 
             <div class="container section-padding">
@@ -41,6 +34,14 @@
                 <div class="list-group">
 
                     <!-- Item de exemplo -->
+
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-12 text-end my-5">
+                              <a type="button" class="btn btn-success" href="{% url 'invite-users' organization_id=org.organization.id %}">Convidar usuários</a>
+                          </div>
+                        </div>
+                    </div>
 
                     {% for org_user in users %}
                         <div class="list-group-item py-3">
