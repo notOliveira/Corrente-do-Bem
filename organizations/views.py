@@ -152,7 +152,57 @@ def settings_org(request, id):
         'role': user_role.role
     }
     return render(request, 'organizations/settings-org.html', context)
+
+def users_org(request, id):
+    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
+    
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
+    
+    if request.method == "POST":
+        form = request.POST
+        if 'leave-org' in form:
+
+            # Se o usuário for colaborador, pode sair da organização
+
+            if user_role.role == 1:
+                UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                Organization.objects.get(id=id).users.remove(request.user)
+                request.user.organizations.remove(organization_profile.organization)
+                messages.success(request, 'Você saiu da organização com sucesso.')
+                return redirect('organizations')
+            
+            elif user_role.role == 0:
+                if organization_profile.organization.users.count() == 1:
+                    UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                    Organization.objects.get(id=id).users.remove(request.user)
+                    request.user.organizations.remove(organization_profile.organization)
+                # Validar se o usuário é o único administrador da organização
+                elif UserRole.objects.filter(organization=organization_profile.organization, role=0).count() == 1:
+                    messages.error(request, 'Você não pode sair da organização, pois é o único administrador.')
+                    return redirect('users-org', id=id)
+                else:
+                    UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                    Organization.objects.get(id=id).users.remove(request.user)
+                    messages.success(request, 'Você saiu da organização com sucesso.')
+                    return redirect('organizations')
+        
+    users = organization_profile.organization.users.all()
+
+    # Unir lista de usuários com seus respectivos roles
+    users = [(user, UserRole.objects.filter(user=user, organization=organization_profile.organization).first().role) for user in users]
+    
+    context = {
+        'org': organization_profile,
+        'users': users,
+        'role': user_role.role
+    }
+    
+    return render(request, 'organizations/organization-users.html', context)
+
 # Donations
 
 @login_required(login_url='login')
@@ -212,25 +262,3 @@ def register_donation(request, id):
     }
     
     return render(request, 'donations/register-donation.html', context)
-
-def users_org(request, id):
-    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
-    
-    if request.user not in organization_profile.organization.users.all():
-        messages.error(request, 'Você não tem permissão para acessar essa organização.')
-        return redirect('organizations')
-    
-    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
-    
-    users = organization_profile.organization.users.all()
-
-    # Unir lista de usuários com seus respectivos roles
-    users = [(user, UserRole.objects.filter(user=user, organization=organization_profile.organization).first().role) for user in users]
-    
-    context = {
-        'org': organization_profile,
-        'users': users,
-        'role': user_role.role
-    }
-    
-    return render(request, 'organizations/organization-users.html', context)

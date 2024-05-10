@@ -70,6 +70,10 @@ def invite_users(request, organization_id):
 def accept_invite(request, token):
     invitation = get_object_or_404(Invitation, token=token)
 
+    if not invitation.is_valid():
+        messages.error(request, 'Este convite é inválido ou expirou.')
+        return redirect('organizations')
+
     # Marque o convite como aceito
     invitation.is_accepted = True
     
