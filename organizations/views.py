@@ -203,6 +203,19 @@ def users_org(request, id):
                 messages.error(request, 'Houve um problema ao remover o usuário.')
                 return redirect('users-org', id=id)
 
+        elif 'promote-user' in form:
+            user_id = form.get('promote-user-input')
+            # Promover usuário
+            try:
+                user = User.objects.get(username=user_id)
+                user_role = UserRole.objects.filter(user=user, organization=organization_profile.organization).first()
+                user_role.role = 0
+                user_role.save()
+                messages.success(request, 'Usuário promovido com sucesso.')
+                return redirect('users-org', id=id)
+            except Exception:
+                messages.error(request, 'Houve um problema ao promover o usuário.')
+                return redirect('users-org', id=id)
 
     users = organization_profile.organization.users.all()
 

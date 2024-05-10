@@ -69,7 +69,7 @@
                                     <div class="col-12">
                                         {% if role == 0 %}
                                             {% if org_user.1 == 1 %}
-                                                <a class="btn btn-success float-end">Promover para administrador &nbsp;<i class="bi bi-person-check"></i></a>
+                                                <a class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#promoteUserModal" onclick="selectUserToPromote('{{org_user.0.email}}')">Promover para administrador &nbsp;<i class="bi bi-person-check"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -95,7 +95,7 @@
 
                         <p class="text-warning">OBS: Caso você seja o único administrador desta organização, não conseguirá sair da organização. Promova algum colaborador antes de sair.</p>
 
-                        <p class="mt-4">Digite <b>"{{org.organization.name}}"</b> para confirmar</p>
+                        <p class="mt-4">Digite abaixo<b>{{org.organization.name}}</b> para confirmar</p>
                         <form method="POST">
                             {% csrf_token %}
                             <input type="text" class="form-control my-4" id="leave-org-input" onkeyup="handleLeaveOrgInput(event)" >
@@ -123,7 +123,33 @@
                         <form method="POST">
                             {% csrf_token %}
                             <input type="text" class="form-control my-4" id="remove-user-input" name="remove-user-input" value="" hidden >
-                            <button type="submit" name="remove-user" class="btn btn-danger col-12">Excluir</button>
+                            <button type="submit" name="remove-user" class="btn btn-danger col-12">Remover usuário</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} Modal - Promover usuário {% endcomment %}
+        <div class="modal fade" id="promoteUserModal" tabindex="-1" aria-labelledby="promoteUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="leaveOrgModalLabel">Promover usuário</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja promover o usuário para administrador? Por enquanto, essa ação é <b class="text-danger">IRREVERSÍVEL</b>.</p>
+
+                        <p class="mt-4">Digite abaixo <b id="user-promote-email"></b> para confirmar</p>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" id="promote-user-input" name="promote-user-input" onkeyup="handlePromoteUserInput(event)">
+                            <button type="submit" name="promote-user" id="promote-user-btn" class="btn btn-success col-12" disabled>Confirmar</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -138,8 +164,27 @@
 {% block links %}
     <script>
 
+        let userToPromote;
+
         function selectUserToRemove(userId) {
             document.getElementById('remove-user-input').value = userId;
+        }
+
+        function selectUserToPromote(username) {
+           userToPromote = username;
+              document.getElementById('user-promote-email').innerText = username;
+        }
+
+        const handlePromoteUserInput = (event) => {
+            const input = event.target;
+            const promoteUserBtn = document.getElementById('promote-user-btn');
+            const inputValue = input.value.trim();
+        
+            if (inputValue === userToPromote) {
+                promoteUserBtn.removeAttribute('disabled');
+            } else {
+                promoteUserBtn.setAttribute('disabled', 'true');
+            }
         }
 
         const handleLeaveOrgInput = (event) => {
