@@ -30,18 +30,19 @@
         <section class="news-section">
 
             <div class="container section-padding">
-                <h2 class="mb-4 text-dark">Todos os usuários da organização</h2>
+                <h2 class="text-dark">Todos os usuários da organização</h2>
                 <div class="list-group">
 
                     <!-- Item de exemplo -->
-
-                    <div class="container">
+                    {% if role == 0 %}
+                    <div class="container my-5">
                         <div class="row">
-                          <div class="col-12 text-end my-5">
-                              <a type="button" class="btn btn-success" href="{% url 'invite-users' organization_id=org.organization.id %}">Convidar usuários</a>
-                          </div>
+                            <div class="col-12">
+                                <a type="button" class="btn btn-success col-12" href="{% url 'invite-users' organization_id=org.organization.id %}">Convidar usuários</a>
+                            </div>
                         </div>
                     </div>
+                    {% endif %}
 
                     {% for org_user in users %}
                         <div class="list-group-item py-3">
@@ -55,7 +56,7 @@
                                         <!-- Caso você seja admin, mostrar a opção de remover usuário -->
                                         {% if role == 0 %}
                                             {% if org_user.0 != user and org_user.1 == 1 %}
-                                                <a class="btn btn-danger float-end mb-3">Remover usuário &nbsp;<i class="bi bi-trash-fill"></i></a>
+                                                <a class="btn btn-danger float-end mb-3" data-bs-toggle="modal" data-bs-target="#removeUserModal" onclick="selectUserToRemove({{org_user.0.id}})">Remover usuário &nbsp;<i class="bi bi-trash-fill"></i></a>
                                             {% elif org_user.0 == user %}
                                                 <a class="btn btn-danger float-end mb-3" data-bs-toggle="modal" data-bs-target="#leaveOrgModal">Sair da organização &nbsp;<i class="bi bi-box-arrow-right"></i></a>
                                             {% endif %}
@@ -80,6 +81,8 @@
                 </div>
             </div>
         </section>
+
+        {% comment %} Modal - Sair da organização {% endcomment %}
         <div class="modal fade" id="leaveOrgModal" tabindex="-1" aria-labelledby="leaveOrgModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -95,7 +98,7 @@
                         <p class="mt-4">Digite <b>"{{org.organization.name}}"</b> para confirmar</p>
                         <form method="POST">
                             {% csrf_token %}
-                            <input type="text" class="form-control my-4" id="leave-org-input" onkeyup="handleDeleteOrgInput(event)" >
+                            <input type="text" class="form-control my-4" id="leave-org-input" onkeyup="handleLeaveOrgInput(event)" >
                             <button type="submit" name="leave-org" class="btn btn-danger col-12" id="leave-org-btn" disabled>Excluir</button>
                         </form>
                     </div>
@@ -106,12 +109,40 @@
             </div>
         </div>
 
+        {% comment %} Modal - Remover usuário {% endcomment %}
+        <div class="modal fade" id="removeUserModal" tabindex="-1" aria-labelledby="removeUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="leaveOrgModalLabel">Remover usuário</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja remover o usuário da organização? Esse poderá voltar mediante um novo convite.</p>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" id="remove-user-input" name="remove-user-input" value="" hidden >
+                            <button type="submit" name="remove-user" class="btn btn-danger col-12">Excluir</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 {% endblock content %}
 
 {% block links %}
     <script>
-        const handleDeleteOrgInput = (event) => {
+
+        function selectUserToRemove(userId) {
+            document.getElementById('remove-user-input').value = userId;
+        }
+
+        const handleLeaveOrgInput = (event) => {
             const input = event.target;
             const leaveOrgBtn = document.getElementById('leave-org-btn');
             const orgName = "{{org.organization.name}}";
@@ -124,4 +155,5 @@
             }
         }
     </script>
+
 {% endblock links %}

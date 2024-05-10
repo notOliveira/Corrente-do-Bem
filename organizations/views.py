@@ -190,6 +190,20 @@ def users_org(request, id):
                     messages.success(request, 'Você saiu da organização com sucesso.')
                     return redirect('organizations')
         
+        elif 'remove-user' in form:
+            user_id = form.get('remove-user-input')
+            # Remover usuário da organização
+            try:
+                organization_profile.organization.users.remove(User.objects.get(id=user_id))
+                UserRole.objects.filter(user=User.objects.get(id=user_id), organization=organization_profile.organization).delete()
+                User.objects.get(id=user_id).organizations.remove(organization_profile.organization)
+                messages.success(request, 'Usuário removido com sucesso.')
+                return redirect('users-org', id=id)
+            except Exception as e:
+                messages.error(request, 'Houve um problema ao remover o usuário.')
+                return redirect('users-org', id=id)
+
+
     users = organization_profile.organization.users.all()
 
     # Unir lista de usuários com seus respectivos roles
