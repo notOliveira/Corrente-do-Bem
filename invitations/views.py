@@ -2,8 +2,8 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.template.loader import render_to_string
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from organizations.models import Organization, OrganizationProfile, UserRole
+from django.core.exceptions import ValidationError
+from organizations.models import OrganizationProfile, UserRole
 from users.models import CustomUser as User
 from .models import Invitation
 
@@ -94,3 +94,10 @@ def accept_invite(request, token):
     messages.success(request, f'Você aceitou o convite para se juntar à organização {invitation.organization.name}.')
 
     return redirect('organizations')
+
+def invites(request):
+    user_invites = Invitation.objects.filter(invited_user=request.user)
+    context = {
+        'invites': user_invites
+    }
+    return render(request, 'invitations/invites.html', context)

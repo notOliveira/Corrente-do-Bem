@@ -1,0 +1,60 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Zero Fome - Convites{% endblock title %}
+
+{% block content %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="container py-4">
+                <div class="row">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
+                        {{ message }}
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <section class="news-detail-header-section text-center">
+            <div class="section-overlay"></div>
+
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-12 col-12">
+                        <h1 class="text-white">Convites</h1>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="news-section py-5">
+
+            <div class="container section-padding">
+                <h2 class="mb-4 text-dark">Todos os convites</h2>
+                <div class="list-group">
+
+                    <!-- Item de exemplo -->
+                    {% for invite in invites %}
+                        <div class="list-group-item list-group-item-action py-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Convite - {{invite.organization}}</h5>
+                                <a href="" class="btn btn-success">Aceitar</a>
+                                <a href="" class="btn btn-danger">Recusar</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </section>
+
+
+{% endblock content %}

@@ -92,6 +92,7 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% if request.path == '/' %}#{% else %} {% url "home" %} {% endif %}">Início</a>
                     </li>
@@ -102,17 +103,20 @@
 
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll dropdown-toggle"
-                                id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">{{user.first_name}}</a>
 
+                            
+                            <a class="nav-link click-scroll dropdown-toggle"
+                            id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">{{user.first_name}}</a>
+
+                            
                             <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url "profile" %}">Perfil</a></li>
-
+                                
                                 <li><a class="dropdown-item" href="{% url "organizations" %}">Organizações</a></li>
                                 
                                 {% if user.is_superuser %}
-                                    <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
+                                <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
                                 {% endif %}
                                 
                                 <form method="post" action="{% url 'logout' %}">
@@ -121,6 +125,12 @@
                                 </form>
                                 
                             </ul>
+
+                            
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "invites" %}"><i class="bi bi-bell{% if notifications %}-fill{% endif %}"></i></a>
                         </li>
                     {% endif %}
 
