@@ -95,11 +95,11 @@
 
                         <p class="text-warning">OBS: Caso você seja o único administrador desta organização, não conseguirá sair da organização. Promova algum colaborador antes de sair.</p>
 
-                        <p class="mt-4">Digite abaixo<b>{{org.organization.name}}</b> para confirmar</p>
+                        <p class="mt-4">Digite abaixo <b>{{org.organization.name}}</b> para confirmar</p>
                         <form method="POST">
                             {% csrf_token %}
                             <input type="text" class="form-control my-4" id="leave-org-input" onkeyup="handleLeaveOrgInput(event)" >
-                            <button type="submit" name="leave-org" class="btn btn-danger col-12" id="leave-org-btn" disabled>Excluir</button>
+                            <button type="submit" name="leave-org" class="btn btn-danger col-12" id="leave-org-btn" disabled>Confirmar</button>
                         </form>
                     </div>
                     <div class="modal-footer">

@@ -180,6 +180,8 @@ def users_org(request, id):
                     UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
                     Organization.objects.get(id=id).users.remove(request.user)
                     request.user.organizations.remove(organization_profile.organization)
+                    messages.success(request, 'Você saiu da organização com sucesso.')
+                    return redirect('organizations')
                 # Validar se o usuário é o único administrador da organização
                 elif UserRole.objects.filter(organization=organization_profile.organization, role=0).count() == 1:
                     messages.error(request, 'Você não pode sair da organização, pois é o único administrador.')
