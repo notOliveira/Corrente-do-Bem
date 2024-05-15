@@ -35,12 +35,12 @@ def invite_users(request, organization_id):
                     messages.info(request, f'O usuário {invited_user.first_name} já faz parte desta organização.')
                     continue
                 # Verifique se já existe um convite pendente para este usuário nesta organização
-                elif Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user, is_accepted=False).exists():
+                elif Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user).exists():
                     messages.error(request, f'O usuário {invited_user.first_name} já foi convidado para se juntar a esta organização.')
                     continue
 
                 # Crie um novo convite
-                invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user)
+                invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user, invited_by=request.user)
 
                 # Envie o email de convite
                 subject = 'Convite para se juntar à organização'
@@ -69,19 +69,20 @@ def invite_users(request, organization_id):
     return render(request, 'invitations/invite-users.html', {'id': organization_profile.organization.id})
 
 def accept_invite(request, token):
+    referer = request.META.get('HTTP_REFERER') or 'organizations'
     try:
         invitation = Invitation.objects.get(token=token)
     except ValidationError:
         messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
-        return redirect('organizations')
+        return redirect(referer)
     except Invitation.DoesNotExist:
         messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
-        return redirect('organizations')
+        return redirect(referer)
     
     # Validar se o usuário logado é o mesmo da solicitação. Caso não seja, mostre uma mensagem de erro
     if not request.user == invitation.invited_user:
         messages.error(request, 'Você não tem permissão para aceitar este convite.')
-        return redirect('organizations')
+        return redirect(referer)
     
     # Adicione o usuário à organização
     invitation.organization.users.add(invitation.invited_user)
@@ -93,7 +94,32 @@ def accept_invite(request, token):
     
     messages.success(request, f'Você aceitou o convite para se juntar à organização {invitation.organization.name}.')
 
-    return redirect('organizations')
+    return redirect(referer)
+
+def decline_invite(request, token):
+
+    referer = request.META.get('HTTP_REFERER') or 'organizations'
+    try:
+        invitation = Invitation.objects.get(token=token)
+    except ValidationError:
+        messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
+        return redirect(referer)
+    except Invitation.DoesNotExist:
+        messages.error(request, 'Este convite é inválido, expirou ou já foi aceito.')
+        return redirect(referer)
+    
+    # Validar se o usuário logado é o mesmo da solicitação. Caso não seja, mostre uma mensagem de erro
+    if not request.user == invitation.invited_user:
+        messages.error(request, 'Você não tem permissão para rejeitar este convite.')
+        return redirect(referer)
+    
+    # Remover o convite
+    invitation.delete()
+    
+    messages.success(request, f'Você rejeitou o convite para se juntar à organização {invitation.organization.name}.')
+
+    return redirect(referer)
+
 
 def invites(request):
     user_invites = Invitation.objects.filter(invited_user=request.user)

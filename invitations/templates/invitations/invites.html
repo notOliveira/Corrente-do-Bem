@@ -19,42 +19,50 @@
         {% endif %}
 
 
-        <section class="news-detail-header-section text-center">
-            <div class="section-overlay"></div>
-
+        <section class="news-section py-5">
             <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-12 col-12">
-                        <h1 class="text-white">Convites</h1>
-                    </div>
-
-                </div>
+                <h1 class="text-center">Convites</h1>
             </div>
         </section>
 
 
         <section class="news-section py-5">
-
-            <div class="container section-padding">
-                <h2 class="mb-4 text-dark">Todos os convites</h2>
-                <div class="list-group">
-
+            <div class="container ">
                     <!-- Item de exemplo -->
-                    {% for invite in invites %}
-                        <div class="list-group-item list-group-item-action py-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Convite - {{invite.organization}}</h5>
-                                <a href="" class="btn btn-success">Aceitar</a>
-                                <a href="" class="btn btn-danger">Recusar</a>
+                    {% if not invites %}
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-action py-3">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Nenhum convite encontrado</h5>
+                                </div>
                             </div>
                         </div>
-                    {% endfor %}
+                    {% else %}
+                        <div class="list-group">
+                            <h2 class="mb-4 text-dark">Todos os convites</h2>
+                            {% for invite in invites %}
+                                <div class="list-group-item list-group-item-action py-3">
+                                    <div class="row">
 
-                </div>
+                                        <div class="col-6">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">Convite - {{invite.organization}}</h5>
+                                            </div>
+                                            <p class="mb-1">Convidado por: {{invite.invited_by}}<br>{{invite.invite_date}} </p>
+                                        </div>
+
+                                        <div class="col-4"></div>
+                                        <div class="col-2">
+                                            <div class="d-flex justify-content-between">
+                                                <a href="{% url "accept-invite" token=invite.token %}" class="btn btn-success">Aceitar</a>
+                                                <a href="{% url "decline-invite" token=invite.token %}" class="btn btn-danger">Recusar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
             </div>
-
         </section>
-
-
 {% endblock content %}
