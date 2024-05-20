@@ -42,15 +42,15 @@
                         <h3 class="text-center">Menu rápido</h3>
                     </div>
                     <div class="row my-3">
-                        <div class="col-4">
+                        {% comment %} <div class="col-6">
                             <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Visualizar doações</a>
+                        </div> {% endcomment %}
+                        <div class="col-12">
+                            <a class="btn btn-block btn-success col-12 fs-5" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                         </div>
-                        <div class="col-4">
-                            <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
-                        </div>
-                        <div class="col-4">
+                        {% comment %} <div class="col-4">
                             <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Ranking</a>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>

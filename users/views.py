@@ -19,7 +19,7 @@ from .forms import UserRegisterForm, ProfileUpdateForm, UsersUpdateForm
 @login_required(login_url='/login')
 def profile(request):
     if request.method == "POST":
-        if 'save-profile' in request.POST:
+        if 'delete-account' in request.POST:
             user_email = CustomUser.objects.filter(id=request.user.id).first()
     
             # Checando se o usuário é adminstrador único de alguma organizaçáo, caso seja, não poderá deletar a conta
@@ -69,7 +69,8 @@ def profile(request):
             user_email.delete()
             messages.success(request, "Conta deletada com sucesso!")
             return redirect('home')
-        elif 'delete-account' in request.POST:
+        
+        elif 'save-profile' in request.POST:
                 user_form = UsersUpdateForm(request.POST, instance=request.user)
                 profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
                 if user_form.is_valid() and profile_form.is_valid():
