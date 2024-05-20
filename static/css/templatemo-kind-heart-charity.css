@@ -87,6 +87,12 @@ body {
   font-family: var(--body-font-family); 
 }
 
+.yellow-primary {
+  color: var(--primary-color) !important; 
+
+
+}
+
 
 /*---------------------------------------
   TYPOGRAPHY               

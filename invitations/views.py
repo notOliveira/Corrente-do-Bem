@@ -1,7 +1,9 @@
 from django.shortcuts import redirect, get_object_or_404, render
-from django.core.mail import send_mail
+from django.db import transaction
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from organizations.models import OrganizationProfile, UserRole
 from users.models import CustomUser as User
@@ -20,7 +22,6 @@ def invite_users(request, organization_id):
         messages.error(request, 'Você não tem permissão para acessar essa página')
         return redirect('organization', id=organization_id)
     
-    
     if request.method == 'POST':
         
         for email_user in list(request.POST.getlist('email')):
@@ -30,33 +31,35 @@ def invite_users(request, organization_id):
                 if not invited_user:
                     raise Exception(f'O usuário com email {email_user} não foi encontrado.')
                 
-                # Verificar se o usuário já pertence à organização
                 if invited_user in organization_profile.organization.users.all():
                     messages.info(request, f'O usuário {invited_user.first_name} já faz parte desta organização.')
                     continue
-                # Verifique se já existe um convite pendente para este usuário nesta organização
                 elif Invitation.objects.filter(organization=organization_profile.organization, invited_user=invited_user).exists():
                     messages.error(request, f'O usuário {invited_user.first_name} já foi convidado para se juntar a esta organização.')
                     continue
-
-                # Crie um novo convite
-                invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user, invited_by=request.user)
-
-                # Envie o email de convite
-                subject = 'Convite para se juntar à organização'
-                email_template_name = 'invite_org.txt'
-                parameters = {
-                    'username': invited_user.first_name,
-                    'email': invited_user.email,
-                    'domain': 'localhost:8000',
-                    'site_name': 'Zero Fome',
-                    'token': invitation.token,
-                    'protocol': 'http',
-                    'org_name': invitation.organization.name
-                }
-                email = render_to_string(email_template_name, parameters)
                 
-                send_mail(subject, email, '', [invitation.invited_user.username], fail_silently=False)
+                with transaction.atomic():
+                    invitation = Invitation.objects.create(organization=organization_profile.organization, invited_user=invited_user, invited_by=request.user)
+
+                    subject = 'Convite para se juntar à organização'
+                    email_template_name = 'invite_org.html'
+                    parameters = {
+                        'username': invited_user.first_name,
+                        'email': invited_user.email,
+                        'domain': 'localhost:8000',
+                        'site_name': 'Zero Fome',
+                        'token': invitation.token,
+                        'protocol': 'http',
+                        'org_name': invitation.organization.name
+                    }
+                    
+                    html_content = render_to_string(email_template_name, parameters)
+                    text_content = strip_tags(html_content)
+                    
+                    email = EmailMultiAlternatives(subject, text_content, '', [invited_user.email])
+                    email.attach_alternative(html_content, "text/html")
+                    
+                    email.send()
                 
                 messages.success(request, f"Um convite foi enviado para {parameters['email']}.")
                 
@@ -120,9 +123,16 @@ def decline_invite(request, token):
 
     return redirect(referer)
 
-
 def invites(request):
     user_invites = Invitation.objects.filter(invited_user=request.user)
+    
+    if request.method == 'POST':
+        if 'decline-invite' in request.POST:
+            invite_id = request.POST.get('decline-invite-input')
+            token = get_object_or_404(Invitation, id=invite_id).token
+            return decline_invite(request, token)
+        
+        return redirect('invites')
     context = {
         'invites': user_invites
     }
