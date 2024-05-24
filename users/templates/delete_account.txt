@@ -2,12 +2,12 @@
 
 Olá {{ username }}!
 
-Você solicitou o encerramento permanente de sua conta no Zero Fome.
+Você solicitou o encerramento permanente de sua conta no Corrente do Bem.
 
 Lamentamos sua decisão, mas respeitamos sua escolha. Esperamos que tenha tido uma boa experiência conosco e que possamos atendê-lo novamente no futuro.
 
 Atenciosamente,
 
-Equipe Zero Fome
+Equipe Corrente do Bem
 
 {% endautoescape %}

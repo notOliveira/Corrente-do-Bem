@@ -1,4 +1,4 @@
-# Zero Fome
+# Corrente do Bem
 
 ### Leia tudo, mas principalmente as [instruções iniciais](#instruções-iniciais), para que o projeto funcione.
 
@@ -11,7 +11,7 @@
 ### Criando ambiente virtual
 
 ```
-\Zero Fome> python -m venv <name venv>
+\> python -m venv <name venv>
 ```
 
 <br>
@@ -21,13 +21,13 @@
 #### Linux
 
 ```
-\Zero Fome> source venv/bin/activate
+\> source venv/bin/activate
 ```
 
 #### Windows
 
 ```
-\Zero Fome> .\venv\Scripts\activate
+\> .\venv\Scripts\activate
 ```
 
 <br>
@@ -37,7 +37,7 @@
 <br>
 
 ```
-\Zero Fome> deactivate
+\> deactivate
 ```
 
 ---
@@ -48,7 +48,7 @@
 - Instale na venv preferencialmente
 
 ```
-(venv) \Zero Fome> pip install -r requirements.txt
+(venv) \> pip install -r requirements.txt
 ```
 <br>
 
@@ -60,8 +60,8 @@
 ## Aplicando as migrações
 
 ```
-\Zero Fome> python manage.py makemigrations // Provavelmente não será necessário, porque deixarei um arquivo com a migração inicial
-\Zero Fome> python manage.py migrate
+\> python manage.py makemigrations // Provavelmente não será necessário, porque deixarei um arquivo com a migração inicial
+\> python manage.py migrate
 ```
 
 <br>
@@ -69,7 +69,7 @@
 ## Criando super usuário
 
 ```
-\Zero Fome> python manage.py createsuperuser
+\> python manage.py createsuperuser
 ```
 
 <br>
@@ -79,7 +79,7 @@
 - Há um comando para criar os objetos no banco de dados, que deve ser executado após as migrações:
 
 ```
-\Zero Fome> python manage.py init
+\> python manage.py init
 ```
 
 <br>
@@ -88,7 +88,7 @@
 
 
 ```
-\Zero Fome> python manage.py runserver <port>
+\> python manage.py runserver <port>
 ```
 
 <br>
@@ -112,12 +112,12 @@
 
 - Exportando dados dos modelos principais (recomendado, por enquanto)
 ```
-\Zero Fome> python -Xutf8 .\manage.py dumpdata main --output=data-models.json
+\> python -Xutf8 .\manage.py dumpdata main --output=data-models.json
 ```
 
 - Exportando todos os dados (dá erros de importação, não recomendado)
 ```
-\Zero Fome> python -Xutf8 .\manage.py dumpdata --output=data.json
+\> python -Xutf8 .\manage.py dumpdata --output=data.json
 ```
 
 <br>
@@ -129,5 +129,5 @@
 ## Importando dados
 
 ```
-\Zero Fome> python manage.py loaddata data.json
+\> python manage.py loaddata data.json
 ```

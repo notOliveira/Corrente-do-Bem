@@ -47,7 +47,7 @@ def invite_users(request, organization_id):
                         'username': invited_user.first_name,
                         'email': invited_user.email,
                         'domain': 'localhost:8000',
-                        'site_name': 'Zero Fome',
+                        'site_name': 'Corrente do Bem',
                         'token': invitation.token,
                         'protocol': 'http',
                         'org_name': invitation.organization.name
