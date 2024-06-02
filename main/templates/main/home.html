@@ -89,41 +89,39 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="featured-block d-flex justify-content-center align-items-center">
-                            <a href="#" class="d-block">
+                            <div class="d-block">
                                 <img src="{% static 'media/images/icons/home-welcome-1.png' %}" class="featured-block-image img-fluid" alt="">
                                 <p class="featured-block-text"><strong>Faça sua doação</strong></p>
-                            </a>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="featured-block d-flex justify-content-center align-items-center">
-                            <a href="#" class="d-block">
+                            <div class="d-block">
                                 <img src="{% static 'media/images/icons/marker-dot.png' %}" class="featured-block-image img-fluid" alt="">
                                 <p class="featured-block-text"><strong>Encontre organizações</strong></p>
-                            </a>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-4">
                         <div class="featured-block d-flex justify-content-center align-items-center">
-                            <a href="#" class="d-block">
+                            <div class="d-block">
                                 <img src="{% static 'media/images/icons/home-welcome-2.png' %}" class="featured-block-image img-fluid" alt="">
                                 <p class="featured-block-text"><strong>Ganhe recompensas</strong></p>
-                            </a>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-4">
                         <div class="featured-block d-flex justify-content-center align-items-center">
-                            <a href="#" class="d-block">
+                            <div class="d-block">
                                 <img src="{% static 'media/images/icons/home-welcome-3.png' %}" class="featured-block-image img-fluid" alt="">
                                 <p class="featured-block-text"><strong>Faça a diferença</strong></p>
-                            </a>
+                            </div>
                         </div>
                     </div>
-
-                    
 
                 </div>
             </div>
@@ -133,12 +131,12 @@
             <div class="container">
                 <div class="row">
 
-                    <div class="col-lg-6 col-12 mb-5 mb-lg-0">
+                    {% comment %} <div class="col-lg-6 col-12 mb-5 mb-lg-0">
                         <img src="{% static 'media/images/group-people-volunteering-foodbank-poor-people.jpg' %}"
                             class="custom-text-box-image img-fluid" alt="">
-                    </div>
+                    </div> {% endcomment %}
 
-                    <div class="col-lg-6 col-12">
+                    <div class="col-12">
                         <div class="custom-text-box">
                             <h2 class="mb-2">Nossa história</h2>
 
@@ -174,24 +172,29 @@
 
                             <div class="col-lg-6 col-md-6 col-12">
                                 <div class="custom-text-box d-flex flex-wrap d-lg-block mb-lg-0">
-                                    <div class="counter-thumb">
-                                        <span class="counter-text">Fundado em</span>
-                                        <div class="d-flex">
-                                            <span class="counter-number" data-from="0" data-to="2024"
-                                                data-speed="1000"></span>
-                                            <span class="counter-number-text"></span>
+                                    <div class="row">
+
+                                    
+                                        <div class="counter-thumb col-5 ">
+                                            <span class="counter-text">Fundado em</span>
+                                            
+                                            <div class="d-flex">
+                                                <span class="counter-number" data-from="0" data-to="2024"
+                                                    data-speed="1000"></span>
+                                                <span class="counter-number-text"></span>
+                                            </div>
+
                                         </div>
 
-                                    </div>
+                                        <div class="counter-thumb col-5 ">
+                                            <span class="counter-text">Donations</span>
+                                            <div class="d-flex">
+                                                <span class="counter-number" data-from="0" data-to="{{ total_donations }}"
+                                                    data-speed="1000"></span>
+                                                <span class="counter-number-text"></span>
+                                            </div>
 
-                                    <div class="counter-thumb mt-4">
-                                        <span class="counter-text">Donations</span>
-                                        <div class="d-flex">
-                                            <span class="counter-number" data-from="0" data-to="{{ total_donations }}"
-                                                data-speed="1000"></span>
-                                            <span class="counter-number-text"></span>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +206,7 @@
         </section>
 
 
-        <section class="about-section section-padding">
+        {% comment %} <section class="about-section section-padding">
             <div class="container">
                 <div class="row">
 
@@ -241,28 +244,23 @@
 
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
 
-        <section class="cta-section section-padding section-bg">
+        <section class="section-padding ">
             <div class="container">
                 <div class="row justify-content-center align-items-center">
 
-                    <div class="col-lg-5 col-12 ms-auto">
-                        <h2 class="mb-0">Make an impact. <br> Save lives.</h2>
+                    <div class=" col-12 text-center">
+                        <h2 class="mb-0">Faça a diferença.<br>Ajude os que mais precisam.</h2>
                     </div>
 
-                    <div class="col-lg-5 col-12">
-                        <a href="#" class="me-4">Make a donation</a>
-
-                        <a href="#section_4" class="custom-btn btn smoothscroll">Become a volunteer</a>
-                    </div>
 
                 </div>
             </div>
         </section>
 
 
-        <section class="section-padding" id="section_3">
+        {% comment %} <section class="section-padding" id="section_3">
             <div class="container">
                 <div class="row">
 
@@ -376,9 +374,9 @@
 
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
 
-        <section class="volunteer-section section-padding" id="section_4">
+        {% comment %} <section class="volunteer-section section-padding" id="section_4">
             <div class="container">
                 <div class="row">
 
@@ -437,9 +435,9 @@
 
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
 
-        <section class="testimonial-section section-padding section-bg">
+        {% comment %} <section class="testimonial-section section-padding section-bg">
             <div class="container">
                 <div class="row">
 
@@ -517,10 +515,10 @@
 
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
 
 
-        <section class="contact-section section-padding" id="section_5">
+        {% comment %} <section class="contact-section section-padding" id="section_5">
             <div class="container">
                 <div class="row">
 
@@ -598,6 +596,6 @@
 
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
     
 {% endblock content %}
