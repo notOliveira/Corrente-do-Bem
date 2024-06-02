@@ -666,12 +666,13 @@ strong {
 }
 
 .featured-block:hover .featured-block-image {
-  transform: scale(0.75);
+  transform: scale(1.1);
 }
 
 .featured-block-image {
   display: block;
   margin: auto;
+  height: 100px !important;
   transition: all 0.5s;
 }
 
