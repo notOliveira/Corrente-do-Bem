@@ -106,7 +106,7 @@ class Command(BaseCommand):
                 'state': 'SP',
                 'number': '1',
                 'description': '',
-                'category_name': 3,
+                'category_name': 6,
                 'complement': ''
             },
             {
@@ -120,7 +120,7 @@ class Command(BaseCommand):
                 'state': 'SP',
                 'number': '1',
                 'description': '',
-                'category_name': 5,
+                'category_name': 7,
                 'complement': ''
             },
             {
@@ -134,7 +134,7 @@ class Command(BaseCommand):
                 'state': 'SP',
                 'number': '1',
                 'description': '',
-                'category_name': 5,
+                'category_name': 8,
                 'complement': ''
             },
             {
@@ -148,7 +148,7 @@ class Command(BaseCommand):
                 'state': 'SP',
                 'number': '1',
                 'description': '',
-                'category_name': 5,
+                'category_name': 9,
                 'complement': ''
             },
             {
@@ -162,7 +162,7 @@ class Command(BaseCommand):
                 'state': 'SP',
                 'number': '1',
                 'description': '',
-                'category_name': 5,
+                'category_name': 10,
                 'complement': ''
             },
             
