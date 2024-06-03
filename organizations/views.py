@@ -80,11 +80,7 @@ def organization(request, id):
         'key': settings.GOOGLE_API_KEY,
         'location': location,
         'role': user_role.role if user_role else None,
-        'role_name': user_role.get_role_display() if user_role else None,
-        'current_org': {
-            'id': organization_profile.organization.id,
-            'name': organization_profile.organization.name
-        }
+        'role_name': user_role.get_role_display() if user_role else None
     }
 
     if not organization_profile.organization.users.filter(id=request.user.id).exists():
