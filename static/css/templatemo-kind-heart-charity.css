@@ -178,6 +178,10 @@ strong {
   font-weight: var(--font-weight-bold);
 }
 
+.text-cdb {
+  color: var(--primary-color) !important;
+}
+
 
 /*---------------------------------------
   SECTION               
@@ -783,13 +787,40 @@ strong {
   DONATE              
 -----------------------------------------*/
 .donate-section {
-  background-image: url('../media/images/different-people-doing-volunteer-work.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   position: relative;
   padding-top: 100px;
   padding-bottom: 100px;
+}
+
+.donate-bg-1 {
+  background-image: url('../media/images/backgrounds/bg-1.jpg') !important;
+}
+
+.donate-bg-2 {
+  background-image: url('../media/images/backgrounds/bg-2.jpg') !important;
+}
+
+.donate-bg-3 {
+  background-image: url('../media/images/backgrounds/bg-3.jpg') !important;
+}
+
+.donate-bg-4 {
+  background-image: url('../media/images/backgrounds/bg-4.jpg') !important;
+}
+
+.donate-bg-5 {
+  background-image: url('../media/images/backgrounds/bg-5.jpg') !important;
+}
+
+.donate-bg-6 {
+  background-image: url('../media/images/backgrounds/bg-6.jpg') !important;
+}
+
+.donate-bg-7 {
+  background-image: url('../media/images/backgrounds/bg-7.jpg');
 }
 
 .donate-form {
@@ -805,7 +836,7 @@ strong {
   NEWS         
 -----------------------------------------*/
 .news-detail-header-section {
-  background-image: url('../media/images/news/close-up-volunteer-oganizing-stuff-donation.jpg');
+  
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

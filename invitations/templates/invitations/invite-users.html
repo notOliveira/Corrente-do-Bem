@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<section class="donate-section">
+<section class="donate-section donate-bg-2">
     <div class="section-overlay"></div>
     <div class="container">
         <div class="row">
@@ -23,7 +23,7 @@
                     <div class="container mb-5">
                         <div class="row">
                             <div class="col-12 text-start ms-auto">
-                                <a type="button" class="btn btn-primary" href="{% url 'users-org' id=id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
+                                <a type="button" class="btn btn-primary" href="{% url 'users-org' id=current_org.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
                             </div>
                         </div>
                     </div>

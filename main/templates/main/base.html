@@ -98,16 +98,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'near-you' %}">Perto de você</a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link" href="/#section_2">Sobre nós</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'near-you' %}">Perto de você</a>
+                    </li>
+
+
                     {% if current_org %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
+                        <a class="nav-link text-cdb" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
                     </li>
                     {% endif %}
                     
@@ -178,7 +179,7 @@
                     <h5 class="site-footer-title mb-3">Links</h5>
 
                     <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Sobre nós</a></li>
+                        <li class="footer-menu-item"><a href="/#section_2" class="footer-menu-link">Sobre nós</a></li>
 
                         <li class="footer-menu-item"><a href="{% url 'near-you' %}" class="footer-menu-link">Locais de doações</a></li>
 

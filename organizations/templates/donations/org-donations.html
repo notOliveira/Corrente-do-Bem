@@ -19,12 +19,11 @@
         {% endif %}
 
 
-        <section class="news-detail-header-section text-center">
+        <section class="news-detail-header-section donate-bg-5 text-center">
             <div class="section-overlay"></div>
 
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-12 col-12">
                         <h1 class="text-white">Doações - {{org.organization.name}}</h1>
                     </div>
@@ -34,9 +33,9 @@
         </section>
 
 
-        <section class="news-section py-5">
+        <section class="news-section">
 
-            <div class="container">
+            <div class="container col-9">
                 <div class="row">
                     <div class="col-12 py-3">
                         <h3 class="text-center">Menu rápido</h3>
@@ -54,25 +53,32 @@
                     </div>
                 </div>
             </div>
+            {% if donations %}
+                <div class="container col-9 section-padding">
+                    <h3 class="text-dark">Últimas 10 doações</h2>
+                    <div class="list-group">
 
-            <div class="container section-padding">
-                <h2 class="mb-4 text-dark">Últimas 10 doações</h2>
-                <div class="list-group">
-
-                    <!-- Item de exemplo -->
-                    {% for donation in donations %}
-                        <div class="list-group-item list-group-item-action py-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Doação #{{donation.id}}</h5>
-                                <small>{{donation.date}}</small>
+                        <!-- Item de exemplo -->
+                        {% for donation in donations %}
+                            <div class="list-group-item list-group-item-action py-3">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Doação #{{donation.id}}</h5>
+                                    <small>{{donation.date}}</small>
+                                </div>
+                                <p class="mb-1">Usuário: {{donation.user}} </p>
                             </div>
-                            <p class="mb-1">Usuário: {{donation.user}} </p>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                        
+                        
+                        
 
+                    </div>
                 </div>
-            </div>
-
+            {% else %}
+                <div class="container col-9 section-padding">
+                    <h3 class="text-dark">Nenhuma doação registrada</h2>
+                </div>
+            {% endif %}
         </section>
 
 

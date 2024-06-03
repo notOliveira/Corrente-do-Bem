@@ -69,7 +69,13 @@ def invite_users(request, organization_id):
         
         return redirect('organization', id=organization_id) 
     
-    return render(request, 'invitations/invite-users.html', {'id': organization_profile.organization.id})
+    context = {
+        'current_org': {
+            'id': organization_profile.organization.id,
+            'name': organization_profile.organization.name
+        }
+    }
+    return render(request, 'invitations/invite-users.html', context)
 
 def accept_invite(request, token):
     referer = request.META.get('HTTP_REFERER') or 'organizations'
