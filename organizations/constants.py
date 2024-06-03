@@ -29,11 +29,16 @@ STATE_CHOICES = (
 )
 
 CATEGORY_CHOICES = (
-    (1, 'Eletrodomésticos'),
-    (2, 'Alimentos'),
+    (1, 'Alimentos'),
+    (2, 'Eletrônicos'),
     (3, 'Vestuário'),
     (4, 'Mobílias'),
-    (5, 'Diversos')
+    (5, 'Leitura'),
+    (6, 'Limpeza'),
+    (7, 'Brinquedos'),
+    (8, 'Utensílios'),
+    (9, 'Voluntariado'),
+    (10, 'Diversos'),
 )
 
 USER_ROLES = (
