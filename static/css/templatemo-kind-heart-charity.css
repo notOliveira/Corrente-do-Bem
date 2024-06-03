@@ -59,6 +59,7 @@ https://templatemo.com/tm-581-kind-heart-charity
   --p-color:                      #717275;
   --border-color:                 #295785;
   --off-white-color:              rgba(255, 240, 205, 0.973);
+  --blue-bg-color:                rgba(213, 216, 255, 0.973);
 
   --body-font-family:             'Metropolis', sans-serif;
 
@@ -356,7 +357,7 @@ strong {
 }
 
 .off-white-bg {
-  background: var(--off-white-color);
+  background: var(--blue-bg-color);
 
 }
 
