@@ -38,7 +38,7 @@ CATEGORY_CHOICES = (
     (7, 'Brinquedos'),
     (8, 'Utensílios'),
     (9, 'Voluntariado'),
-    (10, 'Diversos'),
+    (10, 'Diversos')
 )
 
 USER_ROLES = (
