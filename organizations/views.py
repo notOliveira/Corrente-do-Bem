@@ -5,6 +5,7 @@ from users.models import CustomUser as User
 from .models import Organization, OrganizationProfile, Donation, UserRole
 from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
 from django.conf import settings
+from .constants import CATEGORY_CHOICES
 import googlemaps
 
 # Organizations
@@ -59,7 +60,10 @@ def create_org(request):
                 messages.error(request, 'Houve um problema ao validar o formulário. Por favor, tente novamente.')
             return redirect('create-org')
         
-    return render(request, 'organizations/create-org.html')
+    context = {
+        'categories': CATEGORY_CHOICES
+    }
+    return render(request, 'organizations/create-org.html', context )
 
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)

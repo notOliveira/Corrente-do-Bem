@@ -67,12 +67,10 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <select name="category" class="form-control" id="id_category" multiple="" required>
-                                        <option class="form-control" value="1">Eletrodomésticos</option>
-                                        <option class="form-control" value="2">Alimentos</option>
-                                        <option class="form-control" value="3">Vestuário</option>
-                                        <option class="form-control" value="4">Mobílias</option>
-                                        <option class="form-control" value="5">Diversos</option>
+                                    <select name="category" class="form-control" id="id_category" multiple="" style="height:400px;" required>
+                                        {% for category in categories %}
+                                            <option class="form-control" value="{{category.0}}">{{category.1}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
 
