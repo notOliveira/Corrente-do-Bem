@@ -12,5 +12,6 @@ urlpatterns = [
     
     # Donations
     path('<int:id>/donations/', views.org_donations, name='org-donations'),
+    path('<int:id>/donations/all', views.org_all_donations, name='org-all-donations'),
     path('<int:id>/donations/new', views.register_donation, name='register-donation'),
 ]

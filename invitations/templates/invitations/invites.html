@@ -32,14 +32,9 @@
                     <h2 class="text-dark">Convites</h2>
                 </div>
                     <!-- Item de exemplo -->
-                    {% if not invites %}
-                        <div class="list-group">
-                            <div class="list-group-item list-group-item-action py-3">
-                                <div class="row">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h4 class="mb-1 yellow-primary">Nenhum convite encontrado</h5>
-                                </div>
-                            </div>
+                    {% if not invites %}    
+                        <div class="d-flex w-100 justify-content-between mt-4">
+                            <h4 class="mb-1 yellow-primary">Nenhum convite encontrado</h5>
                         </div>
                     {% else %}
                         <div class="list-group">

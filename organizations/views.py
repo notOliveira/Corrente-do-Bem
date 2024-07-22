@@ -74,9 +74,9 @@ def organization(request, id):
         user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
     
     location = [{
-        'lat': float(organization_profile.organization.lat),
-        'lng': float(organization_profile.organization.lng),
-        'name' : organization_profile.organization.name
+        'lat': float(organization_profile.organization.lat) if organization_profile.organization.lat else 0,
+        'lng': float(organization_profile.organization.lng) if organization_profile.organization.lng else 0,
+        'name' : organization_profile.organization.name,
     }]
     
     context = {
@@ -246,8 +246,8 @@ def users_org(request, id):
 
 # Donations
 
-@login_required(login_url='login')
-def org_donations(request, id):
+# This function is used to get the donations of an organization
+def donations(request, id, page, all):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
 
     if request.user not in organization_profile.organization.users.all():
@@ -255,13 +255,12 @@ def org_donations(request, id):
         return redirect('organizations')
     
     user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
-        
-    # Get last 10 donations
-    donations = Donation.objects.filter(organization__id=id).order_by('-date')[:10]
+
+    donations = Donation.objects.filter(organization__id=id).order_by('-date')
     
     context = {
         'org': organization_profile,
-        'donations': donations,
+        'donations': donations if all else donations[:10],
         'role': user_role.role,
         'current_org': {
             'id': organization_profile.organization.id,
@@ -269,7 +268,15 @@ def org_donations(request, id):
         }
     }
     
-    return render(request, 'donations/org-donations.html', context)
+    return render(request, f'donations/{page}.html', context)
+
+@login_required(login_url='login')
+def org_donations(request, id):
+    return donations(request, id, 'org-donations', False)
+
+@login_required(login_url='login')
+def org_all_donations(request, id):
+    return donations(request, id, 'org-all-donations', True)
 
 @login_required(login_url='login')
 def register_donation(request, id):

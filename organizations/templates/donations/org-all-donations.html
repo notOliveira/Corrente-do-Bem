@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-12">
-                        <h1 class="text-white">Doações - {{org.organization.name}}</h1>
+                        <h1 class="text-white">Todas as doações - {{org.organization.name}}</h1>
                     </div>
 
                 </div>
@@ -41,25 +41,26 @@
                         <h3 class="text-center">Menu rápido</h3>
                     </div>
                     <div class="row my-3">
-                        {% comment %} <div class="col-6">
-                            <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Visualizar doações</a>
-                        </div> {% endcomment %}
-                        <div class="col-6">
+                        <div class="col-12">
                             <a class="btn btn-block btn-success col-12 fs-5" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                         </div>
-
-                        <div class="col-6">
-                            <a class="btn btn-block btn-info col-12 fs-5" href="{% url "org-all-donations" id=org.organization.id %}">Todas as doações</a>
-                        </div>
-                        {% comment %} <div class="col-4">
-                            <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Ranking</a>
-                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
             {% if donations %}
-                <div class="container col-9 section-padding">
-                    <h3 class="text-dark">Últimas 10 doações</h2>
+
+                {% comment %} a {% endcomment %}
+
+                <div class="container col-9">
+
+                    <form class="custom-form search-form mt-5" action="#" method="post" role="form">
+                        <input class="form-control" type="search" placeholder="Buscar por email ou email" aria-label="Search">
+
+                        <button type="submit" class="form-control">
+                            <i class="bi-search"></i>
+                        </button>
+                    </form>
+
                     <div class="list-group">
 
                         <!-- Item de exemplo -->
