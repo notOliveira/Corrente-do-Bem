@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
+from rest_framework import viewsets
 from users.models import CustomUser as User
+from googlemaps import Client as GmapClient
 from .models import Organization, OrganizationProfile, Donation, UserRole
 from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
-from django.conf import settings
 from .constants import CATEGORY_CHOICES
-import googlemaps
 
 # Organizations
 
@@ -33,7 +34,7 @@ def create_org(request):
                 
                 # Adding the place_id, lat and lng to the organization
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
                 location = gmap.geocode(address)[0]
     
                 place_id = location.get('place_id', None)
@@ -120,7 +121,7 @@ def settings_org(request, id):
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
                     
                 # Adding the place_id, lat and lng to the organization
-                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
                 location = gmap.geocode(address)[0]
 
                 place_id = location.get('place_id', None)
