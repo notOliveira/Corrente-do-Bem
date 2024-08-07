@@ -33,7 +33,7 @@
         </section>
 
 
-        <section class="news-section">
+        <section class="news-section my-5">
 
             <div class="container col-9">
                 <div class="row">
@@ -53,8 +53,8 @@
 
                 <div class="container col-9">
 
-                    <form id="search-donations" class="custom-form search-form mt-5">
-                        <input class="form-control" id="search-bar" type="search" placeholder="Buscar por email" aria-label="Search">
+                    <div class="custom-form search-form mt-5">
+                        <input class="form-control" id="search-bar" type="search" placeholder="Filtrar por email ou data (ex: 5 de setembro)" aria-label="Search">
 
                         <button type="submit" class="form-control">
                             <i class="bi-search"></i>
@@ -65,12 +65,12 @@
 
                         <!-- Item de exemplo -->
                         {% for donation in donations %}
-                            <div class="list-group-item list-group-item-action py-3">
+                            <div class="list-group-item list-group-item-action py-3 donations-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">Doação #{{donation.id}}</h5>
-                                    <small>{{donation.date}}</small>
+                                    <small class="donation-date">{{donation.date}}</small>
                                 </div>
-                                <p class="mb-1">Usuário: {{donation.user}} </p>
+                                <p class="mb-1 donation-user">Usuário: {{donation.user.email}} </p>
                             </div>
                         {% endfor %}
 

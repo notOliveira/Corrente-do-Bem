@@ -1,10 +1,23 @@
+// Div pai
 const listDonations = document.getElementById('list-all-donations');
+// Input
 const searchBar = document.getElementById('search-bar');
-const searchDonationsForm = document.getElementById('search-donations');
+// Items
+const donations = document.getElementsByClassName('donations-item');
+// Form
+// const searchDonationsForm = document.getElementById('search-donations');
 
-searchDonationsForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Search button clicked');
-    // request to API localhost:8000/api/v1/donations with params
-    // organization_id, email
+searchBar.addEventListener('input', (e) => {
+    let filter = e.target.value.toLowerCase();
+
+    Array.from(donations).forEach((donation) => {
+        let donationName = donation.getElementsByClassName('donation-user')[0].innerText;
+        let donationDate = donation.getElementsByClassName('donation-date')[0].innerText;
+        console.log(donationDate);
+        if (donationName.toLowerCase().indexOf(filter) != -1 || donationDate.toLowerCase().indexOf(filter) != -1) {
+            donation.style.display = 'block';
+        } else {
+            donation.style.display = 'none';
+        }
+    });
 });
