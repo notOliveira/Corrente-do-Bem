@@ -53,8 +53,8 @@
 
                 <div class="container col-9">
 
-                    <form class="custom-form search-form mt-5" action="#" method="post" role="form">
-                        <input class="form-control" type="search" placeholder="Buscar por email ou email" aria-label="Search">
+                    <form id="search-donations" class="custom-form search-form mt-5">
+                        <input class="form-control" id="search-bar" type="search" placeholder="Buscar por email" aria-label="Search">
 
                         <button type="submit" class="form-control">
                             <i class="bi-search"></i>
@@ -85,3 +85,7 @@
 
 
 {% endblock content %}
+
+{% block links %}
+    <script src="{% static 'js/search-bar.js' %}"></script>
+{% endblock links %}

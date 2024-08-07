@@ -5,7 +5,7 @@ from users.models import CustomUser
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username']
+        fields = ['id', 'email']
 
 class DonationSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer()
