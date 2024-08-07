@@ -107,8 +107,8 @@
 
 
                     {% if current_org %}
-                    <li class="nav-item">
-                        <a class="nav-link text-cdb" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
+                    <li class="nav-item" >
+                        <a class="nav-link current-org" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
                     </li>
                     {% endif %}
                     

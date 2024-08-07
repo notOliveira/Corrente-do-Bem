@@ -178,8 +178,11 @@ strong {
   font-weight: var(--font-weight-bold);
 }
 
-.text-cdb {
-  color: var(--primary-color) !important;
+.current-org {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  padding: 10px 20px 10px 20px !important;
+  margin-top: 10px;
 }
 
 
