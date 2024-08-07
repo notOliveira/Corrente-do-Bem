@@ -13,7 +13,6 @@ searchBar.addEventListener('input', (e) => {
     Array.from(donations).forEach((donation) => {
         let donationName = donation.getElementsByClassName('donation-user')[0].innerText;
         let donationDate = donation.getElementsByClassName('donation-date')[0].innerText;
-        console.log(donationDate);
         if (donationName.toLowerCase().indexOf(filter) != -1 || donationDate.toLowerCase().indexOf(filter) != -1) {
             donation.style.display = 'block';
         } else {
