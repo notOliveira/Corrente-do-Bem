@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 load_dotenv(verbose=True, override=True)
 
 # Verifica em qual branch estamos
+# Ambientes: development / production / sqlite / fatec
 environment = os.getenv("DEVENV", "production")
 print(f"Running on environment: {environment}")
 
