@@ -98,11 +98,14 @@
 - Crie, pelo MySQL Workbench ou Shell uma base de dados previamente, com o nome 'corrente_do_bem'.
 - Crie um arquivo chamado [settings_local.py](/corrente_do_bem/corrente_do_bem/settings_local.py) no mesmo diretório do arquivo [settings.py](/corrente_do_bem/corrente_do_bem/settings.py), pois ele contém informações que serão importadas nas configurações, é de extrema importância que o arquivo seja criado. O arquivo criado deve conter as seguintes informações (não foi criado previamente por problemas com o Git):
     ```
+    DEVENV=development # Essa configuração serve para definir o ambiente, mas caso não queira configuar uma base de dados, mude para 'sqlite'
     DATABASE_USER = 'root' # Troque por seu usuário na base de dados
     DATABASE_PASSWORD = 'SUA_SENHA_AQUI' # Troque por sua senha na base de dados
     DATABASE_HOST = 'localhost' # Caso esteja utilizando um servidor remoto, troque para o endereço do servidor
     DATABASE_PORT = '3306' # Troque para a porta utilizada pelo servidor de banco de dados
+    GOOGLE_API_KEY='?' # Coloque sua chave do Google API
     SECRET_KEY = '?'
+
     ```
 - Como é um arquivo que contém informações potencialmente confidenciais, eu não quero versioná-lo no Git, para não me trazer problemas futuros.
 
