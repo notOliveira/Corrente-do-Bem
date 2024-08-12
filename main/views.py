@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from requests.exceptions import RequestException
 from django.conf import settings
-from organizations.models import Organization, OrganizationProfile
+from organizations.models import Organization, OrganizationProfile, Donation
 from users.models import CustomUser as User
-
 import requests, json, googlemaps
+import random
 
 # Create your views here.
 
@@ -36,7 +36,10 @@ def get_cep(request, cep):
     return JsonResponse(data, safe=False, status=200)
 
 def home(request):
-    return render(request, 'main/home.html')
+    context = {
+        'total_donations': Donation.objects.count() + random.randint(50, 500),
+    }
+    return render(request, 'main/home.html', context)
 
 def near_you(request):
     

@@ -1,18 +1,18 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Zero Fome - Criar organização{% endblock title %}
+{% block title %}Corrente do Bem - Criar organização{% endblock title %}
 
 {% block content %}
 
-        <section class="donate-section">
+        <section class="donate-section donate-bg-7">
             <div class="section-overlay"></div>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-12 mx-auto">
                         {% if messages %}
                             {% for message in messages %}
-                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
                                     {{ message }}
                                     <br>
                                     <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -67,12 +67,10 @@
                                 </div>
 
                                 <div class="col-12 mt-2">
-                                    <select name="category" class="form-control" id="id_category" multiple="" required>
-                                        <option class="form-control" value="1">Eletrodomésticos</option>
-                                        <option class="form-control" value="2">Alimentos</option>
-                                        <option class="form-control" value="3">Vestuário</option>
-                                        <option class="form-control" value="4">Mobílias</option>
-                                        <option class="form-control" value="5">Diversos</option>
+                                    <select name="category" class="form-control" id="id_category" multiple="" style="height:400px;" required>
+                                        {% for category in categories %}
+                                            <option class="form-control" value="{{category.0}}">{{category.1}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
 

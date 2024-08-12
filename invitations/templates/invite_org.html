@@ -1,0 +1,38 @@
+{% autoescape off %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: #ffffff;
+      border-radius: 5px;
+    }
+    .accept-button {
+      background-color: #4CAF50; /* Verde */
+      color: white;
+    }
+    .decline-button {
+      background-color: #f44336; /* Vermelho */
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <p>Olá {{ username }},</p>
+  <p>Você foi convidado para se juntar à organização "{{ org_name }}"!</p>
+  <a href="{{ protocol }}://{{ domain }}{% url 'accept-invite' token=token %}" class="button accept-button">Aceitar Convite</a>
+  <a href="{{ protocol }}://{{ domain }}{% url 'decline-invite' token=token %}" class="button decline-button">Recusar Convite</a>
+  <p>Você também pode visualizar os seus convites pela própria plataforma, caso queira.</p>
+  <p>Atenciosamente,</p>
+  <p>Equipe Corrente do Bem</p>
+</body>
+</html>
+
+{% endautoescape %}

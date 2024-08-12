@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('profile.js loaded');
     var textContainer = document.getElementById('upload-pic');
     textContainer.innerHTML = textContainer.innerHTML.replace('Currently: ', '');
     textContainer.innerHTML = textContainer.innerHTML.replace('Change:', '');

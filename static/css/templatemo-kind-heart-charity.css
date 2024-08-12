@@ -49,16 +49,17 @@ https://templatemo.com/tm-581-kind-heart-charity
 -----------------------------------------*/
 :root {
   --white-color:                  #ffffff;
-  --primary-color:                #f8af1f;
-  --secondary-color:              #5a6f80;
-  --section-bg-color:             #f0f8ff;
-  --site-footer-bg-color:         #44525d;
-  --custom-btn-bg-color:          #f8af1f;
-  --custom-btn-bg-hover-color:    #5bc1ac;
+  --primary-color:                #328fe6;
+  --secondary-color:              #615a80;
+  --section-bg-color:             #d2f1f5;
+  --site-footer-bg-color:         #070066;
+  --custom-btn-bg-color:          #0062be;
+  --custom-btn-bg-hover-color:    #002b47;
   --dark-color:                   #000000;
   --p-color:                      #717275;
   --border-color:                 #295785;
-  --off-white-color:              rgb(255, 248, 232);
+  --off-white-color:              rgba(255, 240, 205, 0.973);
+  --blue-bg-color:                rgba(213, 216, 255, 0.973);
 
   --body-font-family:             'Metropolis', sans-serif;
 
@@ -85,6 +86,12 @@ https://templatemo.com/tm-581-kind-heart-charity
 body {
   background-color: var(--white-color);
   font-family: var(--body-font-family); 
+}
+
+.yellow-primary {
+  color: var(--primary-color) !important; 
+
+
 }
 
 
@@ -169,6 +176,13 @@ a:hover {
 b,
 strong {
   font-weight: var(--font-weight-bold);
+}
+
+.current-org {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  padding: 10px 20px 10px 20px !important;
+  margin-top: 10px;
 }
 
 
@@ -350,7 +364,7 @@ strong {
 }
 
 .off-white-bg {
-  background: var(--off-white-color);
+  background: var(--blue-bg-color);
 
 }
 
@@ -387,6 +401,12 @@ strong {
 .logo {
   width: 80px;
   height: auto;
+}
+
+.footer-logo {
+  width: 200px;
+  height: auto;
+
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
@@ -654,12 +674,13 @@ strong {
 }
 
 .featured-block:hover .featured-block-image {
-  transform: scale(0.75);
+  transform: scale(1.1);
 }
 
 .featured-block-image {
   display: block;
   margin: auto;
+  height: 100px !important;
   transition: all 0.5s;
 }
 
@@ -769,13 +790,40 @@ strong {
   DONATE              
 -----------------------------------------*/
 .donate-section {
-  background-image: url('../media/images/different-people-doing-volunteer-work.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   position: relative;
   padding-top: 100px;
   padding-bottom: 100px;
+}
+
+.donate-bg-1 {
+  background-image: url('../media/images/backgrounds/bg-1.jpg') !important;
+}
+
+.donate-bg-2 {
+  background-image: url('../media/images/backgrounds/bg-2.jpg') !important;
+}
+
+.donate-bg-3 {
+  background-image: url('../media/images/backgrounds/bg-3.jpg') !important;
+}
+
+.donate-bg-4 {
+  background-image: url('../media/images/backgrounds/bg-4.jpg') !important;
+}
+
+.donate-bg-5 {
+  background-image: url('../media/images/backgrounds/bg-5.jpg') !important;
+}
+
+.donate-bg-6 {
+  background-image: url('../media/images/backgrounds/bg-6.jpg') !important;
+}
+
+.donate-bg-7 {
+  background-image: url('../media/images/backgrounds/bg-7.jpg');
 }
 
 .donate-form {
@@ -791,13 +839,13 @@ strong {
   NEWS         
 -----------------------------------------*/
 .news-detail-header-section {
-  background-image: url('../media/images/news/close-up-volunteer-oganizing-stuff-donation.jpg');
+  
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   position: relative;
-  padding-top: 150px;
-  padding-bottom: 150px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 
 .news-block-top {
