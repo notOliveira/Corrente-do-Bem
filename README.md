@@ -105,6 +105,8 @@
     DATABASE_PORT = '3306' # Troque para a porta utilizada pelo servidor de banco de dados
     GOOGLE_API_KEY='?' # Coloque sua chave do Google API
     SECRET_KEY = '?'
+    ALLOWED_HOSTS=localhost # Para adicionar mais, coloque um ';' após o 
+    CSRF_TRUSTED_ORIGINS=https://corrente-do-bem.up.railway.app
 
     ```
 - Como é um arquivo que contém informações potencialmente confidenciais, eu não quero versioná-lo no Git, para não me trazer problemas futuros.

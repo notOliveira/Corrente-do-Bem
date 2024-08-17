@@ -33,14 +33,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = f"{os.environ['SECRET_KEY']}"  
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['zero-fome-production.up.railway.app', 'localhost']
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(';')
 
 # FORM SUBMISSION
 # Comment out the following line and place your railway URL, and your production URL in the array.
-CSRF_TRUSTED_ORIGINS = ['https://zero-fome-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(';')
 
 # Application definition
 

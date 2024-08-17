@@ -46,10 +46,10 @@ def invite_users(request, organization_id):
                     parameters = {
                         'username': invited_user.first_name,
                         'email': invited_user.email,
-                        'domain': 'localhost:8000',
+                        'domain': request.get_host(),
                         'site_name': 'Corrente do Bem',
                         'token': invitation.token,
-                        'protocol': 'http',
+                        'protocol': request.scheme,
                         'org_name': invitation.organization.name
                     }
                     

@@ -155,11 +155,11 @@ def password_reset_request(request):
                 parameters = {
                     'username': user_email.first_name,
                     'email': user_email.username,
-                    'domain': 'localhost:8000',
+                    'domain': request.get_host(),
                     'site_name': 'Corrente do Bem',
                     'uid': urlsafe_base64_encode(force_bytes(user_email.pk)),
                     'token': default_token_generator.make_token(user_email),
-                    'protocol': 'http',
+                    'protocol': request.scheme,
                 }
                 email = render_to_string(email_template_name, parameters)
                 
