@@ -1,17 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
+from rest_framework import viewsets
 from users.models import CustomUser as User
+from googlemaps import Client as GmapClient
 from .models import Organization, OrganizationProfile, Donation, UserRole
 from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
-from django.conf import settings
-import googlemaps
+from .constants import CATEGORY_CHOICES
 
 # Organizations
 
 @login_required(login_url='login')
 def organizations(request):
-    orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user)
+    orgs_profile = OrganizationProfile.objects.select_related('organization').filter(organization__users=request.user).order_by('organization__name')
     context = {
         'orgs': orgs_profile
     }
@@ -32,7 +34,7 @@ def create_org(request):
                 
                 # Adding the place_id, lat and lng to the organization
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
                 location = gmap.geocode(address)[0]
     
                 place_id = location.get('place_id', None)
@@ -59,7 +61,10 @@ def create_org(request):
                 messages.error(request, 'Houve um problema ao validar o formulário. Por favor, tente novamente.')
             return redirect('create-org')
         
-    return render(request, 'organizations/create-org.html')
+    context = {
+        'categories': CATEGORY_CHOICES
+    }
+    return render(request, 'organizations/create-org.html', context )
 
 def organization(request, id):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
@@ -70,9 +75,9 @@ def organization(request, id):
         user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
     
     location = [{
-        'lat': float(organization_profile.organization.lat),
-        'lng': float(organization_profile.organization.lng),
-        'name' : organization_profile.organization.name
+        'lat': float(organization_profile.organization.lat) if organization_profile.organization.lat else 0,
+        'lng': float(organization_profile.organization.lng) if organization_profile.organization.lng else 0,
+        'name' : organization_profile.organization.name,
     }]
     
     context = {
@@ -116,7 +121,7 @@ def settings_org(request, id):
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
                     
                 # Adding the place_id, lat and lng to the organization
-                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
                 location = gmap.geocode(address)[0]
 
                 place_id = location.get('place_id', None)
@@ -149,14 +154,101 @@ def settings_org(request, id):
         'org' : organization,
         'org_profile': organization_profile,
         'categories': org_categories,
-        'role': user_role.role
+        'role': user_role.role,
+        'current_org': {
+            'id': organization_profile.organization.id,
+            'name': organization_profile.organization.name
+        }
     }
     return render(request, 'organizations/settings-org.html', context)
+
+def users_org(request, id):
+    organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
     
+    if request.user not in organization_profile.organization.users.all():
+        messages.error(request, 'Você não tem permissão para acessar essa organização.')
+        return redirect('organizations')
+    
+    user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
+    
+    if request.method == "POST":
+        form = request.POST
+        if 'leave-org' in form:
+
+            # Se o usuário for colaborador, pode sair da organização
+
+            if user_role.role == 1:
+                UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                Organization.objects.get(id=id).users.remove(request.user)
+                request.user.organizations.remove(organization_profile.organization)
+                messages.success(request, 'Você saiu da organização com sucesso.')
+                return redirect('organizations')
+            
+            elif user_role.role == 0:
+                if organization_profile.organization.users.count() == 1:
+                    UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                    Organization.objects.get(id=id).users.remove(request.user)
+                    request.user.organizations.remove(organization_profile.organization)
+                    messages.success(request, 'Você saiu da organização com sucesso.')
+                    return redirect('organizations')
+                # Validar se o usuário é o único administrador da organização
+                elif UserRole.objects.filter(organization=organization_profile.organization, role=0).count() == 1:
+                    messages.error(request, 'Você não pode sair da organização, pois é o único administrador.')
+                    return redirect('users-org', id=id)
+                else:
+                    UserRole.objects.filter(user=request.user, organization=organization_profile.organization).delete()
+                    Organization.objects.get(id=id).users.remove(request.user)
+                    messages.success(request, 'Você saiu da organização com sucesso.')
+                    return redirect('organizations')
+        
+        elif 'remove-user' in form:
+            user_id = form.get('remove-user-input')
+            # Remover usuário da organização
+            try:
+                organization_profile.organization.users.remove(User.objects.get(id=user_id))
+                UserRole.objects.filter(user=User.objects.get(id=user_id), organization=organization_profile.organization).delete()
+                User.objects.get(id=user_id).organizations.remove(organization_profile.organization)
+                messages.success(request, 'Usuário removido com sucesso.')
+                return redirect('users-org', id=id)
+            except Exception as e:
+                messages.error(request, 'Houve um problema ao remover o usuário.')
+                return redirect('users-org', id=id)
+
+        elif 'promote-user' in form:
+            user_id = form.get('promote-user-input')
+            # Promover usuário
+            try:
+                user = User.objects.get(username=user_id)
+                user_role = UserRole.objects.filter(user=user, organization=organization_profile.organization).first()
+                user_role.role = 0
+                user_role.save()
+                messages.success(request, 'Usuário promovido com sucesso.')
+                return redirect('users-org', id=id)
+            except Exception:
+                messages.error(request, 'Houve um problema ao promover o usuário.')
+                return redirect('users-org', id=id)
+
+    users = organization_profile.organization.users.all()
+
+    # Unir lista de usuários com seus respectivos roles
+    users = [(user, UserRole.objects.filter(user=user, organization=organization_profile.organization).first().role) for user in users]
+    
+    context = {
+        'org': organization_profile,
+        'users': users,
+        'role': user_role.role,
+        'current_org': {
+            'id': organization_profile.organization.id,
+            'name': organization_profile.organization.name
+        }
+    }
+    
+    return render(request, 'organizations/organization-users.html', context)
+
 # Donations
 
-@login_required(login_url='login')
-def org_donations(request, id):
+# This function is used to get the donations of an organization
+def donations(request, id, page, all):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
 
     if request.user not in organization_profile.organization.users.all():
@@ -164,17 +256,28 @@ def org_donations(request, id):
         return redirect('organizations')
     
     user_role = UserRole.objects.filter(user=request.user, organization=organization_profile.organization).first()
-        
-    # Get last 10 donations
-    donations = Donation.objects.filter(organization__id=id).order_by('-date')[:10]
+
+    donations = Donation.objects.filter(organization__id=id).order_by('-date')
     
     context = {
         'org': organization_profile,
-        'donations': donations,
-        'role': user_role.role
+        'donations': donations if all else donations[:10],
+        'role': user_role.role,
+        'current_org': {
+            'id': organization_profile.organization.id,
+            'name': organization_profile.organization.name
+        }
     }
     
-    return render(request, 'donations/org-donations.html', context)
+    return render(request, f'donations/{page}.html', context)
+
+@login_required(login_url='login')
+def org_donations(request, id):
+    return donations(request, id, 'org-donations', False)
+
+@login_required(login_url='login')
+def org_all_donations(request, id):
+    return donations(request, id, 'org-all-donations', True)
 
 @login_required(login_url='login')
 def register_donation(request, id):
@@ -208,8 +311,11 @@ def register_donation(request, id):
             return redirect('register-donation', id=id)
     
     context = {
-        'org': organization_profile
+        'org': organization_profile,
+        'current_org': {
+            'id': organization_profile.organization.id,
+            'name': organization_profile.organization.name
+        }
     }
     
     return render(request, 'donations/register-donation.html', context)
-

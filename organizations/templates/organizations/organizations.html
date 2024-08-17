@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Zero Fome - Minhas organizações{% endblock title %}
+{% block title %}Corrente do Bem - Minhas organizações{% endblock title %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
            
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
                         {{ message }}
                         <br>
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -23,7 +23,7 @@
                     
                     {% if orgs %}
                         {% for org in orgs %}
-                            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 mt-5">
+                            <a href="{% url "organization" id=org.organization.id %}" class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 mt-5">
                                 <div class="custom-block-wrap off-white-bg">
                                     
                                     <img src="{{org.image.url}}"
@@ -33,10 +33,10 @@
                                         <div class="custom-block-body">
                                             <h5 class="text-center text-dark">{{org.organization.name}}</h5>
                                         </div>
-                                        <a href="{% url "organization" id=org.organization.id %}" class="custom-btn btn">Visualizar</a>
+                                        <div class="custom-btn btn">Visualizar</div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         {% endfor %}
                     {% else %}
 
@@ -56,8 +56,6 @@
                           </div>
                         </div>
                     </div>
-                    
-                    
                 </div>
             </div>
         </section>

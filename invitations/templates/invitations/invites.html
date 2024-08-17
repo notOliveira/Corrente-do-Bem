@@ -1,0 +1,101 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Corrente do Bem - Convites{% endblock title %}
+
+{% block content %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="container py-4">
+                <div class="row">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
+                        {{ message }}
+                        <br>
+                        <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <section class="news-section py-5">
+            <div class="container">
+                <h1 class="text-center">Notificações</h1>
+            </div>
+        </section>
+
+
+        <section class="news-section py-5">
+            <div class="container">
+                <div class="col-12">
+                    <h2 class="text-dark">Convites</h2>
+                </div>
+                    <!-- Item de exemplo -->
+                    {% if not invites %}    
+                        <div class="d-flex w-100 justify-content-between mt-4">
+                            <h4 class="mb-1 yellow-primary">Nenhum convite encontrado</h5>
+                        </div>
+                    {% else %}
+                        <div class="list-group">
+                            {% for invite in invites %}
+                                <div class="list-group-item list-group-item-action py-3">
+                                    <div class="row">
+
+                                        <div class="col-6">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">Convite - {{invite.organization}}</h5>
+                                            </div>
+                                            <p class="mb-1">Convidado por: {{invite.invited_by}}<br>{{invite.invite_date}} </p>
+                                        </div>
+
+                                        <div class="col-4"></div>
+                                        <div class="col-2">
+                                            <div class="d-flex justify-content-between">
+                                                <a href="{% url "accept-invite" token=invite.token %}" class="btn btn-success">Aceitar</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#declineInviteModal" onclick="handleDeclineInvite({{invite.id}})" class="btn btn-danger">Recusar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+            </div>
+        </section>
+
+        {% comment %} Modal - Recusar convite {% endcomment %}
+
+        <div class="modal fade" id="declineInviteModal" tabindex="-1" aria-labelledby="declineInviteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="declineInviteModalLabel">Recusar convite</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-5">Tem certeza que deseja recusar o convite? Você poderá ser convidado novamente a qualquer momento.</p>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" class="form-control my-4" id="decline-invite-input" name="decline-invite-input" hidden>
+                            <button type="submit" name="decline-invite" id="decline-invite-btn" class="btn btn-danger col-12">Recusar</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary justify-content-end" data-bs-dismiss="modal" aria-label="Fechar" >Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+
+{% block links %}
+
+    <script>
+        function handleDeclineInvite(inviteId) {
+            document.getElementById('decline-invite-input').value = inviteId;
+        }
+    </script>
+
+{% endblock links %}

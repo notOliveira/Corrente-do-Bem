@@ -9,7 +9,7 @@
            
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show m-auto mx-5 mb-5" role="alert">
                         {{ message }}
                         <br>
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -25,7 +25,7 @@
         <section class="section-bg py-1">
             <div class="container">
                 {% if org.image.url == '/media/default_org_picture.png' %}
-                    <div class="alert alert-info alert-dismissible fade show m-auto my-5 fs-5" role="alert">
+                    <div class="alert alert-warning alert-dismissible fade show m-auto my-5 fs-5" role="alert">
                         A organização ainda não possui uma imagem de perfil.
                         <br>
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -38,7 +38,7 @@
                         <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "settings-org" id=org.organization.id %}">Editar informações</a>
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "invite-users" organization_id=org.organization.id %}">Convidar usuários</a>
+                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "users-org" id=org.organization.id %}">Gerenciar usuários</a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
@@ -50,11 +50,14 @@
                 </div>
                 {% else %}
                 <div class="row my-3">
-                    <div class="col-6">
+                    <div class="col-4">
                         <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <a class="btn btn-block btn-warning col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Gerenciar doações</a>
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "users-org" id=org.organization.id %}">Visualizar usuários</a>
                     </div>
                 </div>
                 {% endif %}
@@ -133,7 +136,6 @@
             </div>
         </section>
 
-        {% comment %} MODAL USERS {% endcomment %}
         <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

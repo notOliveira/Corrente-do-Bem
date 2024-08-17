@@ -1,18 +1,18 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Zero Fome - Perfil{% endblock title %}
+{% block title %}Corrente do Bem - Perfil{% endblock title %}
 
 {% block content %}
 
-        <section class="donate-section">
+        <section class="donate-section donate-bg-5">
             <div class="section-overlay"></div>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-12 mx-auto">
                         {% if messages %}
                             {% for message in messages %}
-                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show w-100 mx-auto" role="alert">
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show w-100 mx-auto" role="alert">
                                     <h6>{{message}}</h6>
                                     <button type="button" class="btn-close  d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
@@ -116,12 +116,13 @@
                     </div>
                     <div class="modal-body">
                         <p class="fs-5">Tem certeza que deseja encerrar sua conta? Essa ação é <b class="text-danger">irreversível</b>.</p>
+                        <p class="fs-6">OBS: Caso você seja o único administrador de alguma organização, será necessário nomear outro usuário como administrador antes de encerrar sua conta, caso o contrário você não conseguirá prosseguir.</p>
 
-                        <p class="mt-4">Digite <b>"{{user.username}}"</b> para confirmar</p>
+                        <p class="mt-4">Digite <b>"{{user.username}}"</b> para confirmar.</p>
                         <form method="POST">
                             {% csrf_token %}
                             <input type="text" class="form-control my-4" onkeyup="handleDeleteUserInput(event)" >
-                            <button type="submit" name="delete-account" class="btn btn-danger col-12" id="delete-user-btn" disabled>Excluir</button>
+                            <button type="submit" name="delete-account" class="btn btn-danger col-12" id="delete-user-btn" disabled>Encerrar conta</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -135,6 +136,7 @@
 
 {% block links %}
     <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/danger-zone.js' %}"></script>
     
     <script>
         const handleDeleteUserInput = (event) => {

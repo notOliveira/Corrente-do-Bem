@@ -78,9 +78,9 @@
     <nav class="navbar navbar-expand-lg bg-light shadow-lg">
         <div class="container">
             <a class="navbar-brand" href="{% url "home" %}">
-                <img src="{% static 'media/images/zero-fome.png' %}" class="logo img-fluid" alt="Kind Heart Charity">
+                <img src="{% static 'media/images/logo.png' %}" class="logo img-fluid" alt="Kind Heart Charity">
                 <span class="fs-4">
-                    Zero Fome
+                    Corrente do Bem
                     <small>Tranformando vidas pela ajuda</small>
                 </span>
             </a>
@@ -92,27 +92,43 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% if request.path == '/' %}#{% else %} {% url "home" %} {% endif %}">Início</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#section_2">Sobre nós</a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'near-you' %}">Perto de você</a>
                     </li>
 
+
+                    {% if current_org %}
+                    <li class="nav-item" >
+                        <a class="nav-link current-org" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
+                    </li>
+                    {% endif %}
+                    
+
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll dropdown-toggle"
-                                id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">{{user.first_name}}</a>
 
+                            
+                            <a class="nav-link click-scroll dropdown-toggle"
+                            id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">{{user.first_name}}</a>
+
+                            
                             <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url "profile" %}">Perfil</a></li>
-
+                                
                                 <li><a class="dropdown-item" href="{% url "organizations" %}">Organizações</a></li>
                                 
                                 {% if user.is_superuser %}
-                                    <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
+                                <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
                                 {% endif %}
                                 
                                 <form method="post" action="{% url 'logout' %}">
@@ -121,6 +137,12 @@
                                 </form>
                                 
                             </ul>
+
+                            
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "invites" %}"><i class="bi bi-bell{% if notifications %}-fill{% endif %}"></i></a>
                         </li>
                     {% endif %}
 
@@ -150,16 +172,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-12 mb-4">
-                    <img src="{% static 'media/images/zero-fome.png' %}" class="logo img-fluid" alt="">
+                    <img src="{% static 'media/images/logo-white.png' %}" class="footer-logo img-fluid" alt="">
                 </div>
 
                 <div class="col-lg-4 col-md-6 col-12 mb-4">
                     <h5 class="site-footer-title mb-3">Links</h5>
 
                     <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Sobre nós</a></li>
+                        <li class="footer-menu-item"><a href="/#section_2" class="footer-menu-link">Sobre nós</a></li>
 
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Locais de doações</a></li>
+                        <li class="footer-menu-item"><a href="{% url 'near-you' %}" class="footer-menu-link">Locais de doações</a></li>
 
                         <li class="footer-menu-item"><a href="#" class="footer-menu-link">Como ajudar</a></li>
 
@@ -186,7 +208,7 @@
                         <i class="bi-envelope me-2"></i>
 
                         <a href="mailto:info@yourgmail.com" class="site-footer-link">
-                            gustavooliveira.classroom@gmail.com
+                            contato.zerofome@gmail.com
                         </a>
                     </p>
 
@@ -205,14 +227,14 @@
                 <div class="row">
 
                     <div class="col-lg-6 col-md-7 col-12">
-                        <p class="copyright-text mb-0">Copyright © 2024 <a href="#">Zero Fome</a>
+                        <p class="copyright-text mb-0">Copyright © 2024 <a href="#">Corrente do Bem</a>
                         </p>
                     </div>
 
                     <div class="col-lg-6 col-md-5 col-12 d-flex justify-content-center align-items-center mx-auto">
                         <ul class="social-icon">
                             <li class="social-icon-item">
-                                <a href="https://github.com/notOliveira/Zero-Fome" class="social-icon-link bi-github" target="blank"></a>
+                                <a href="https://github.com/notOliveira/Corrente-do-Bem" class="social-icon-link bi-github" target="blank"></a>
                             </li>
 
                             <li class="social-icon-item">

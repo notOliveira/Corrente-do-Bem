@@ -5,14 +5,14 @@
 
 {% block content %}
 
-        <section class="donate-section">
+        <section class="donate-section donate-bg-1">
             <div class="section-overlay"></div>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-12 mx-auto">
                         {% if messages %}
                             {% for message in messages %}
-                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show w-100 mx-auto" role="alert">
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show w-100 mx-auto" role="alert">
                                     <h6>{{message}}</h6>
                                     <button type="button" class="btn-close  d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
@@ -30,7 +30,7 @@
                             <div class="container mb-5">
                                 <div class="row">
                                     <div class="col-12 text-start ms-auto">
-                                        <a type="button" class="btn btn-primary" href="{% url 'organization' id=org_profile.organization.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
+                                        <a type="button" class="btn btn-primary" href="{% url 'organization' id=org.id %}"><i class="bi bi-arrow-left"></i> Voltar</a>
                                     </div>
                                 </div>
                             </div>
@@ -218,6 +218,7 @@
 
 {% block links %}
     <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/danger-zone.js' %}"></script>
     
     <script>
         const handleDeleteOrgInput = (event) => {

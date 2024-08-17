@@ -8,7 +8,7 @@
             {% for message in messages %}
             <div class="container py-4">
                 <div class="row">
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %} alert-dismissible fade show m-auto mb-4" role="alert">
                         {{ message }}
                         <br>
                         <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -19,14 +19,13 @@
         {% endif %}
 
 
-        <section class="news-detail-header-section text-center">
+        <section class="news-detail-header-section donate-bg-3 text-center">
             <div class="section-overlay"></div>
 
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-12 col-12">
-                        <h1 class="text-white">Doações - {{org.organization.name}}</h1>
+                        <h1 class="text-white">Doações<div class="py-3"></div> {{org.organization.name}}</h1>
                     </div>
 
                 </div>
@@ -34,45 +33,56 @@
         </section>
 
 
-        <section class="news-section py-5">
+        <section class="news-section">
 
-            <div class="container">
+            <div class="container col-9">
                 <div class="row">
                     <div class="col-12 py-3">
                         <h3 class="text-center">Menu rápido</h3>
                     </div>
                     <div class="row my-3">
-                        <div class="col-4">
+                        {% comment %} <div class="col-6">
                             <a class="btn btn-block btn-primary col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Visualizar doações</a>
+                        </div> {% endcomment %}
+                        <div class="col-6">
+                            <a class="btn btn-block btn-success col-12 fs-5" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
                         </div>
-                        <div class="col-4">
-                            <a class="btn btn-block btn-success col-12 fs-5" style="height: 50px;" href="{% url "register-donation" id=org.organization.id %}">Registrar doação</a>
+
+                        <div class="col-6">
+                            <a class="btn btn-block btn-info col-12 fs-5" href="{% url "org-all-donations" id=org.organization.id %}">Todas as doações</a>
                         </div>
-                        <div class="col-4">
+                        {% comment %} <div class="col-4">
                             <a class="btn btn-block btn-secondary col-12 fs-5" style="height: 50px;" href="{% url "org-donations" id=org.organization.id %}">Ranking</a>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
+            {% if donations %}
+                <div class="container col-9 section-padding">
+                    <h3 class="text-dark">Últimas 10 doações</h2>
+                    <div class="list-group">
 
-            <div class="container section-padding">
-                <h2 class="mb-4 text-dark">Últimas 10 doações</h2>
-                <div class="list-group">
-
-                    <!-- Item de exemplo -->
-                    {% for donation in donations %}
-                        <div class="list-group-item list-group-item-action py-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Doação #{{donation.id}}</h5>
-                                <small>{{donation.date}}</small>
+                        <!-- Item de exemplo -->
+                        {% for donation in donations %}
+                            <div class="list-group-item list-group-item-action py-3">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Doação #{{donation.id}}</h5>
+                                    <small>{{donation.date}}</small>
+                                </div>
+                                <p class="mb-1">Usuário: {{donation.user}} </p>
                             </div>
-                            <p class="mb-1">Usuário: {{donation.user}} </p>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                        
+                        
+                        
 
+                    </div>
                 </div>
-            </div>
-
+            {% else %}
+                <div class="container col-9 section-padding">
+                    <h3 class="text-dark">Nenhuma doação registrada</h2>
+                </div>
+            {% endif %}
         </section>
 
 

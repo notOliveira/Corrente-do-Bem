@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'zero_fome.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'corrente_do_bem.settings')
 
 application = get_wsgi_application()
