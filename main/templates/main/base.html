@@ -98,10 +98,6 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/#section_2">Sobre nós</a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'near-you' %}">Perto de você</a>
                     </li>
 
@@ -111,39 +107,34 @@
                         <a class="nav-link current-org" href="{% url 'organization' id=current_org.id %}">{{current_org.name}}</a>
                     </li>
                     {% endif %}
-                    
 
                     {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
+                    
 
-                            
-                            <a class="nav-link click-scroll dropdown-toggle"
-                            id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">{{user.first_name}}</a>
+                    <li class="nav-item" >
+                        <a class="nav-link"  href="{% url "profile" %}">Perfil</a>
+                    </li>
 
-                            
-                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{% url "profile" %}">Perfil</a></li>
-                                
-                                <li><a class="dropdown-item" href="{% url "organizations" %}">Organizações</a></li>
-                                
-                                {% if user.is_superuser %}
-                                <li><a class="dropdown-item" href="/admin" target="blank">Django admin</a></li>
-                                {% endif %}
-                                
-                                <form method="post" action="{% url 'logout' %}">
-                                    {% csrf_token %}
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
-                                </form>
-                                
-                            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "organizations" %}">Organizações</a>
+                    </li>
 
-                            
-                        </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin" target="blank">Django admin</a>
+                    </li>
+                    {% endif %}
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "invites" %}"><i class="bi bi-bell{% if notifications %}-fill{% endif %}"></i></a>
+                    </li>
+
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url "invites" %}"><i class="bi bi-bell{% if notifications %}-fill{% endif %}"></i></a>
+                            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
                         </li>
+                    </form>
                     {% endif %}
 
                     {% if not user.is_authenticated and request.path == '/login/' %}
