@@ -247,7 +247,6 @@ def users_org(request, id):
 
 # Donations
 
-# This function is used to get the donations of an organization
 def donations(request, id, page, all):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
 
