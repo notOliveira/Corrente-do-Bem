@@ -2,16 +2,16 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
-# from django.shortcuts import get_object_or_404
 from organizations.models import Donation, OrganizationProfile
-from .permissions import CreateSuperUserPermission
 from .serializers import DonationSerializer, OrganizationProfileSerializer
+# from django.shortcuts import get_object_or_404
+# from .permissions import CreateSuperUserPermission
 
 class DonationsViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
-    permission_classes = [CreateSuperUserPermission]
     search_fields = ['user__username']
+    # permission_classes = [CreateSuperUserPermission]
 
     def get_queryset(self):
         queryset = Donation.objects.all()
@@ -28,13 +28,12 @@ class DonationsViewSet(viewsets.ModelViewSet):
         return queryset
 
 # Organizations that the user is part of
-class OrganizationProfileViewSet(viewsets.ModelViewSet):
+class OrganizationViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizationProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return OrganizationProfile.objects.filter(organization__users=user)
+        return OrganizationProfile.objects.all()
 
     @action(detail=False, methods=['get'])
     def current_user_organizations(self, request):

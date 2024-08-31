@@ -7,7 +7,7 @@ from . import views
 r = DefaultRouter()
 
 r.register(r"donations", views.DonationsViewSet, basename='api-donations')
-r.register(r"organizations", views.OrganizationProfileViewSet, basename='api-organizations')
+r.register(r"organizations", views.OrganizationViewSet, basename='api-organizations')
 
 urlpatterns = [
     # DefaultRouter
