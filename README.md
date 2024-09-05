@@ -84,11 +84,19 @@
 
 <br>
 
-## Iniciar o projeto (porta opcional, padrão 8000)
+## Iniciar o projeto (endereço e porta opcionais, porta padrão 8000)
 
 
 ```
-\> python manage.py runserver <port>
+\> python manage.py runserver <endereço IP>:<port>
+```
+
+<br>
+
+OBS: Recomendo rodar com o seguinte comando:
+
+```
+\> python.exe .\manage.py runserver 0.0.0.0:8000
 ```
 
 <br>
