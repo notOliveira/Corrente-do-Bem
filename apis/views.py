@@ -32,7 +32,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     # Define o serializer padrão para as outras operações
     def get_serializer_class(self):
-        if self.action == 'details':
+        if 'details' in self.action:
             return OrganizationProfileDetailSerializer
         return OrganizationProfileBasicSerializer
 
@@ -52,4 +52,11 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     def details(self, request, pk=None):
         organization = OrganizationProfile.objects.get(pk=pk)
         serializer = self.get_serializer(organization)
+        return Response(serializer.data)
+    
+    # Resgatar todos os dados das organizações
+    @action(detail=False, methods=['get'])
+    def orgs_details(self, request):
+        organization = OrganizationProfile.objects.all()
+        serializer = self.get_serializer(organization, many=True)
         return Response(serializer.data)
