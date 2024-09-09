@@ -3,7 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from organizations.models import Donation, OrganizationProfile
-from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer
+from users.models import CustomUser, Profile
+from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -60,3 +61,18 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         organization = OrganizationProfile.objects.all()
         serializer = self.get_serializer(organization, many=True)
         return Response(serializer.data)
+    
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Profile.objects.all()
+
+        # Filters
+        email = self.request.query_params.get('email')
+
+        if email is not None:
+            queryset = queryset.filter(email=f'{email}')
+        
+        return queryset
