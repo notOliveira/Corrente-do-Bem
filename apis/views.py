@@ -27,7 +27,6 @@ class DonationsViewSet(viewsets.ModelViewSet):
         
         return queryset
 
-# Organizations that the user is part of
 class OrganizationViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizationProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -35,9 +34,12 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return OrganizationProfile.objects.all()
 
+    # Organizações que o usuário faz parte
     @action(detail=False, methods=['get'])
-    def current_user_organizations(self, request):
+    def user(self, request):
         user = request.user
         organizations = OrganizationProfile.objects.filter(organization__users=user)
         serializer = self.get_serializer(organizations, many=True)
         return Response(serializer.data)
+    
+    

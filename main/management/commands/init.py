@@ -336,18 +336,19 @@ class Command(BaseCommand):
 
                 UserRole.objects.create(user=admin_user, organization=organization, role=0)
 
-                # Obtenha os detalhes do local usando o Google Maps API
-                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-                location = gmap.geocode(address)[0]
+                if settings.GOOGLE_API_KEY:
+                    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+                    address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+                    location = gmap.geocode(address)[0]
 
-                place_id = location.get('place_id', None)
-                lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                
-                organization.lat = lat
-                organization.lng = lng
-                organization.place_id = place_id
+                    place_id = location.get('place_id', None)
+                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+                    
+                    organization.lat = lat
+                    organization.lng = lng
+                    organization.place_id = place_id
+
                 organization.save()
             
             self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
