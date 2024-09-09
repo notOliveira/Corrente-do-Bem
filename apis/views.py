@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from organizations.models import Donation, OrganizationProfile
-from .serializers import DonationSerializer, OrganizationProfileSerializer
+from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -28,18 +28,28 @@ class DonationsViewSet(viewsets.ModelViewSet):
         return queryset
 
 class OrganizationViewSet(viewsets.ModelViewSet):
-    serializer_class = OrganizationProfileSerializer
     permission_classes = [IsAuthenticated]
+
+    # Define o serializer padrão para as outras operações
+    def get_serializer_class(self):
+        if self.action == 'details':
+            return OrganizationProfileDetailSerializer
+        return OrganizationProfileBasicSerializer
 
     def get_queryset(self):
         return OrganizationProfile.objects.all()
 
-    # Organizações que o usuário faz parte
+    # Resgata as organizações que o usuário faz parte
     @action(detail=False, methods=['get'])
     def user(self, request):
         user = request.user
         organizations = OrganizationProfile.objects.filter(organization__users=user)
         serializer = self.get_serializer(organizations, many=True)
         return Response(serializer.data)
-    
-    
+
+    # Resgatar todos os dados da organização
+    @action(detail=True, methods=['get'])
+    def details(self, request, pk=None):
+        organization = OrganizationProfile.objects.get(pk=pk)
+        serializer = self.get_serializer(organization)
+        return Response(serializer.data)

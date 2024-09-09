@@ -19,9 +19,18 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = '__all__'
 
-class OrganizationProfileSerializer(serializers.ModelSerializer):
-    organization = OrganizationSerializer().fields['name']
+# Serializer básico para respostas simples (sem todos os dados da Organization)
+class OrganizationProfileBasicSerializer(serializers.ModelSerializer):
+    organization = serializers.StringRelatedField()
     id = OrganizationSerializer().fields['id']
+
+    class Meta:
+        model = OrganizationProfile
+        fields = ['id', 'image', 'organization', 'website', 'instagram']
+
+# Serializer detalhado para respostas que incluem todos os dados da Organization
+class OrganizationProfileDetailSerializer(serializers.ModelSerializer):
+    organization = OrganizationSerializer()
 
     class Meta:
         model = OrganizationProfile
