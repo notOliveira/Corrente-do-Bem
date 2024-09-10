@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'image']
 
 class DonationSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
+    user = UserProfileSerializer()
     class Meta:
         model = Donation
         fields = ['id', 'user', 'date', 'organization']
