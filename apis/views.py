@@ -89,3 +89,4 @@ class NotificationsViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = queryset.filter(invited_user=user)
         return queryset
+
