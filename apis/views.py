@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from organizations.models import Donation, OrganizationProfile
 from users.models import CustomUser, Profile
 from invitations.models import Invitation
-from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer
+from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer, OrganizationUsersSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -61,6 +61,14 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     def orgs_details(self, request):
         organization = OrganizationProfile.objects.all()
         serializer = self.get_serializer(organization, many=True)
+        return Response(serializer.data)
+    
+    # Resgatar todos os usuários da organização
+    @action(detail=True, methods=['get'])
+    def users(self, request, pk=None):
+        organization = OrganizationProfile.objects.get(pk=pk)
+        users = organization.organization.users.all()
+        serializer = OrganizationUsersSerializer(users, many=True)
         return Response(serializer.data)
     
 class UserViewSet(viewsets.ModelViewSet):

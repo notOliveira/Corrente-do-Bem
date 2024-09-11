@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from organizations.models import Donation, OrganizationProfile, Organization
+from organizations.models import Donation, OrganizationProfile, Organization, UserRole
 from users.models import CustomUser, Profile
 from invitations.models import Invitation
 
@@ -8,6 +8,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = '__all__'
 
+class OrganizationUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'first_name', 'last_name']
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:

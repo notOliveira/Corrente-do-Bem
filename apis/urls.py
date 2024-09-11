@@ -13,7 +13,7 @@ r.register(r"notifications", views.NotificationsViewSet, basename='api-notificat
 
 urlpatterns = [
     # DefaultRouter
-    path('api/v1/', include(r.urls), name='api'),
+    path('', include(r.urls), name='api'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),    
 ]
