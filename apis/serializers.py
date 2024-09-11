@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from organizations.models import Donation, OrganizationProfile, Organization
 from users.models import CustomUser, Profile
+from invitations.models import Invitation
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,3 +46,12 @@ class OrganizationProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationProfile
         fields = ['id', 'image', 'organization', 'website', 'instagram']
+
+class InvitationSerializer(serializers.ModelSerializer):
+    invited_by = serializers.StringRelatedField()
+    organization = serializers.StringRelatedField()
+    invite_date = serializers.DateTimeField(format='%d/%m/%Y - %H:%M:%S')
+
+    class Meta:
+        model = Invitation
+        fields = '__all__'

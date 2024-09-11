@@ -4,7 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from organizations.models import Donation, OrganizationProfile
 from users.models import CustomUser, Profile
-from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer
+from invitations.models import Invitation
+from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -75,4 +76,16 @@ class UserViewSet(viewsets.ModelViewSet):
         if email is not None:
             queryset = queryset.filter(email=f'{email}')
         
+        return queryset
+
+class NotificationsViewSet(viewsets.ModelViewSet):
+    serializer_class = InvitationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Invitation.objects.all()
+        
+        # Filtrar as notificações do usuário
+        user = self.request.user
+        queryset = queryset.filter(invited_user=user)
         return queryset

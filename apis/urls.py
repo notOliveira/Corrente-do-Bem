@@ -9,6 +9,7 @@ r = DefaultRouter()
 r.register(r"donations", views.DonationsViewSet, basename='api-donations')
 r.register(r"organizations", views.OrganizationViewSet, basename='api-organizations')
 r.register(r"users", views.UserViewSet, basename='api-users')
+r.register(r"notifications", views.NotificationsViewSet, basename='api-notifications')
 
 urlpatterns = [
     # DefaultRouter
