@@ -17,3 +17,6 @@ sqlparse==0.4.4
 tzdata==2024.1
 urllib3==2.2.1
 whitenoise==6.2.0
+rest_framework_simplejwt
+djangorestframework-simplejwt
+django-cors-headers

@@ -32,18 +32,19 @@ def create_org(request):
 
                 UserRole.objects.create(user=request.user, organization=organization, role=0)
                 
-                # Adding the place_id, lat and lng to the organization
-                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
-                location = gmap.geocode(address)[0]
-    
-                place_id = location.get('place_id', None)
-                lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                
-                organization.lat = lat
-                organization.lng = lng
-                organization.place_id = place_id
+                if settings.GOOGLE_API_KEY:
+                    gmap = GmapClient(key=settings.GOOGLE_API_KEY)
+                    address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
+                    location = gmap.geocode(address)[0]
+        
+                    place_id = location.get('place_id', None)
+                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+                    
+                    organization.lat = lat
+                    organization.lng = lng
+                    organization.place_id = place_id
+
                 organization.save()
                                 
                 messages.success(request, 'Organização criada com sucesso!')
@@ -119,18 +120,19 @@ def settings_org(request, id):
                 organization = Organization.objects.get(id=id)
                 
                 address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                    
-                # Adding the place_id, lat and lng to the organization
-                gmap = GmapClient(key=settings.GOOGLE_API_KEY)
-                location = gmap.geocode(address)[0]
 
-                place_id = location.get('place_id', None)
-                lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                
-                organization.lat = lat
-                organization.lng = lng
-                organization.place_id = place_id
+                if settings.GOOGLE_API_KEY:
+                    gmap = GmapClient(key=settings.GOOGLE_API_KEY)
+                    location = gmap.geocode(address)[0]
+
+                    place_id = location.get('place_id', None)
+                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
+                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
+                    
+                    organization.lat = lat
+                    organization.lng = lng
+                    organization.place_id = place_id
+                    
                 organization.save()
                 
                 messages.success(request, 'Configurações atualizadas com sucesso!')
@@ -247,7 +249,6 @@ def users_org(request, id):
 
 # Donations
 
-# This function is used to get the donations of an organization
 def donations(request, id, page, all):
     organization_profile = get_object_or_404(OrganizationProfile, organization__id=id)
 
