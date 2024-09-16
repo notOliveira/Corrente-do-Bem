@@ -51,6 +51,11 @@ class OrganizationProfileDetailSerializer(serializers.ModelSerializer):
         model = OrganizationProfile
         fields = ['id', 'image', 'organization', 'website', 'instagram']
 
+class OrganizationUserRolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ['id', 'name']
+
 class InvitationSerializer(serializers.ModelSerializer):
     invited_by = serializers.StringRelatedField()
     organization = serializers.StringRelatedField()
@@ -59,3 +64,11 @@ class InvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitation
         fields = '__all__'
+
+class UserRoleSerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer()
+    organization = OrganizationUserRolesSerializer()
+
+    class Meta:
+        model = UserRole
+        fields = ['id', 'user', 'organization', 'role']

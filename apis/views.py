@@ -2,10 +2,10 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from organizations.models import Donation, OrganizationProfile
-from users.models import CustomUser, Profile
+from organizations.models import Donation, OrganizationProfile, UserRole
+from users.models import Profile
 from invitations.models import Invitation
-from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer, OrganizationUsersSerializer
+from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer, OrganizationUsersSerializer, UserRoleSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -98,3 +98,24 @@ class NotificationsViewSet(viewsets.ModelViewSet):
         queryset = queryset.filter(invited_user=user)
         return queryset
 
+class UserRoleViewSet(viewsets.ModelViewSet):
+    serializer_class = UserRoleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        queryset = UserRole.objects.all()
+        user = self.request.user
+        
+        # Filtrar as organizações do usuário
+        if user is not None:
+            queryset = queryset.filter(user=user)
+        
+        return queryset
+    
+    @action(detail=False, methods=['get'])
+    def user(self, request):
+        user = request.user
+        user_roles = UserRole.objects.filter(user=user)
+        serializer = self.get_serializer(user_roles, many=True)
+        return Response(serializer.data)
