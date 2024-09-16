@@ -5,7 +5,12 @@ from rest_framework.response import Response
 from organizations.models import Donation, OrganizationProfile, UserRole
 from users.models import Profile
 from invitations.models import Invitation
-from .serializers import DonationSerializer, OrganizationProfileDetailSerializer, OrganizationProfileBasicSerializer, ProfileSerializer, InvitationSerializer, OrganizationUsersSerializer, UserRoleSerializer
+# Serializers
+from .serializers.donations_serializer import DonationSerializer
+from .serializers.organization_profile_serializers import OrganizationProfileSerializer
+from .serializers.users_serializers import ProfileSerializer, OrganizationUsersSerializer
+from .serializers.roles_serializers import UserRoleSerializer
+from .serializers.invitations_serializer import InvitationSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -34,9 +39,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     # Define o serializer padrão para as outras operações
     def get_serializer_class(self):
-        if 'details' in self.action:
-            return OrganizationProfileDetailSerializer
-        return OrganizationProfileBasicSerializer
+        return OrganizationProfileSerializer
 
     def get_queryset(self):
         return OrganizationProfile.objects.all()
