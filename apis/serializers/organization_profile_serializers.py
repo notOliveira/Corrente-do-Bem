@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from organizations.models import OrganizationProfile
-from apis.serializers.organization_serializers import OrganizationSerializer
+from apis.serializers.organization_serializers import OrganizationSerializer, OrganizationGeolocationLatLonSerializer
 
+# Serializer para o perfil da organização
 class OrganizationProfileSerializer(serializers.ModelSerializer):
     organization = serializers.SerializerMethodField()
 
@@ -17,3 +18,11 @@ class OrganizationProfileSerializer(serializers.ModelSerializer):
             return OrganizationSerializer(obj.organization).data
         # Retorna apenas o nome da organização (com StringRelatedField)
         return str(obj.organization)
+
+# API de localização da organização (/near-you)
+class OrganizationLocationSerializer(serializers.ModelSerializer):
+    organization = OrganizationGeolocationLatLonSerializer()
+
+    class Meta:
+        model = OrganizationProfile
+        fields = ['id', 'organization', 'image']

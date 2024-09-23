@@ -7,7 +7,7 @@ from users.models import Profile
 from invitations.models import Invitation
 # Serializers
 from .serializers.donations_serializer import DonationSerializer
-from .serializers.organization_profile_serializers import OrganizationProfileSerializer
+from .serializers.organization_profile_serializers import OrganizationProfileSerializer, OrganizationLocationSerializer
 from .serializers.users_serializers import ProfileSerializer, OrganizationUsersSerializer
 from .serializers.roles_serializers import UserRoleSerializer
 from .serializers.invitations_serializer import InvitationSerializer
@@ -73,6 +73,13 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         users = organization.organization.users.all()
         serializer = OrganizationUsersSerializer(users, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def location(self, request):
+        organization = OrganizationProfile.objects.all()
+        serializer = OrganizationLocationSerializer(organization, many=True)
+        return Response(serializer.data)
+
     
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
