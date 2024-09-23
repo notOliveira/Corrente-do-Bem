@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from organizations.models import UserRole
-# Serializers
-from apis.serializers.users_serializers import UserProfileSerializer
+
+from apis.serializers.users_serializers import OrganizationUsersSerializer
 from apis.serializers.organization_serializers import OrganizationUserRolesSerializer
 
+# Serializer geral para as funções dos usuários (/user-roles)
 class UserRoleSerializer(serializers.ModelSerializer):
-    user = UserProfileSerializer()
+    user = OrganizationUsersSerializer()
     organization = OrganizationUserRolesSerializer()
 
     class Meta:

@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from organizations.models import OrganizationProfile
+
 from apis.serializers.organization_serializers import OrganizationSerializer, OrganizationGeolocationLatLonSerializer
 
-# Serializer para o perfil da organização
+# Serializer geral para o perfil da organização
 class OrganizationProfileSerializer(serializers.ModelSerializer):
     organization = serializers.SerializerMethodField()
 

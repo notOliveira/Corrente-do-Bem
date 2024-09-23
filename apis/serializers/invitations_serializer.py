@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from invitations.models import Invitation
 
+# Serializer geral para os convites
 class InvitationSerializer(serializers.ModelSerializer):
     invited_by = serializers.StringRelatedField()
     organization = serializers.StringRelatedField()

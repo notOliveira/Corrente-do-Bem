@@ -3,6 +3,7 @@ from organizations.models import Donation
 
 from apis.serializers.users_serializers import UserProfileSerializer
 
+# Serializer geral para as doações
 class DonationSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer()
     class Meta:

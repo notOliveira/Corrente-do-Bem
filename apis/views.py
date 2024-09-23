@@ -8,9 +8,10 @@ from invitations.models import Invitation
 # Serializers
 from .serializers.donations_serializer import DonationSerializer
 from .serializers.organization_profile_serializers import OrganizationProfileSerializer, OrganizationLocationSerializer
-from .serializers.users_serializers import ProfileSerializer, OrganizationUsersSerializer
+from .serializers.users_serializers import OrganizationUsersSerializer
 from .serializers.roles_serializers import UserRoleSerializer
 from .serializers.invitations_serializer import InvitationSerializer
+from .serializers.profile_serializers import ProfileSerializer
 # from django.shortcuts import get_object_or_404
 # from .permissions import CreateSuperUserPermission
 
@@ -35,7 +36,7 @@ class DonationsViewSet(viewsets.ModelViewSet):
         return queryset
 
 class OrganizationViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     # Define o serializer padrão para as outras operações
     def get_serializer_class(self):
@@ -79,11 +80,10 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         organization = OrganizationProfile.objects.all()
         serializer = OrganizationLocationSerializer(organization, many=True)
         return Response(serializer.data)
-
     
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Profile.objects.all()
@@ -98,7 +98,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class NotificationsViewSet(viewsets.ModelViewSet):
     serializer_class = InvitationSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Invitation.objects.all()
@@ -110,7 +110,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 
 class UserRoleViewSet(viewsets.ModelViewSet):
     serializer_class = UserRoleSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
 
