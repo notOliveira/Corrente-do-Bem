@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-# put on your settings.py file below INSTALLED_APPS
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
