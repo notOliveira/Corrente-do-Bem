@@ -8,4 +8,4 @@ class DonationSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer()
     class Meta:
         model = Donation
-        fields = ['id', 'user', 'date', 'organization']
+        fields = ['id', 'user', 'date', 'organization', 'image']

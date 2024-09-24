@@ -22,18 +22,14 @@ class DonationsViewSet(viewsets.ModelViewSet):
     # permission_classes = [CreateSuperUserPermission]
 
     def get_queryset(self):
-        queryset = Donation.objects.all()
-
-        # Filters
-        organization_id = self.request.query_params.get('organization_id')
-        user_email = self.request.query_params.get('user_email')
-
-        if organization_id is not None:
-            queryset = queryset.filter(organization__id=organization_id)
-        if user_email is not None:
-            queryset = queryset.filter(user__email=f'{user_email}')
-        
-        return queryset
+        return Donation.objects.all()
+    
+    @action(detail=False, methods=['get'])
+    def user(self, request):
+        user = self.request.query_params.get('email') or request.user.username
+        donations = Donation.objects.filter(user__username=user)
+        serializer = self.get_serializer(donations, many=True)
+        return Response(serializer.data)
 
 class OrganizationViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
@@ -75,12 +71,22 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         serializer = OrganizationUsersSerializer(users, many=True)
         return Response(serializer.data)
     
+    # Resgatar a localização das organizações
     @action(detail=False, methods=['get'])
     def location(self, request):
         organization = OrganizationProfile.objects.all()
         serializer = OrganizationLocationSerializer(organization, many=True)
         return Response(serializer.data)
     
+    # Resgatar as doações da organização
+    @action(detail=True, methods=['get'])
+    def donations(self, request, pk=None):
+        organization = OrganizationProfile.objects.get(pk=pk)
+        donations = Donation.objects.filter(organization=organization.organization)
+        serializer = DonationSerializer(donations, many=True)
+        return Response(serializer.data)
+
+# Melhorar
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     # permission_classes = [IsAuthenticated]
@@ -91,11 +97,11 @@ class UserViewSet(viewsets.ModelViewSet):
         # Filters
         email = self.request.query_params.get('email')
 
-        if email is not None:
-            queryset = queryset.filter(email=f'{email}')
+        queryset = queryset.filter(email=f'{email}') if email is not None else queryset
         
         return queryset
 
+# Melhorar
 class NotificationsViewSet(viewsets.ModelViewSet):
     serializer_class = InvitationSerializer
     # permission_classes = [IsAuthenticated]
@@ -108,6 +114,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
         queryset = queryset.filter(invited_user=user)
         return queryset
 
+# Melhorar
 class UserRoleViewSet(viewsets.ModelViewSet):
     serializer_class = UserRoleSerializer
     # permission_classes = [IsAuthenticated]
