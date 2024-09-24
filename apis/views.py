@@ -86,20 +86,21 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         serializer = DonationSerializer(donations, many=True)
         return Response(serializer.data)
 
-# Melhorar
-class UserViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Profile.objects.all()
-
-        # Filters
-        email = self.request.query_params.get('email')
-
-        queryset = queryset.filter(email=f'{email}') if email is not None else queryset
         
         return queryset
+    
+    @action(detail=False, methods=['get'])
+    def user(self, request):
+        user = self.request.query_params.get('email') or request.user.username
+        profile = Profile.objects.get(user__username=user)
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
 
 # Melhorar
 class NotificationsViewSet(viewsets.ModelViewSet):

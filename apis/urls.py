@@ -8,7 +8,7 @@ r = DefaultRouter()
 
 r.register(r"donations", views.DonationsViewSet, basename='api-donations')
 r.register(r"organizations", views.OrganizationViewSet, basename='api-organizations')
-r.register(r"users", views.UserViewSet, basename='api-users')
+r.register(r"profiles", views.ProfileViewSet, basename='api-profiles')
 r.register(r"notifications", views.NotificationsViewSet, basename='api-notifications')
 r.register(r"user-roles", views.UserRoleViewSet, basename='api-user-roles')
 
