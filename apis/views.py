@@ -9,7 +9,7 @@ from invitations.models import Invitation
 from .serializers.donations_serializer import DonationSerializer
 from .serializers.organization_profile_serializers import OrganizationProfileSerializer, OrganizationLocationSerializer
 from .serializers.users_serializers import OrganizationUsersSerializer
-from .serializers.roles_serializers import UserRoleSerializer
+from .serializers.roles_serializers import UserRoleSerializer, RolesFromOrganizationSerializer
 from .serializers.invitations_serializer import InvitationSerializer
 from .serializers.profile_serializers import ProfileSerializer
 # from django.shortcuts import get_object_or_404
@@ -65,7 +65,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     
     # Resgatar todos os usuários da organização
     @action(detail=True, methods=['get'])
-    def users(self, request, pk=None):
+    def all_users(self, request, pk=None):
         organization = OrganizationProfile.objects.get(pk=pk)
         users = organization.organization.users.all()
         serializer = OrganizationUsersSerializer(users, many=True)
@@ -84,6 +84,14 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         organization = OrganizationProfile.objects.get(pk=pk)
         donations = Donation.objects.filter(organization=organization.organization)
         serializer = DonationSerializer(donations, many=True)
+        return Response(serializer.data)
+    
+    # Resgatar os usuários e as funções de cada usuário
+    @action(detail=True, methods=['get'])
+    def roles(self, request, pk=None):
+        organization = OrganizationProfile.objects.get(pk=pk)
+        roles = UserRole.objects.filter(organization=organization.organization)
+        serializer = RolesFromOrganizationSerializer(roles, many=True)
         return Response(serializer.data)
 
 class ProfileViewSet(viewsets.ModelViewSet):
