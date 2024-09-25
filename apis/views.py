@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .permissions import CreateSuperUserPermission
-# 
+# Models
 from organizations.models import Donation, OrganizationProfile, UserRole
 from users.models import Profile
 from invitations.models import Invitation
@@ -150,7 +150,6 @@ class UserRoleViewSet(viewsets.ModelViewSet):
         user_roles = UserRole.objects.filter(user=user)
         serializer = self.get_serializer(user_roles, many=True)
         return Response(serializer.data)
-
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
