@@ -1,19 +1,24 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+# Views, viewsets e generics da aplicação apis
+from rest_framework import viewsets, generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from .permissions import CreateSuperUserPermission
+# 
 from organizations.models import Donation, OrganizationProfile, UserRole
 from users.models import Profile
 from invitations.models import Invitation
+from users.models import CustomUser
+from rest_framework.permissions import AllowAny
 # Serializers
 from .serializers.donations_serializer import DonationSerializer
 from .serializers.organization_profile_serializers import OrganizationProfileSerializer, OrganizationLocationSerializer
-from .serializers.users_serializers import OrganizationUsersSerializer
+from .serializers.users_serializers import OrganizationUsersSerializer, RegisterSerializer
 from .serializers.roles_serializers import UserRoleSerializer, RolesFromOrganizationSerializer
 from .serializers.invitations_serializer import InvitationSerializer
 from .serializers.profile_serializers import ProfileSerializer
+
 # from django.shortcuts import get_object_or_404
-# from .permissions import CreateSuperUserPermission
 
 class DonationsViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
@@ -145,3 +150,9 @@ class UserRoleViewSet(viewsets.ModelViewSet):
         user_roles = UserRole.objects.filter(user=user)
         serializer = self.get_serializer(user_roles, many=True)
         return Response(serializer.data)
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
