@@ -171,6 +171,33 @@ class NotificationsViewSet(viewsets.ModelViewSet):
         
         except Invitation.DoesNotExist:
             return Response({'error': 'Convite não encontrado.'}, status=404)
+    
+    # Aceitar convite pelo token
+    @action(detail=False, methods=['post'])
+    def accept(self, request):
+        try:
+            token = request.query_params.get('token')
+            invitation = Invitation.objects.get(token=token)
+            user = request.user
+            if not user == invitation.invited_user:
+                return Response({'error': 'Você não tem permissão para aceitar esse convite.'}, status=403)
+            
+            # Adicionando usuário à organização
+            invitation.organization.users.add(user)
+            invitation.organization.save()
+            
+            # Adicionando organização ao usuário
+            invitation.invited_user.organizations.add(invitation.organization)
+            invitation.invited_user.save()
+
+            # Adicionando role para o usuário
+            UserRole.objects.create(user=invitation.invited_user, organization=invitation.organization, role=1)
+
+            invitation.delete()
+            return Response({'message': 'Convite aceito.'}, status=200)
+        
+        except Invitation.DoesNotExist:
+            return Response({'error': 'Convite inválido, expirou ou já foi aceito.'}, status=404)
 
 # Melhorar
 class UserRoleViewSet(viewsets.ModelViewSet):
