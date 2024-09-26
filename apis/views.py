@@ -115,7 +115,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(profile)
         return Response(serializer.data)
 
-# Melhorar
 class NotificationsViewSet(viewsets.ModelViewSet):
     serializer_class = InvitationSerializer
     # permission_classes = [IsAuthenticated]
@@ -123,10 +122,55 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Invitation.objects.all()
         
-        # Filtrar as notificações do usuário
         user = self.request.user
-        queryset = queryset.filter(invited_user=user)
+        
+        if not user.is_superuser:
+            return queryset.filter(invited_user=user)
+        
+        # Adicionando filtros
+        organization = self.request.query_params.get('organization')
+        if organization is not None:
+            queryset = queryset.filter(organization__name=organization)        
+
+        invited_user = self.request.query_params.get('invited_user')
+        if invited_user is not None:
+            queryset = queryset.filter(invited_user__username=invited_user)
+
+        invited_by = self.request.query_params.get('invited_by')
+        if invited_by is not None:
+            queryset = queryset.filter(invited_by__username=invited_by)
+
         return queryset
+    
+    @action(detail=False, methods=['get'])
+    def user(self, request):
+        user = request.user
+        notifications = Invitation.objects.filter(invited_user=user)
+        serializer = self.get_serializer(notifications, many=True)
+        return Response(serializer.data)
+    
+    # Deletar convite
+    @action(detail=True, methods=['post'])
+    def remove(self, request, pk=None):
+        try:
+            invitation = Invitation.objects.get(pk=pk)
+            
+            # Verifica se o usuário que está tentando apagar o convite é:
+            # - Superusuário 
+            # - Usuário convidado
+            # - Quem convidou
+            # Caso seja, ele pode apagar o convite
+            if not (request.user.is_superuser or 
+                    invitation.invited_user == request.user or 
+                    invitation.invited_by == request.user):
+                return Response({'error': 'Você não tem permissão para remover esse convite.'}, status=403)
+            
+            # Deleta o convite
+            invitation.delete()
+            return Response({'message': 'Convite removido.'}, status=204)
+        
+        except Invitation.DoesNotExist:
+            return Response({'error': 'Convite não encontrado.'}, status=404)
 
 # Melhorar
 class UserRoleViewSet(viewsets.ModelViewSet):
