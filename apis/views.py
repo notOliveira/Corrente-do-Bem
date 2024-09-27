@@ -1,5 +1,5 @@
 # Views, viewsets e generics da aplicação apis
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -163,14 +163,14 @@ class NotificationsViewSet(viewsets.ModelViewSet):
             if not (request.user.is_superuser or 
                     invitation.invited_user == request.user or 
                     invitation.invited_by == request.user):
-                return Response({'error': 'Você não tem permissão para remover esse convite.'}, status=403)
+                return Response({'detail': 'Você não tem permissão para remover esse convite.'}, status=status.HTTP_403_FORBIDDEN)
             
             # Deleta o convite
             invitation.delete()
-            return Response({'message': 'Convite removido.'}, status=204)
+            return Response({'message': 'Convite removido.'}, status=status.HTTP_204_NO_CONTENT)
         
         except Invitation.DoesNotExist:
-            return Response({'error': 'Convite não encontrado.'}, status=404)
+            return Response({'detail': 'Convite não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
     
     # Aceitar convite pelo token
     @action(detail=False, methods=['post'])
@@ -180,7 +180,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
             invitation = Invitation.objects.get(token=token)
             user = request.user
             if not user == invitation.invited_user:
-                return Response({'error': 'Você não tem permissão para aceitar esse convite.'}, status=403)
+                return Response({'detail': 'Você não tem permissão para aceitar esse convite.'}, status=status.HTTP_403_FORBIDDEN)
             
             # Adicionando usuário à organização
             invitation.organization.users.add(user)
@@ -194,32 +194,46 @@ class NotificationsViewSet(viewsets.ModelViewSet):
             UserRole.objects.create(user=invitation.invited_user, organization=invitation.organization, role=1)
 
             invitation.delete()
-            return Response({'message': 'Convite aceito.'}, status=200)
+            return Response({'message': 'Convite aceito.'}, status=status.HTTP_200_OK)
         
         except Invitation.DoesNotExist:
-            return Response({'error': 'Convite inválido, expirou ou já foi aceito.'}, status=404)
+            return Response({'detail': 'Convite inválido, expirou ou já foi aceito.'}, status=status.HTTP_404_NOT_FOUND)
 
 # Melhorar
 class UserRoleViewSet(viewsets.ModelViewSet):
     serializer_class = UserRoleSerializer
     # permission_classes = [IsAuthenticated]
 
+    # Melhorar filtro
     def get_queryset(self):
 
-        queryset = UserRole.objects.all()
         user = self.request.user
-        
-        # Filtrar as organizações do usuário
-        if user is not None:
-            queryset = queryset.filter(user=user)
-        
-        return queryset
+        return UserRole.objects.filter(user=user)
     
-    @action(detail=False, methods=['get'])
-    def user(self, request):
+    # Resgatar o papel do usuário em uma organização
+    @action(detail=True, methods=['get'], url_path='role')
+    def role_in_organization(self, request, pk=None):
         user = request.user
-        user_roles = UserRole.objects.filter(user=user)
-        serializer = self.get_serializer(user_roles, many=True)
+        
+        # Caso seja passado um email como parâmetro e o usuário seja superusuário, ele pode resgatar o papel de qualquer usuário
+        if request.query_params.get('email') and user.is_superuser:
+            email = request.query_params.get('email')
+            user = CustomUser.objects.get(username=email)
+        
+        # Tenta obter a organização pela PK passada na URL
+        try:
+            organization = OrganizationProfile.objects.get(pk=pk).organization
+        except OrganizationProfile.DoesNotExist:
+            return Response({"detail": "Organização não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verifica se o usuário tem um papel nessa organização
+        try:
+            user_role = UserRole.objects.get(user=user, organization=organization)
+        except UserRole.DoesNotExist:
+            return Response({"detail": "Usuário não tem função nessa organização."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Retorna o papel do usuário na organização
+        serializer = self.get_serializer(user_role)
         return Response(serializer.data)
 
 class RegisterView(generics.CreateAPIView):
