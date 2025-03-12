@@ -1,51 +1,61 @@
 {% load static %}
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script> 
-    let map
+<!-- Importando Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    function initMap(){
-        var locations = {{ locations|safe }};
-        var imageUrl = '{{ image|safe }}';
+<script>
+    let map;
+    let locations = {{ locations|safe }};
+    let imageUrl = '{{ image|safe }}';
 
-        var firstLocation = locations[0];
-        var infoWindow = [];
-    
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: firstLocation.lat, lng: firstLocation.lng }, 
-            zoom: 17,
-        });
-    
+    function initMap() {
+        if (locations.length === 0) {
+            console.warn("Nenhuma localização disponível.");
+            return;
+        }
+
+        // Define o centro inicial no primeiro local da lista
+        let firstLocation = locations[0];
+
+        map = L.map('map').setView([firstLocation.lat, firstLocation.lng], 17);
+
+        // Adiciona camada de tiles do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Adiciona os marcadores das localizações
         locations.forEach(function (location) {
-            var marker = new google.maps.Marker({
-                position: { lat: location.lat, lng: location.lng }, 
-                map: map, 
-                title: location.name
-            });
-    
-            var infowindow = new google.maps.InfoWindow();
-    
-            infoWindow.push(infowindow);
-    
-            marker.addListener('mouseover', function() {
-                // Criar um elemento div para conter a imagem
-                var contentString = "<div class='marker-content'>" +
-                    "<p class='text-center'>" + location.name + "</p>" +
-                    "<div class='marker-image-container d-flex justify-content-center align-items-center'>" +
-                        "<img src='" + imageUrl + "' class='marker-image' style='height: 150px;'>" +
-                    "</div>" +
-                "</div>";
-                infowindow.setContent(contentString);
-                infowindow.open(map, marker);
+            let marker = L.marker([location.lat, location.lng], {
+                icon: L.icon({
+                    iconUrl: "{% static 'media/images/icons/marker-dot.png' %}",
+                    iconSize: [30, 30]
+                })
+            }).addTo(map);
+
+            // Criando o conteúdo do pop-up
+            let popupContent = `
+                <div class='marker-content'>
+                    <p class='text-center'>${location.name}</p>
+                    <div class='marker-image-container d-flex justify-content-center align-items-center'>
+                        <img src='${imageUrl}' class='marker-image' style='height: 150px;'>
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent);
+
+            // Exibe popup ao passar o mouse
+            marker.on('mouseover', function () {
+                marker.openPopup();
             });
 
-            marker.addListener('mouseout', function() {
-                infowindow.close();
+            // Fecha popup ao tirar o mouse
+            marker.on('mouseout', function () {
+                marker.closePopup();
             });
-
-            marker.setIcon("{% static 'media/images/icons/marker-dot.png' %}");
         });
     }
-    
-    initMap();
 
+    initMap();
 </script>

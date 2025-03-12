@@ -3,6 +3,7 @@ from users.models import CustomUser
 from django.conf import settings
 from organizations.models import Organization, Category, UserRole
 from organizations.constants import CATEGORY_CHOICES
+from main.generate_coordinates import save_coordinates_here
 import requests
 
 class Command(BaseCommand):
@@ -300,13 +301,13 @@ class Command(BaseCommand):
                     'name': 'Organização 20',
                     'email': 'org20@email.com',
                     'phone': '11968317891',
-                    'cep': '04432100',
-                    'street': 'Rua Doutor José Virgílio Vita',
-                    'neighborhood': 'Jardim São Jorge',
+                    'cep': '04438220',
+                    'street': 'Rua Durval Pedroso da Silva',
+                    'neighborhood': 'Vila do Castelo',
                     'city': 'São Paulo',
                     'state': 'SP',
-                    'number': '16',
-                    'description': '',
+                    'number': '291',
+                    'description': 'Natanael casa',
                     'category_name': 10,
                     'complement': ''
                 }
@@ -339,31 +340,8 @@ class Command(BaseCommand):
 
                 UserRole.objects.create(user=admin_user, organization=organization, role=0)
 
-                address = f'{organization.street} {organization.number}, {organization.cep} - {organization.city}'
-                
-                # Obtenha as informações de localização
-                response = requests.get(f"{url}&q={address}")
-
-                data = response.json()
-
-                print("Endereço: ", address)
-                print("Endereço da response: ", data.get('items', [])[0].get('title', None))
-                print("\n")
-
-                items = data.get('items', [])
-
-                if not items:
-                    continue
-
-                position = items[0].get('position', None)
-
-                lat = position.get('lat', None)
-                lng = position.get('lng', None)
-                
-                organization.lat = lat
-                organization.lng = lng
-
-                organization.save()
+                # Salve as coordenadas
+                save_coordinates_here(organization)
             
             self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
         except Exception as e:

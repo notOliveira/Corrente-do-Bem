@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.conf import settings
 from rest_framework import viewsets
 from users.models import CustomUser as User
-from googlemaps import Client as GmapClient
+from main.generate_coordinates import save_coordinates_here
 from .models import Organization, OrganizationProfile, Donation, UserRole
 from .forms import OrganizationCreationForm, OrganizationUpdateForm, OrganizationProfileUpdateForm, DonationForm
 from .constants import CATEGORY_CHOICES
@@ -32,24 +32,12 @@ def create_org(request):
 
                 UserRole.objects.create(user=request.user, organization=organization, role=0)
                 
-                if settings.GOOGLE_API_KEY:
-                    gmap = GmapClient(key=settings.GOOGLE_API_KEY)
-                    address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                    location = gmap.geocode(address)[0]
-        
-                    place_id = location.get('place_id', None)
-                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                    
-                    organization.lat = lat
-                    organization.lng = lng
-                    organization.place_id = place_id
-
-                organization.save()
+                save_coordinates_here(organization)
                                 
                 messages.success(request, 'Organização criada com sucesso!')
                 
                 return redirect('organizations')
+            
             except Exception as e:
                 print(e)
                 messages.error(request, f'Houve um problema ao criar a organização. Por favor, tente novamente.')
@@ -83,7 +71,6 @@ def organization(request, id):
     
     context = {
         'org': organization_profile,
-        'key': settings.GOOGLE_API_KEY,
         'location': location,
         'role': user_role.role if user_role else None,
         'role_name': user_role.get_role_display() if user_role else None
@@ -118,24 +105,11 @@ def settings_org(request, id):
                 org_profile_form.save()
                 
                 organization = Organization.objects.get(id=id)
-                
-                address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
 
-                if settings.GOOGLE_API_KEY:
-                    gmap = GmapClient(key=settings.GOOGLE_API_KEY)
-                    location = gmap.geocode(address)[0]
-
-                    place_id = location.get('place_id', None)
-                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                    
-                    organization.lat = lat
-                    organization.lng = lng
-                    organization.place_id = place_id
-                    
-                organization.save()
+                save_coordinates_here(organization)
                 
                 messages.success(request, 'Configurações atualizadas com sucesso!')
+                
                 return redirect('settings-org', id=id)
             else:
                 messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')

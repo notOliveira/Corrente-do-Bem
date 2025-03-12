@@ -1443,6 +1443,7 @@ select option:checked {
 
 #map {
   height: 500px;
+  z-index: 0;
 }
 
 
