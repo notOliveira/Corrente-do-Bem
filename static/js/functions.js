@@ -93,3 +93,16 @@ function getCep() {
         });
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const select = document.getElementById("id_category");
+
+    select.addEventListener("mousedown", function (event) {
+        event.preventDefault(); // Evita a seleção padrão do select
+
+        const option = event.target;
+        if (option.tagName === "OPTION") {
+            option.selected = !option.selected; // Alterna entre selecionado e não selecionado
+        }
+        // return false; // Impede o comportamento padrão do select
+    });
+});

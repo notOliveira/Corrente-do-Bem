@@ -109,7 +109,7 @@ def settings_org(request, id):
                 save_coordinates_here(organization)
                 
                 messages.success(request, 'Configurações atualizadas com sucesso!')
-                
+
                 return redirect('settings-org', id=id)
             else:
                 messages.error(request, 'Erro ao atualizar as configurações. Por favor, corrija os erros abaixo.')
@@ -129,13 +129,15 @@ def settings_org(request, id):
     context = {
         'org' : organization,
         'org_profile': organization_profile,
-        'categories': org_categories,
+        'categories': CATEGORY_CHOICES,
+        'org_categories': org_categories,
         'role': user_role.role,
         'current_org': {
             'id': organization_profile.organization.id,
             'name': organization_profile.organization.name
         }
     }
+    
     return render(request, 'organizations/settings-org.html', context)
 
 def users_org(request, id):

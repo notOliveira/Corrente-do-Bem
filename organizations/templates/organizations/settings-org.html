@@ -70,12 +70,10 @@
                                         <h5 class="mt-4">* Categorias</h5>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <select name="category" class="form-control" id="id_category" multiple="" required>
-                                            <option class="form-control" value="1" {% if 1 in categories %}selected{% endif %}>Eletrodomésticos</option>
-                                            <option class="form-control" value="2" {% if 2 in categories %}selected{% endif %}>Alimentos</option>
-                                            <option class="form-control" value="3" {% if 3 in categories %}selected{% endif %}>Vestuário</option>
-                                            <option class="form-control" value="4" {% if 4 in categories %}selected{% endif %}>Mobílias</option>
-                                            <option class="form-control" value="5" {% if 5 in categories %}selected{% endif %}>Diversos</option>
+                                        <select name="category" class="form-control" id="id_category" multiple="" style="height:400px;" required>
+                                            {% for category in categories %}
+                                                <option class="form-control" value="{{category.0}}" {% if category.0 in org_categories %}selected{% endif %}>{{category.1}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     
