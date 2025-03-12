@@ -1,12 +1,9 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from django.http import JsonResponse
 from requests.exceptions import RequestException
 from django.conf import settings
-from organizations.models import Organization, OrganizationProfile, Donation
-from users.models import CustomUser as User
-import requests, json, googlemaps
+from organizations.models import OrganizationProfile, Donation
+import requests
 import random
 
 # Create your views here.

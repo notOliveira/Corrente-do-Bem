@@ -3,7 +3,8 @@ from users.models import CustomUser
 from django.conf import settings
 from organizations.models import Organization, Category, UserRole
 from organizations.constants import CATEGORY_CHOICES
-import googlemaps
+from main.generate_coordinates import save_coordinates_here
+import requests
 
 class Command(BaseCommand):
     help = 'Cria os objetos padrão do banco'
@@ -11,6 +12,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try: 
+            # URL da API do Here Maps
+            url = f"{settings.HERE_API_URL}"
+
             # Adiciona as categorias
             Category.objects.bulk_create([Category(name=value) for value, _ in CATEGORY_CHOICES if not Category.objects.filter(name=value).exists()])
             
@@ -297,13 +301,13 @@ class Command(BaseCommand):
                     'name': 'Organização 20',
                     'email': 'org20@email.com',
                     'phone': '11968317891',
-                    'cep': '04432100',
-                    'street': 'Rua Doutor José Virgílio Vita',
-                    'neighborhood': 'Jardim São Jorge',
+                    'cep': '04438220',
+                    'street': 'Rua Durval Pedroso da Silva',
+                    'neighborhood': 'Vila do Castelo',
                     'city': 'São Paulo',
                     'state': 'SP',
-                    'number': '16',
-                    'description': '',
+                    'number': '291',
+                    'description': 'Natanael casa',
                     'category_name': 10,
                     'complement': ''
                 }
@@ -336,20 +340,8 @@ class Command(BaseCommand):
 
                 UserRole.objects.create(user=admin_user, organization=organization, role=0)
 
-                if settings.GOOGLE_API_KEY:
-                    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-                    address = f'{organization.street} {organization.number}, {organization.cep}, {organization.city} - {organization.state}'
-                    location = gmap.geocode(address)[0]
-
-                    place_id = location.get('place_id', None)
-                    lat = location.get('geometry', {}).get('location', {}).get('lat', None)
-                    lng = location.get('geometry', {}).get('location', {}).get('lng', None)
-                    
-                    organization.lat = lat
-                    organization.lng = lng
-                    organization.place_id = place_id
-
-                organization.save()
+                # Salve as coordenadas
+                save_coordinates_here(organization)
             
             self.stdout.write(self.style.SUCCESS('Objetos criados com sucesso.'))
         except Exception as e:
