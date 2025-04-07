@@ -107,13 +107,17 @@ def register_user(request):
             else:
                 messages.error(request, 'Houve um problema ao criar o usuário. Por favor, tente novamente.')
         else:
+
+            possible_errors = {
+                'email': "O email já está cadastrado.",
+                'password2': "As senhas não coincidem ou a senha é fraca."
+            }
+
             errors = form.errors.as_data()
-            if 'email' in errors:
-                messages.error(request, 'O email já está cadastrado.')
-            elif 'password2' in errors:
-                messages.error(request, 'As senhas não coincidem ou a senha é fraca.')
-            else:
-                messages.error(request, 'Por favor, preencha os campos corretamente.')
+
+            for field in errors:
+                message = possible_errors.get(field, 'Por favor, preencha os campos corretamente.')
+                messages.error(request, message)
 
     return render(request, 'users/register.html')
 
