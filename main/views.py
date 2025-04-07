@@ -51,11 +51,11 @@ def near_you(request):
     }
     return render(request, 'main/near-you.html', context)
 
-def donate(request):
-    return render(request, 'main/donate.html')
+# def donate(request):
+#     return render(request, 'main/donate.html')
 
-def news(request):
-    return render(request, 'main/news.html')
+# def news(request):
+#     return render(request, 'main/news.html')
 
-def news_detail(request):
-    return render(request, 'main/news-detail.html')
+# def news_detail(request):
+#     return render(request, 'main/news-detail.html')
