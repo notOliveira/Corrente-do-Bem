@@ -4,7 +4,6 @@ from requests.exceptions import RequestException
 from django.conf import settings
 from organizations.models import OrganizationProfile, Donation
 import requests
-import random
 
 # Create your views here.
 
@@ -34,7 +33,7 @@ def get_cep(request, cep):
 
 def home(request):
     context = {
-        'total_donations': Donation.objects.count() + random.randint(50, 500),
+        'total_donations': Donation.objects.count()
     }
     return render(request, 'main/home.html', context)
 
