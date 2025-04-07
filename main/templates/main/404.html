@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Erro{% endblock title %}
+
+{% block content %}
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-10 col-12 text-center mx-auto">
+                        <h1 class="display-1 font-weight-bold"><b>404</b></h1>
+                    </div>
+
+                    <div class="col-lg-10 col-12 text-center mx-auto">
+                        <h1 class="mb-5">Página não encontrada</h2>
+                        <p class="h5 mb-5">Desculpe, mas a página que você está procurando não existe.</p>
+                        <a href="{% url 'home' %}" class="btn btn-primary">Voltar para o início</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    
+{% endblock content %}
