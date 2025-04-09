@@ -116,12 +116,15 @@ OBS: Recomendo rodar com o seguinte comando:
     SECRET_KEY = '?'
     ALLOWED_HOSTS = localhost # Para adicionar mais, coloque um ';' após o 'localhost'
     CSRF_TRUSTED_ORIGINS = https://corrente-do-bem.up.railway.app
-    CORS_ALLOWED_ORIGINS = https://corrente-do-bem.up.railway.app;*
+    CORS_ALLOWED_ORIGINS = https://corrente-do-bem.up.railway.app
+    CORS_ALLOW_ALL_ORIGINS = # False / True - É bom deixar false, no geral
     HERE_API_KEY = '?'
     HERE_API_URL = "https://geocode.search.hereapi.com/v1/geocode?apiKey=?"
 
     ```
 - Como é um arquivo que contém informações potencialmente confidenciais, eu não quero versioná-lo no Git, para não me trazer problemas futuros.
+
+OBS: Há outras variáveis para o banco de dados, recomendo verificar o [settings.py](/corrente_do_bem/settings.py)
 
 <br>
 
