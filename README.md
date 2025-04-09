@@ -107,15 +107,18 @@ OBS: Recomendo rodar com o seguinte comando:
 - Crie um arquivo chamado [.env](/.env), pois ele contém informações que serão importadas nas configurações, é de extrema importância que o arquivo seja criado. O arquivo criado deve conter as seguintes informações:
     ```
     DEVENV=development # Essa configuração serve para definir o ambiente (local), mas caso não queira configuar uma base de dados, mude para 'sqlite'
-    LOCALDATABASE = 'root' # Troque por seu usuário na base de dados
-    LOCALPASSWORD = 'SUA_SENHA_AQUI' # Troque por sua senha na base de dados
+    LOCALDATABASE = 'corrente_do_bem' # Troque pelo nome do banco de dados que preferir
     LOCALHOST = 'localhost' # Caso esteja utilizando um servidor remoto, troque para o endereço do servidor
+    LOCALUSER = 'root' # Troque por seu usuário na base de dados
+    LOCALPASSWORD = 'SUA_SENHA_AQUI' # Troque por sua senha na base de dados
     LOCALPORT = '3306' # Troque para a porta utilizada pelo servidor de banco de dados
-    GOOGLE_API_KEY='?' # Coloque sua chave do Google API
+    GOOGLE_API_KEY = '?' # Coloque sua chave do Google API
     SECRET_KEY = '?'
-    ALLOWED_HOSTS=localhost # Para adicionar mais, coloque um ';' após o 'localhost'
-    CSRF_TRUSTED_ORIGINS=https://corrente-do-bem.up.railway.app
-    CORS_ALLOWED_ORIGINS=https://corrente-do-bem.up.railway.app;*
+    ALLOWED_HOSTS = localhost # Para adicionar mais, coloque um ';' após o 'localhost'
+    CSRF_TRUSTED_ORIGINS = https://corrente-do-bem.up.railway.app
+    CORS_ALLOWED_ORIGINS = https://corrente-do-bem.up.railway.app;*
+    HERE_API_KEY = '?'
+    HERE_API_URL = "https://geocode.search.hereapi.com/v1/geocode?apiKey=?"
 
     ```
 - Como é um arquivo que contém informações potencialmente confidenciais, eu não quero versioná-lo no Git, para não me trazer problemas futuros.
